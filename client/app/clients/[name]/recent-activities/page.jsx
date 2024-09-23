@@ -1,7 +1,7 @@
 "use client";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
-import AgencyDetails from "@/app/Components/clients/AgencyDetails";
+import AgencyDetails from "../../../Components/agencies/AgencyDetails";
 import { useRouter } from "next/navigation";
 import { AiOutlineClose } from "react-icons/ai";
 

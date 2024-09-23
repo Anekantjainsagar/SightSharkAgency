@@ -1,13 +1,13 @@
 "use client";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
-import AgencyDetails from "@/app/Components/clients/AgencyDetails";
-import AgencyDetailsTopbar from "@/app/Components/clients/AgencyDetailsTopbar";
+import AgencyDetails from "../../../Components/agencies/AgencyDetails";
+import AgencyDetailsTopbar from "../../../Components/agencies/AgencyDetailsTopbar";
 import { BiPencil } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import DeleteAgency from "@/app/Components/clients/DeleteAgency";
+import DeleteAgency from "../../../Components/agencies/DeleteAgency";
 
 const Overview = () => {
   const [status, setStatus] = useState("Active");
