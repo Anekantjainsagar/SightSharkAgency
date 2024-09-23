@@ -2,26 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.mainLogoSize {
+  @apply text-[24px];
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.bigFont {
+  @apply text-[36px];
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+.maintext12 {
+  @apply text-[12px];
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.maintext14 {
+  @apply text-[14px];
+}
+
+.mainText18 {
+  @apply text-[18px];
+}
+
+.mainText20 {
+  @apply text-[20px];
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.glass {
+  background-color: rgba(255, 255, 255, 0.11);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.gradient-line {
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border: none;
+}
+
+.gradient-line-vertical {
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.11);
+  width: 1px;
+  border: none;
+}
+
+.radialGradient {
+  background: radial-gradient(rgba(38, 0, 255, 0.15), #030021);
+}
+
+.mainPageBg {
+  background: radial-gradient(#212687, #030636, #000);
+}
+
+.small-scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+.small-scroller::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+/* Handle */
+.small-scroller::-webkit-scrollbar-thumb {
+  background: rgb(143, 143, 143);
+  border-radius: 10px;
+}
+
+.agencySmallBlockGrid {
+  /* grid-template-columns: 3% 28% 19% 25% 25%; */
+  grid-template-columns: 3% 18% 29% 25% 25%;
+}
+
+.agencyBlockGrid {
+  /* grid-template-columns: 3% 15% 9% 13% 23% 12% 10% 15%; */
+  grid-template-columns: 3% 14% 10% 14% 22% 14% 10% 12%;
+}
+
+.userBlockGrid {
+  /* grid-template-columns: 3% 20% 15% 15% 15% 17% 15%; */
+  grid-template-columns: 3% 25% 16% 18% 15% 18% 4%;
+}
+
+.status-active {
+  background-color: #094b31;
+  border-color: #0a5b39;
+  color: #73e2a7;
+}
+
+.status-offline {
+  background-color: #1f242f;
+  border-color: #333741;
+  color: #94969c;
+}
+
+.status-hold {
+  background-color: rgba(233, 197, 91, 0.3);
+  color: #e9c55b;
+}
+
+.status-online {
+  background-color: #094b31;
+  color: #73e2a7;
+  border-color: #73e2a7;
+}
+
+.dot-online {
+  background-color: #73e2a7;
 }
