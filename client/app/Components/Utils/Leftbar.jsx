@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { CiGrid41, CiSettings, CiWallet } from "react-icons/ci";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { IoNewspaperOutline } from "react-icons/io5";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 import HelpPage from "@/app/Components/Utils/HelpPage";
 
 const Leftbar = () => {
