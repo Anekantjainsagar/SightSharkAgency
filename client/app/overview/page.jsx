@@ -1,12 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const Overview = () => {
-  const history = useRouter();
+  // const history = useRouter();
 
   const connectorsData = [
     {

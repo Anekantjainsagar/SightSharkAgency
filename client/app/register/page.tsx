@@ -1,25 +1,19 @@
 "use client";
 import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
   useState,
 } from "react";
 import RightSide from "@/app/Components/Login/RightSide";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
-import { BACKEND_URI } from "@/app/utils/url";
-import Cookies from "js-cookie";
-import Context from "../Context/Context";
+import  { Toaster } from "react-hot-toast";
+// import axios from "axios";
+// import { BACKEND_URI } from "@/app/utils/url";
+// import Cookies from "js-cookie";
+// import Context from "../Context/Context";
 import Image from "next/image";
 import Info from "@/app/Components/Login/Info";
 
 const App = () => {
   const history = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
   const [page, setPage] = useState(1);
   const [user, setUser] = useState({
     dataFreq: "",
@@ -28,7 +22,7 @@ const App = () => {
     switchAcc1: "",
     switchAcc2: "",
   });
-  const { checkToken } = useContext(Context);
+  // const { checkToken } = useContext(Context);
 
   return (
     <div className="bg-[#091022] w-full flex items-start justify-between h-[100vh]">

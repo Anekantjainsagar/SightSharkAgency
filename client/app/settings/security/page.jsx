@@ -56,6 +56,7 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 text-2xl cursor-pointer"
                           onClick={(e) => {
+                            e.preventDefault();
                             setShowOriginalPassword(!showOriginalPassword);
                           }}
                         >
@@ -83,6 +84,7 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 text-2xl cursor-pointer"
                           onClick={(e) => {
+                            e.preventDefault();
                             setShowNewPassword(!showNewPassword);
                           }}
                         >
@@ -113,6 +115,7 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 text-2xl cursor-pointer"
                           onClick={(e) => {
+                            e.preventDefault();
                             setShowNewPassword(!showNewPassword);
                           }}
                         >

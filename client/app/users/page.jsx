@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import UserDetailBlock from "@/app/Components/Users/UserDetailBlock";
@@ -109,7 +109,12 @@ const Overview = () => {
                 </div>
                 <div className="h-[11%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
-                    <button className="text-white bg-[#898989]/15 w-[145px] justify-center flex items-center px-4 py-3 rounded-lg mainText14">
+                    <button
+                      onClick={() => {
+                        setPage(page - 1);
+                      }}
+                      className="text-white bg-[#898989]/15 w-[145px] justify-center flex items-center px-4 py-3 rounded-lg mainText14"
+                    >
                       <div className="mr-2 w-8">
                         <svg
                           className="w-full h-full"
@@ -160,7 +165,12 @@ const Overview = () => {
                           );
                         })}
                     </div>
-                    <button className="text-white bg-newBlue flex items-center w-[145px] justify-center px-4 py-3 rounded-lg mainText14">
+                    <button
+                      onClick={() => {
+                        setPage(page + 1);
+                      }}
+                      className="text-white bg-newBlue flex items-center w-[145px] justify-center px-4 py-3 rounded-lg mainText14"
+                    >
                       Next
                       <div className="ml-2 w-8">
                         <svg

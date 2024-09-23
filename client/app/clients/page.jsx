@@ -1,16 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetailsBlock from "@/app/Components/Utils/AgencyDetails";
-import AddAgency from "@/app/Components/clients/AddAgency";
 import { FaPlus } from "react-icons/fa";
 import NewPopup from "@/app/Components/Utils/NewPopup";
 
 const Overview = () => {
   const [page, setPage] = useState(1);
   const [showNewPopup, setShowNewPopup] = useState(false);
-  const [addAgency, setAddAgency] = useState(false);
 
   let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -141,7 +139,13 @@ const Overview = () => {
                 </div>
                 <div className="h-[11%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
-                    <button className="text-white bg-[#898989]/15 flex items-center w-[145px] justify-center py-3 rounded-lg mainText14">
+                    <button
+                      className="text-white bg-[#898989]/15 flex items-center w-[145px] justify-center py-3 rounded-lg mainText14"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage(page - 1);
+                      }}
+                    >
                       <div className="mr-2 w-8">
                         <svg
                           className="w-full h-full"
@@ -192,7 +196,13 @@ const Overview = () => {
                           );
                         })}
                     </div>
-                    <button className="text-white bg-newBlue flex items-center w-[145px] justify-center py-3 rounded-lg mainText14">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage(page + 1);
+                      }}
+                      className="text-white bg-newBlue flex items-center w-[145px] justify-center py-3 rounded-lg mainText14"
+                    >
                       Next
                       <div className="ml-2 w-8">
                         <svg

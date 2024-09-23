@@ -1,26 +1,20 @@
 "use client";
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useState } from "react";
 import RightSide from "@/app/Components/Login/RightSide";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
-import { BACKEND_URI } from "@/app/utils/url";
-import Cookies from "js-cookie";
-import Context from "./Context/Context";
+import { Toaster } from "react-hot-toast";
+// import axios from "axios";
+// import { BACKEND_URI } from "@/app/utils/url";
+// import Cookies from "js-cookie";
+// import Context from "./Context/Context";
 import Image from "next/image";
 
 const App = () => {
   const history = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({ password: "", email: "" });
-  const { checkToken } = useContext(Context);
+  // const { checkToken } = useContext(Context);
 
   return (
     <div className="bg-[#091022] w-full flex items-start justify-between h-[100vh]">
@@ -72,6 +66,7 @@ const App = () => {
               <div
                 className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-xl cursor-pointer"
                 onClick={(e) => {
+                  e.preventDefault();
                   setShowPassword(!showPassword);
                 }}
               >

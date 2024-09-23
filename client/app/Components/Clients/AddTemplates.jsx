@@ -1,13 +1,8 @@
 "use client";
-import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
-import { IoMdCheckmark } from "react-icons/io";
-import Required from "../Utils/Required";
+import { Toaster } from "react-hot-toast";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -25,18 +20,6 @@ const customStyles = {
 };
 
 const AddTemplates = ({ showSubscribe, setShowSubscribe }) => {
-  const [data, setData] = useState({
-    dataSources: [],
-  });
-  const fileInputRef = React.useRef(null);
-
-  const handleFileChangeProfile = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file.name);
-    }
-  };
-
   function closeModal() {
     setShowSubscribe(false);
   }

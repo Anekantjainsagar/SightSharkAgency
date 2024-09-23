@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
@@ -44,6 +44,7 @@ const Overview = ({ params }) => {
                     <h4 className="mainText20">Data Sources </h4>
                     <button
                       onClick={(e) => {
+                        e.preventDefault();
                         setAddDataSouces(!addDataSouces);
                       }}
                       className="bg-newBlue px-5 w-[210px] justify-center py-3 rounded-xl flex items-center gap-x-2 text-base"
@@ -208,22 +209,6 @@ const Circle0 = () => {
   return (
     <div className="bg-[#FFE8CC] p-2 w-7 rounded-full aspect-square">
       <div className="bg-[#FDC53E] w-full h-full rounded-full"></div>
-    </div>
-  );
-};
-
-const Circle1 = () => {
-  return (
-    <div className="bg-[#FFE8CC] p-2 w-7 rounded-full aspect-square">
-      <div className="bg-[#FF8A00] w-full h-full rounded-full"></div>
-    </div>
-  );
-};
-
-const Circle2 = () => {
-  return (
-    <div className="bg-[#B7FFD8] p-2 w-7 rounded-full aspect-square">
-      <div className="bg-[#37BA73] w-full h-full rounded-full"></div>
     </div>
   );
 };

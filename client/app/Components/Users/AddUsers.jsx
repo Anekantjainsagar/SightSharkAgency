@@ -3,10 +3,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
-import { IoMdCheckmark } from "react-icons/io";
+import { Toaster } from "react-hot-toast";
 import Required from "../Utils/Required";
 
 const customStyles = {
@@ -35,17 +32,8 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
     profile: "",
   });
   const fileInputRef = React.useRef(null);
-  const fileInputRefAgent = React.useRef(null);
 
-  // Function to handle file selection
   const handleFileChangeProfile = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file.name);
-    }
-  };
-
-  const handleFileChangeAgent = (event) => {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file.name);
