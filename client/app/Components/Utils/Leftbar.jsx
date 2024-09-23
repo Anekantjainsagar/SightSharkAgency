@@ -316,11 +316,13 @@ const Leftbar = () => {
 };
 
 const LogoutBtn = () => {
+  const history = useRouter();
+  
   return (
     <div
       className={`flex items-center py-2 rounded-xl cursor-pointer text-[#D93F21]`}
       onClick={() => {
-        Cookies.remove("token");
+        // Cookies.remove("token");
         history.push("/");
       }}
     >
