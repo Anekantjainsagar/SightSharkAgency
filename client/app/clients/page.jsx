@@ -119,7 +119,7 @@ const Overview = () => {
                   return (
                     <h5
                       key={i}
-                      className="maintext14 font-light tracking-wider"
+                      className="text-base font-light tracking-wider"
                     >
                       {e}
                     </h5>
