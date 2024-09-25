@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetailsBlock from "@/app/Components/Utils/AgencyDetails";
-import AddAgency from "@/app/Components/Agencies/AddAgency";
+import AddAgency from "@/app/Components/agencies/AddAgency";
 import { FaPlus } from "react-icons/fa";
 
 const Overview = () => {

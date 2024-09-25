@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
-import AgencyDetails from "@/app/Components/Agencies/AgencyDetails";
-import AgencyDetailsTopbar from "@/app/Components/Agencies/AgencyDetailsTopbar";
+import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
+import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import { BiPencil } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import DeleteAgency from "@/app/Components/Agencies/DeleteAgency";
+import DeleteAgency from "@/app/Components/agencies/DeleteAgency";
 
 const Overview = () => {
   const [status, setStatus] = useState("Active");

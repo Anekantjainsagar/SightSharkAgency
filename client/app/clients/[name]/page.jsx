@@ -4,11 +4,11 @@ import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import AgencyDetails from "@/app/Components/Agencies/AgencyDetails";
-import AgencyDetailsTopbar from "@/app/Components/Agencies/AgencyDetailsTopbar";
+import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
+import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import { FaPlus } from "react-icons/fa";
-import AddTemplates from "../../Components/Agencies/AddTemplates";
-import AddDataSouces from "../../Components/Agencies/AddDataSources";
+import AddTemplates from "../../Components/agencies/AddTemplates";
+import AddDataSouces from "../../Components/agencies/AddDataSources";
 import { useRouter } from "next/navigation";
 
 const Overview = ({ params }) => {
