@@ -119,7 +119,9 @@ const Overview = () => {
                   return (
                     <h5
                       key={i}
-                      className="text-[13px] min-[1600px]:text-base font-light tracking-wider"
+                      className={`text-[13px] min-[1600px]:text-base ${
+                        !e?.includes("Name") && "text-center"
+                      } font-light tracking-wider`}
                     >
                       {e}
                     </h5>
