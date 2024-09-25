@@ -36,7 +36,7 @@ const App = () => {
           <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
             Welcome Back
           </h1>
-          <p className="mainText18 text-white/80">Login into your account</p>
+          <p className="mainText18 text-white/80 mt-2">Login into your account</p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label
@@ -127,7 +127,7 @@ const App = () => {
                 //     .post(`${BACKEND_URI}/login/login`, { ...user })
                 //     .then((res) => {
                 //       Cookies.set("token", res.data);
-                history.push("/overview");
+                history.push("/register");
                 //       checkToken();
                 //     })
                 //     .catch((err) => {

@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
 import Required from "../Utils/Required";
@@ -136,7 +135,7 @@ const connectorsData = [
 ];
 
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
-  let maxPage = 3;
+  let maxPage = 4;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [data, setData] = useState({
@@ -195,7 +194,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           />
           <div className="mb-10">
             <div className="flex items-center px-[8vw]">
-              <div className="bg-newBlue w-[6vw] aspect-square rounded-full flex items-center justify-center text-[24px]">
+              <div className="bg-newBlue w-[8vw] aspect-square rounded-full flex items-center justify-center text-[24px]">
                 {page > 1 ? <IoMdCheckmark /> : "1"}
               </div>
               <div
@@ -204,7 +203,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 }`}
               ></div>
               <div
-                className={`w-[6vw] aspect-square rounded-full ${
+                className={`w-[8vw] aspect-square rounded-full ${
                   page >= 2
                     ? "bg-newBlue"
                     : "border border-gray-500/20 bg-[#343745]"
@@ -218,19 +217,34 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 }`}
               ></div>
               <div
-                className={`w-[6vw] aspect-square rounded-full ${
-                  page == maxPage
+                className={`w-[8vw] aspect-square rounded-full ${
+                  page >= 3
                     ? "bg-newBlue"
                     : "border border-gray-500/20 bg-[#343745]"
                 } flex items-center justify-center text-[24px]`}
               >
                 {page > 3 ? <IoMdCheckmark /> : "3"}
               </div>
+              <div
+                className={`line h-[1px] w-full ${
+                  page == maxPage ? "bg-newBlue" : "bg-[#343745]"
+                }`}
+              ></div>
+              <div
+                className={`w-[8vw] aspect-square rounded-full ${
+                  page == maxPage
+                    ? "bg-newBlue"
+                    : "border border-gray-500/20 bg-[#343745]"
+                } flex items-center justify-center text-[24px]`}
+              >
+                {page > 4 ? <IoMdCheckmark /> : "4"}
+              </div>
             </div>
-            <div className="flex items-center text-sm min-[1600px]:text-xl justify-between px-[6vw] mt-2">
-              <p>Agency Details</p>
-              <p>Key Contact Details</p>
-              <p>Data Sources</p>
+            <div className="grid grid-cols-4 text-sm min-[1600px]:text-lg justify-between mt-2">
+              <p className="text-center">Client Details</p>
+              <p className="text-center">Key Contact Details</p>
+              <p className="text-center">Data Sources</p>
+              <p className="text-center">Dashboard Templates</p>
             </div>
           </div>
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
@@ -269,7 +283,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       htmlFor="name"
                       className="mb-1.5 text-sm min-[1600px]:text-base"
                     >
-                      Agency Name
+                      Client Name
                       <Required />
                     </label>
                     <input
@@ -279,7 +293,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                         setData({ ...data, name: e.target.value });
                       }}
                       type="text"
-                      placeholder="Enter Agency Name"
+                      placeholder="Enter Client Name"
                       className="bg-[#898989]/15 outline-none border border-gray-500/20 h-[45px] text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
@@ -506,7 +520,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   </div>
                 </div>
               </div>
-            ) : (
+            ) : page == 3 ? (
               <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
                 {" "}
                 <div className="relative flex items-center w-[350px] min-[1600px]:w-[456px]">
@@ -581,6 +595,34 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                         </div>
                       );
                     })}
+                </div>
+              </div>
+            ) : (
+              <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+                <div className="grid grid-cols-4 gap-x-4 mt-2">
+                  {[
+                    {
+                      img: "/Agency/individual/templates/1 (2).png",
+                    },
+                    {
+                      img: "/Agency/individual/templates/1 (1).png",
+                    },
+                    { img: "/Agency/individual/templates/1 (4).png" },
+                    {
+                      img: "/Agency/individual/templates/1 (3).png",
+                    },
+                  ].map((e, i) => {
+                    return (
+                      <div key={i}>
+                        <Image
+                          src={e?.img}
+                          alt={e?.img?.src}
+                          width={1000}
+                          height={1000}
+                        />
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

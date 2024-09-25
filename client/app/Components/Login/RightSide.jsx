@@ -39,12 +39,10 @@ const RightSide = memo(() => {
         height={1000}
         className="absolute top-0 left-0 object-cover w-full h-full"
       />
-      <div className="p-[1.5vw] glass rounded-xl text-xl min-[1600px]:text-[26px]">
-        <p className="text-white">
-          Today, we create innovative solutions to the challenges that consumers
-          face in both their everyday lives and events.
-        </p>
-      </div>
+      <h5 className="text-white p-[1.5vw] glass rounded-xl text-xl min-[1600px]:text-[26px]">
+        Today, we create innovative solutions to the challenges that consumers
+        face in both their everyday lives and events.
+      </h5>
     </div>
   );
 });

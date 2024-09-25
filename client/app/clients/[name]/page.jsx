@@ -154,7 +154,7 @@ const Overview = ({ params }) => {
                     })}
                   </div>
                 </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[33vh]">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[32vh]">
                   <div className="flex items-center justify-between w-full">
                     <h4 className="min-[1600px]:text-xl">Recent Activity </h4>
                     <p

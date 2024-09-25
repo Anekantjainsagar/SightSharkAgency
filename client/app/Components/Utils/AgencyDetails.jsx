@@ -16,7 +16,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
       />
       <div
         onClick={() => {
-          history.push("/agencies/alpha-solutions");
+          history.push("/clients/alpha-solutions");
         }}
         className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >
@@ -87,7 +87,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               className="scale-110 w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               onClick={() => {
-                history.push("/agencies/alpha-solutions");
+                history.push("/clients/alpha-solutions");
               }}
             >
               <path
@@ -114,7 +114,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               onClick={(e) => {
                 e.stopPropagation();
-                history.push("/agencies/alpha-solutions/edit-profile");
+                history.push("/clients/alpha-solutions/edit-profile");
               }}
             >
               <path
