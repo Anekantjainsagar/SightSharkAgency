@@ -317,16 +317,16 @@ const Leftbar = () => {
 
 const LogoutBtn = () => {
   const history = useRouter();
-  
+
   return (
     <div
       className={`flex items-center py-2 rounded-xl cursor-pointer text-[#D93F21]`}
       onClick={() => {
-        // Cookies.remove("token");
+        Cookies.remove("token");
         history.push("/");
       }}
     >
-      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#D93F21]/10 to-[#D93F21]/20 w-12 aspect-square p-2">
+      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#D93F21]/10 to-[#D93F21]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
         <svg
           width="24"
           height="24"
@@ -362,7 +362,7 @@ const NewwBlock = ({ e, setShow, show }) => {
         }
       }}
     >
-      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/20 w-12 aspect-square p-2">
+      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
         {e?.temp_icon[1]}
       </div>
       <p className="ml-4 mainText18">{e?.title}</p>
@@ -390,7 +390,7 @@ const Block = ({ e }) => {
         }
       }}
     >
-      <span className="w-6">
+      <span>
         {pathname.includes(e?.route)
           ? e?.temp_icon[0]
           : hover

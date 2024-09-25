@@ -22,7 +22,7 @@ const AgencyDetailsTopbar = () => {
               pathname == e?.route
                 ? "bg-newBlue"
                 : "bg-transparent text-[#B2B4BA]"
-            } py-2 px-5 rounded-2xl mr-4`}
+            } py-2 px-5 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-2xl mr-4`}
             onClick={() => {
               history.push(e?.route);
             }}

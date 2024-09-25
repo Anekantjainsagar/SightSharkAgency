@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import UserDetailBlock from "@/app/Components/Users/UserDetailBlock";
@@ -25,19 +25,19 @@ const Overview = () => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg p-6">
+          <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-2xl">Users</h3>
+              <h3 className="text-xl min-[1600px]:text-2xl">Users</h3>{" "}
               <div className="flex items-center">
                 <button
                   onClick={() => {
                     setShowSubscribe(!showSubscribe);
                   }}
-                  className="bg-newBlue px-6 py-3 rounded-xl ml-4 flex items-center gap-x-2 text-base"
+                  className="bg-newBlue px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 flex items-center gap-x-2 text-sm min-[1600px]:text-base"
                 >
                   <FaPlus className="text-sm" /> Add Users
                 </button>
-                <button className="glass px-6 py-3 rounded-xl ml-4 text-base flex items-center gap-x-2 border border-gray-200/5">
+                <button className="glass px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5">
                   <svg
                     width="20"
                     height="20"
@@ -55,7 +55,6 @@ const Overview = () => {
                   </svg>
                   Sort By
                 </button>
-                
               </div>
             </div>
             <div className="mt-5 border border-gray-200/5 rounded-2xl">
@@ -90,7 +89,9 @@ const Overview = () => {
                     return (
                       <h5
                         key={i}
-                        className="text-base font-light tracking-wider"
+                        className={`text-[13px] min-[1600px]:text-base font-light tracking-wider ${
+                          e?.includes("Name") ? "min-[1600px]:ml-0 ml-2" : ""
+                        }`}
                       >
                         {e}
                       </h5>
@@ -98,25 +99,19 @@ const Overview = () => {
                   }
                 )}
               </div>
-              <div className="h-[70vh]">
+              <div className="h-[68vh] min-[1600px]:h-[70vh]">
                 <div className="overflow-y-auto small-scroller h-[89%]">
                   <UserDetailBlock status={"Online"} acess={"Owner"} />
                   <UserDetailBlock status={"Online"} acess={"Guest"} />
                   <UserDetailBlock status={"Online"} acess={"Admin"} />
                   <UserDetailBlock status={"Online"} acess={"Owner"} />{" "}
                   <UserDetailBlock status={"Online"} acess={"Guest"} />
-                  <UserDetailBlock status={"Online"} acess={"Admin"} />
                   <UserDetailBlock status={"Online"} acess={"Guest"} />
                 </div>
-                <div className="h-[11%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
+                <div className="h-[14%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
-                    <button
-                      onClick={() => {
-                        setPage(page - 1);
-                      }}
-                      className="text-white bg-[#898989]/15 w-[145px] justify-center flex items-center px-4 py-3 rounded-lg mainText14"
-                    >
-                      <div className="mr-2 w-8">
+                    <button className="text-white bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
+                      <div className="mr-2 w-5 min-[1600px]:w-8">
                         <svg
                           className="w-full h-full"
                           viewBox="0 0 24 24"
@@ -139,7 +134,7 @@ const Overview = () => {
                       {data?.slice(0, 3)?.map((e, i) => {
                         return (
                           <div
-                            className={`w-[40px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                            className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
                               page == e ? "bg-newBlue" : "text-[#85888E]"
                             }`}
                             key={i}
@@ -157,7 +152,7 @@ const Overview = () => {
                           return (
                             <div
                               key={i}
-                              className={`w-[40px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                              className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
                                 page == e ? "bg-newBlue" : "text-[#85888E]"
                               }`}
                             >
@@ -166,14 +161,9 @@ const Overview = () => {
                           );
                         })}
                     </div>
-                    <button
-                      onClick={() => {
-                        setPage(page + 1);
-                      }}
-                      className="text-white bg-newBlue flex items-center w-[145px] justify-center px-4 py-3 rounded-lg mainText14"
-                    >
+                    <button className="text-white bg-newBlue flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
                       Next
-                      <div className="ml-2 w-8">
+                      <div className="ml-2 w-5 min-[1600px]:w-8">
                         <svg
                           className="w-full h-full"
                           viewBox="0 0 24 24"

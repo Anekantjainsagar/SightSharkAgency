@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
 
 const customStyles = {
@@ -134,9 +134,9 @@ const connectorsData = [
 
 const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
   const [search, setSearch] = useState("");
-  // const [data, setData] = useState({
-  //   dataSources: [],
-  // });
+  const [data, setData] = useState({
+    dataSources: [],
+  });
 
   function closeModal() {
     setShowSubscribe(false);
@@ -157,8 +157,9 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
             onClick={closeModal}
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
-          <div className="px-[4vw] h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
-            <div className="relative flex items-center w-[456px]">
+          <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+            {" "}
+            <div className="relative flex items-center w-[350px] min-[1600px]:w-[456px]">
               <FaSearch className="absolute left-4 z-40 text-white" />{" "}
               {/* Search Icon */}
               <input
@@ -168,7 +169,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                 onChange={(e) => {
                   setSearch(e.target.value);
                 }}
-                className="outline-none text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
+                className="outline-none text-sm min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
               />
             </div>
             <div className="grid grid-cols-3 gap-3 mt-5">
@@ -193,11 +194,11 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                           alt={e?.img?.src}
                           width={1000}
                           height={1000}
-                          className="w-8 h-8 mr-2 aspect-squre object-contain"
+                          className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-squre object-contain"
                         />
                         <label
                           htmlFor={e?.title}
-                          className="mainText14 cursor-pointer"
+                          className="text-[13px] min-[1600px]:text-base cursor-pointer"
                         >
                           {e?.title}
                         </label>
@@ -206,14 +207,13 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                         <label className="relative flex items-center cursor-pointer">
                           <input
                             type="checkbox"
-                            className="before:content[''] peer relative h-6 w-6 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-                            id={e?.title}
-                            name={e?.title}
+                            className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
+                            id="check"
                           />
                           <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4"
+                              className="min-[1600px]:h-4 min-[1600px]:w-4 w-3 h-3"
                               viewBox="0 0 20 20"
                               fill="currentColor"
                               stroke="currentColor"
@@ -233,10 +233,10 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                 })}
             </div>
           </div>
-          <div className="border-t border-t-gray-100/30 px-[5vw] w-full flex items-center justify-end py-6 mt-10 mainText20">
+          <div className="border-t border-t-gray-100/30 px-[5vw] w-full flex items-center justify-end py-6 mt-10 text-[15px] min-[1600px]:text-xl">
             <button
               onClick={() => {}}
-              className={`text-white bg-newBlue w-[170px] h-12 rounded-lg`}
+              className={`text-white bg-newBlue w-[150px] min-[1600px]:w-[170px] h-9 min-[1600px]:h-12 rounded-lg`}
             >
               Save
             </button>

@@ -1,13 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
-import AgencyDetails from "../../../Components/agencies/AgencyDetails";
-import AgencyDetailsTopbar from "../../../Components/agencies/AgencyDetailsTopbar";
+import AgencyDetails from "@/app/Components/Agencies/AgencyDetails";
+import AgencyDetailsTopbar from "@/app/Components/Agencies/AgencyDetailsTopbar";
 import { BiPencil } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-import DeleteAgency from "../../../Components/agencies/DeleteAgency";
+import DeleteAgency from "@/app/Components/Agencies/DeleteAgency";
 
 const Overview = () => {
   const [status, setStatus] = useState("Active");
@@ -62,15 +62,15 @@ const Overview = () => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg flex items-start justify-between">
+          <div className="text-white w-full rounded-lg flex items-start justify-between px-6">
             <AgencyDetails />
-            <div className="w-[69%] h-[82vh]">
+            <div className="w-[69%] min-[1600px]:h-[82vh] h-fit">
               <AgencyDetailsTopbar />
-              <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-4 flex flex-col justify-between">
+              <div className="border border-gray-500/5 min-[1600px]:h-[83vh] h-fit w-full rounded-lg p-3 min-[1600px]:p-4 flex flex-col justify-between">
                 <div>
                   <div>
-                    <h4 className="mainText20">Agency Details</h4>{" "}
-                    <div className="gradient-line my-4"></div>
+                    <h4 className="min-[1600px]:text-xl">Agency Details</h4>{" "}
+                    <div className="gradient-line min-[1600px]:my-4 my-2"></div>
                     <div className="flex items-start justify-between mt-4 px-3">
                       <div className="flex items-center w-1/12">
                         <div className="relative flex items-center justify-center">
@@ -103,7 +103,10 @@ const Overview = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-11/12 pl-[2vw]">
                         <div className="flex flex-col">
-                          <label htmlFor="name" className="mb-1.5">
+                          <label
+                            htmlFor="name"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Agency Name
                           </label>
                           <input
@@ -114,11 +117,14 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Agency Name"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="website" className="mb-1.5">
+                          <label
+                            htmlFor="website"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Website
                           </label>
                           <input
@@ -129,11 +135,14 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Website"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="location" className="mb-1.5">
+                          <label
+                            htmlFor="location"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Location
                           </label>
                           <input
@@ -144,17 +153,20 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Location"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="warrenty" className="mb-1.5">
+                          <label
+                            htmlFor="warrenty"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Warranty Period
                           </label>
                           <select
                             name="status"
                             id="status"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                             value={data?.warrenty}
                             onChange={(e) => {
                               setData({ ...data, warrenty: e.target.value });
@@ -170,7 +182,10 @@ const Overview = () => {
                           </select>
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="deployment" className="mb-1.5">
+                          <label
+                            htmlFor="deployment"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Deployment Date
                           </label>
                           <input
@@ -181,17 +196,20 @@ const Overview = () => {
                             }}
                             type="date"
                             placeholder="Enter deployment Period"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="license" className="mb-1.5">
+                          <label
+                            htmlFor="license"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             License Limit
                           </label>
                           <select
                             name="status"
                             id="status"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                             value={data?.license}
                             onChange={(e) => {
                               setData({ ...data, license: e.target.value });
@@ -207,13 +225,16 @@ const Overview = () => {
                           </select>
                         </div>{" "}
                         <div className="flex flex-col">
-                          <label htmlFor="status" className="mb-1.5">
+                          <label
+                            htmlFor="status"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Status
                           </label>
                           <select
                             name="status"
                             id="status"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                           >
@@ -227,7 +248,10 @@ const Overview = () => {
                           </select>
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="comment" className="mb-1.5">
+                          <label
+                            htmlFor="comment"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Comment
                           </label>
                           <input
@@ -238,15 +262,17 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Comment"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="mt-8">
-                    <h4 className="mainText20">Key Contact Information</h4>{" "}
-                    <div className="gradient-line my-4"></div>
+                    <h4 className="min-[1600px]:text-xl">
+                      Key Contact Information
+                    </h4>{" "}
+                    <div className="gradient-line min-[1600px]:my-4 my-2"></div>
                     <div className="flex items-start justify-between mt-4 px-3">
                       <div className="flex items-center w-1/12">
                         <div className="relative flex items-center justify-center">
@@ -279,7 +305,10 @@ const Overview = () => {
                       </div>
                       <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-11/12 pl-[2vw]">
                         <div className="flex flex-col">
-                          <label htmlFor="namekey" className="mb-1.5">
+                          <label
+                            htmlFor="namekey"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Name
                           </label>
                           <input
@@ -296,11 +325,14 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Name"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="designation" className="mb-1.5">
+                          <label
+                            htmlFor="designation"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Designation
                           </label>
                           <input
@@ -317,11 +349,14 @@ const Overview = () => {
                             }}
                             type="text"
                             placeholder="Enter Designation"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="email" className="mb-1.5">
+                          <label
+                            htmlFor="email"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Email Address
                           </label>
                           <input
@@ -338,11 +373,14 @@ const Overview = () => {
                             }}
                             type="email"
                             placeholder="Enter Email Address"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
-                          <label htmlFor="phone" className="mb-1.5">
+                          <label
+                            htmlFor="phone"
+                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                          >
                             Phone no.
                           </label>
                           <input
@@ -359,16 +397,16 @@ const Overview = () => {
                             }}
                             type="number"
                             placeholder="Enter Phone no."
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between 2xl:mt-0 mt-6">
+                <div className="flex items-center justify-between min-[1600px]:mt-0 mt-6">
                   <button
-                    className={`bg-red-600 font-semibold px-8 py-2 rounded-xl flex items-center ml-4`}
+                    className={`bg-red-600 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl flex items-center ml-4`}
                     onClick={() => {
                       setDeleteAgency(!deleteAgency);
                     }}
@@ -379,13 +417,13 @@ const Overview = () => {
                   <div>
                     {" "}
                     <button
-                      className={`bg-[#898989]/15 font-semibold px-8 py-2 rounded-xl ml-4`}
+                      className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
                       onClick={() => {}}
                     >
                       Discard
                     </button>
                     <button
-                      className={`bg-newBlue font-semibold px-8 py-2 rounded-xl ml-4`}
+                      className={`bg-newBlue min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
                       onClick={() => {}}
                     >
                       Save

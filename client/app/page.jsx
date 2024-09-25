@@ -21,21 +21,28 @@ const App = () => {
       <Toaster />
       <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
         <div className="text-white flex flex-col items-center w-7/12 px-5">
-          <div className="flex items-center gap-x-6 mb-20">
+          <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-8 min-[1600px]:mb-20">
             <Image
               src="/logo.png"
               alt="Logo"
               width={1000}
               height={1000}
-              className="w-[70px]"
+              className="w-12 min-[1600px]:w-[70px]"
             />
-            <h4 className="text-[38.5px] uppercase">SIGHTSHARK</h4>
+            <h4 className="text-4xl min-[1600px]:text-[38.5px] uppercase">
+              SIGHTSHARK
+            </h4>
           </div>
-          <h1 className="text-[40px] font-semibold">Welcome Back</h1>
+          <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
+            Welcome Back
+          </h1>
           <p className="mainText18 text-white/80">Login into your account</p>
-          <div className="w-11/12 mt-4">
-            <div className="flex flex-col mt-10 mb-6">
-              <label htmlFor="email" className="mb-1.5 text-base">
+          <div className="w-11/12 min-[1600px]:mt-4">
+            <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
+              <label
+                htmlFor="email"
+                className="mb-1.5 text-sm min-[1600px]:text-base"
+              >
                 Email
               </label>
               <input
@@ -49,7 +56,10 @@ const App = () => {
                 className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
               />
             </div>
-            <label htmlFor="password" className="text-base">
+            <label
+              htmlFor="password"
+              className="text-sm min-[1600px]:text-base"
+            >
               Password
             </label>
             <div className="w-full relative mt-1.5">
@@ -64,7 +74,7 @@ const App = () => {
                 className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
               />
               <div
-                className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-xl cursor-pointer"
+                className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   setShowPassword(!showPassword);
@@ -73,19 +83,19 @@ const App = () => {
                 {showPassword ? <LuEye /> : <LuEyeOff />}
               </div>
             </div>
-            <div className="my-8 flex items-center justify-between">
-              <div className="mainText18 flex items-center gap-x-3">
+            <div className="my-4 min-[1600px]:my-8 flex items-center justify-between">
+              <div className="mainText18 flex items-center gap-x-2 min-[1600px]:gap-x-3">
                 <div className="inline-flex items-start">
                   <label className="relative flex items-center cursor-pointer">
                     <input
                       type="checkbox"
-                      className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
+                      className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
                       id="check"
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
+                        className="min-[1600px]:h-4 min-[1600px]:w-4 w-3 h-3"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         stroke="currentColor"
@@ -117,7 +127,7 @@ const App = () => {
                 //     .post(`${BACKEND_URI}/login/login`, { ...user })
                 //     .then((res) => {
                 //       Cookies.set("token", res.data);
-                history.push("/register");
+                history.push("/overview");
                 //       checkToken();
                 //     })
                 //     .catch((err) => {
@@ -129,7 +139,7 @@ const App = () => {
             >
               Log In
             </button>
-            <div className="flex items-center justify-between w-full my-10">
+            <div className="flex items-center justify-between w-full my-5 min-[1600px]:my-10">
               <div className="line w-full h-[1px] bg-[#343745]"></div>
               <span className="px-2 whitespace-nowrap text-[#85888E] mainText14">
                 Or

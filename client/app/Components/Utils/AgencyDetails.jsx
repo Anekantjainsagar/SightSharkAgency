@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import DeleteAgency from "../agencies/DeleteAgency";
+import DeleteAgency from "../Agencies/DeleteAgency";
 
 const AgencyDetailsBlock = ({ status, percentage }) => {
   const history = useRouter();
@@ -18,7 +18,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
         onClick={() => {
           history.push("/clients/alpha-solutions");
         }}
-        className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey mainText14"
+        className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >
         {" "}
         <div className="inline-flex items-start">
@@ -59,10 +59,10 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             src="/Agency/Avatar.png"
             width={1000}
             height={1000}
-            className="w-9 aspect-square rounded-full"
+            className="w-7 min-[1600px]:w-9 aspect-square rounded-full"
             alt="Key contact"
           />
-          <p className="ml-4">Olivia Rhye</p>
+          <p className="ml-2 min-[1600px]:ml-4">Olivia Rhye</p>
         </div>
         <p className="break-words w-full">alpha.solutions@example.com</p>
         <p>13-08-2024</p>
@@ -80,12 +80,10 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
         <div className="flex items-center justify-end">
           <div className="mr-5">
             <svg
-              width="20"
-              height="14"
               viewBox="0 0 20 14"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="scale-110"
+              className="scale-110 w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               onClick={() => {
                 history.push("/clients/alpha-solutions");
               }}
@@ -108,8 +106,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
           </div>
           <div className="mr-4">
             <svg
-              width="20"
-              height="20"
+              className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -129,8 +126,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
           </div>
           <div>
             <svg
-              width="20"
-              height="20"
+              className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

@@ -2,7 +2,7 @@ import React from "react";
 
 const AgencySmallBlock = ({ status }) => {
   return (
-    <div className="py-3 px-7 border-gray-400/5 border-y grid agencySmallBlockGrid items-center cursor-pointer text-textGrey mainText12">
+    <div className="py-3 px-7 border-gray-400/5 border-y grid agencySmallBlockGrid items-center cursor-pointer text-textGrey ">
       <div className="inline-flex items-start">
         <label className="relative flex items-center cursor-pointer">
           <input
@@ -28,14 +28,16 @@ const AgencySmallBlock = ({ status }) => {
           </span>
         </label>
       </div>
-      <h5>Alpha solutions</h5>
+      <h5 className="text-sm min-[1600px]:text-base min-[1600px]:ml-0 ml-1">
+        Alpha solutions
+      </h5>
       <div
-        className={`status-${status?.toLowerCase()} w-fit mx-auto px-2.5 border-2 py-0.5 rounded-2xl`}
+        className={`status-${status?.toLowerCase()} text-sm min-[1600px]:text-base w-fit mx-auto px-2.5 border-2 py-0.5 rounded-2xl`}
       >
         {status}
       </div>
-      <p className="text-center">13-08-2024</p>
-      <p className="text-center">13-08-2024</p>
+      <p className="text-center text-sm min-[1600px]:text-base">13-08-2024</p>
+      <p className="text-center text-sm min-[1600px]:text-base">13-08-2024</p>
     </div>
   );
 };

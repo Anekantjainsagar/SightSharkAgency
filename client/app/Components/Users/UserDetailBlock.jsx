@@ -1,11 +1,11 @@
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import DeleteUser from "./DeleteUser";
 
 const UserDetailBlock = ({ status, acess }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  // const history = useRouter();
+  const history = useRouter();
 
   return (
     <>
@@ -13,7 +13,7 @@ const UserDetailBlock = ({ status, acess }) => {
         showSubscribe={showDeletePopup}
         setShowSubscribe={setShowDeletePopup}
       />
-      <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey mainText14">
+      <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
         <div className="inline-flex items-start">
           <label className="relative flex items-center cursor-pointer">
             <input
@@ -39,15 +39,15 @@ const UserDetailBlock = ({ status, acess }) => {
             </span>
           </label>
         </div>{" "}
-        <div className="flex items-start">
+        <div className="flex items-start min-[1600px]:ml-0 ml-2">
           <Image
             src="/Agency/Avatar.png"
             width={1000}
             height={1000}
-            className="w-10 aspect-square rounded-full"
+            className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
             alt="Key contact"
           />
-          <div className="ml-4">
+          <div className="ml-2.5 min-[1600px]:ml-4">
             <p className="mainText14">Olivia Rhye</p>
             <p className="mainText14 text-[#85888E]">olivia@gmail.com</p>
           </div>
@@ -68,13 +68,12 @@ const UserDetailBlock = ({ status, acess }) => {
         <div className="flex items-center justify-end">
           <div className="mr-4">
             <svg
-              width="20"
-              height="20"
+              className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               onClick={(e) => {
-                e.preventDefault();
+                e.stopPropagation();
               }}
             >
               <path
@@ -88,8 +87,7 @@ const UserDetailBlock = ({ status, acess }) => {
           </div>
           <div>
             <svg
-              width="20"
-              height="20"
+              className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

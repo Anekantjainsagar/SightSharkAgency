@@ -5,7 +5,6 @@ import Image from "next/image";
 // import { useRouter } from "next/navigation";
 
 const Overview = () => {
-
   // const history = useRouter();
 
   const connectorsData = [
@@ -128,7 +127,7 @@ const Overview = () => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full p-6">
+          <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
             <div className="grid grid-cols-4 gap-x-6">
               {[
                 {
@@ -155,11 +154,13 @@ const Overview = () => {
                 return (
                   <div
                     key={i}
-                    className="bg-[#171C2A]/50 flex items-center justify-between p-6 border border-gray-500/5 rounded-xl"
+                    className="bg-[#171C2A]/50 flex items-center justify-between p-4 min-[1600px]:p-6 border border-gray-500/5 rounded-xl"
                   >
                     <div>
-                      <p className="text-[#CECFD2]">{e?.name}</p>
-                      <p className="text-[30px] font-semibold mt-1">
+                      <p className="text-sm min-[1600px]:text-base text-[#CECFD2]">
+                        {e?.name}
+                      </p>
+                      <p className="text-[20px] min-[1600px]:text-[30px] font-semibold mt-1">
                         {e?.value}
                       </p>
                     </div>
@@ -168,21 +169,21 @@ const Overview = () => {
                       alt={e.img?.src}
                       width={1000}
                       height={1000}
-                      className="w-[60px] aspect-square"
+                      className="w-[50px] min-[1600px]:w-[60px] aspect-square"
                     />
                   </div>
                 );
               })}
             </div>
-            <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-6">
-              <h3 className="text-[20px]">Data Sources</h3>{" "}
-              <div className="gradient-line my-4"></div>
-              <div className="h-[26vh] overflow-y-auto small-scroller grid grid-cols-3 gap-y-5 bg-[#171C2A]/70 p-4 rounded-lg border border-gray-500/5">
+            <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
+              <h3 className="text-lg min-[1600px]:text-[20px]">Data Sources</h3>{" "}
+              <div className="gradient-line my-2 min-[1600px]:my-4"></div>
+              <div className="h-[26vh] overflow-y-auto small-scroller grid grid-cols-3 gap-y-3 min-[1600px]:gap-y-5 bg-[#171C2A]/70 p-3 min-[1600px]:p-4 rounded-lg border border-gray-500/5">
                 {connectorsData?.map((e, i) => {
                   return (
                     <div key={i} className="flex items-center">
                       <div className="flex items-center">
-                        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-10 aspect-square p-2 mr-4">
+                        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-9 min-[1600px]:w-10 aspect-square p-2 mr-3 min-[1600px]:mr-4">
                           <Image
                             src={e?.img}
                             alt={e?.img?.src}
@@ -191,19 +192,24 @@ const Overview = () => {
                             className="aspect-squre object-contain"
                           />{" "}
                         </div>
-                        <p className="mainText14 cursor-pointer">{e?.title}</p>
+                        <p className="text-sm min-[1600px]:text-base cursor-pointer">
+                          {e?.title}
+                        </p>
                       </div>
                     </div>
                   );
                 })}
               </div>
             </div>
-            <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-6">
-              <h3 className="text-[20px]" onClick={() => {}}>
+            <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
+              <h3
+                className="text-lg min-[1600px]:text-[20px]"
+                onClick={() => {}}
+              >
                 Templates
               </h3>{" "}
-              <div className="gradient-line my-4"></div>
-              <div className="grid grid-cols-4 gap-x-4 mt-2">
+              <div className="gradient-line my-2 min-[1600px]:my-4"></div>
+              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2">
                 {[
                   {
                     img: "/Agency/individual/templates/1 (2).png",

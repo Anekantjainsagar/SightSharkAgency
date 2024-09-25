@@ -3,27 +3,27 @@
 @tailwind utilities;
 
 .mainLogoSize {
-  @apply text-[24px];
+  @apply text-[20px] min-[1600px]:text-[24px];
 }
 
 .bigFont {
-  @apply text-[36px];
+  @apply text-[28px] min-[1600px]:text-[36px];
 }
 
 .maintext12 {
-  @apply text-[12px];
+  @apply text-[10px] min-[1600px]:text-[12px];
 }
 
 .maintext14 {
-  @apply text-[14px];
+  @apply text-[12px] min-[1600px]:text-[14px];
 }
 
 .mainText18 {
-  @apply text-[18px];
+  @apply text-sm min-[1600px]:text-[18px];
 }
 
 .mainText20 {
-  @apply text-[20px];
+  @apply text-[18px] min-[1600px]:text-[20px];
 }
 
 ::-webkit-calendar-picker-indicator {

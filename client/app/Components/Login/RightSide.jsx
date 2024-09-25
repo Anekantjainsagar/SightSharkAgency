@@ -5,7 +5,7 @@ import Image from "next/image";
 const RightSide = memo(() => {
   return (
     <div className="w-5/12 relative p-[3vw] flex flex-col items-center justify-between bg-gradient-to-br from-gradientMain/50 from-[50%] to-black/50 h-full">
-      <div className="w-11/12 flex items-center justify-center">
+      <div className="w-11/12 flex items-center justify-center min-[1600px]:mt-0 mt-10">
         <IconCloud
           iconSlugs={[
             "amazon",
@@ -39,7 +39,7 @@ const RightSide = memo(() => {
         height={1000}
         className="absolute top-0 left-0 object-cover w-full h-full"
       />
-      <div className="p-[1.5vw] glass rounded-xl text-[26px]">
+      <div className="p-[1.5vw] glass rounded-xl text-xl min-[1600px]:text-[26px]">
         <p className="text-white">
           Today, we create innovative solutions to the challenges that consumers
           face in both their everyday lives and events.

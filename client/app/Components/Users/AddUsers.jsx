@@ -33,6 +33,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   });
   const fileInputRef = React.useRef(null);
 
+  // Function to handle file selection
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -75,7 +76,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   onClick={() => {
                     fileInputRef.current.click();
                   }}
-                  className="absolute bg-newBlue flex items-center justify-center text-2xl px-2 -bottom-2 cursor-pointer -right-2 rounded-full"
+                  className="absolute bg-newBlue flex items-center justify-center text-2xl px-2 bottom-0 min-[1600px]:-bottom-2 cursor-pointer right-0 min-[1600px]:-right-2 rounded-full"
                 >
                   +
                 </div>
@@ -84,13 +85,16 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[4vw] rounded-full"
+                  className="w-[6vw] min-[1600px]:w-[4vw] rounded-full"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-x-8 gap-y-6">
               <div className="flex flex-col">
-                <label htmlFor="name" className="mb-1.5 text-base">
+                <label
+                  htmlFor="name"
+                  className="mb-1.5 text-sm min-[1600px]:text-base"
+                >
                   First Name
                   <Required />
                 </label>
@@ -102,11 +106,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter First Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-[45px] px-4 py-2 rounded-lg"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-9 min-[1600px]:h-[45px] px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="lastName" className="mb-1.5 text-base">
+                <label
+                  htmlFor="lastName"
+                  className="mb-1.5 text-sm min-[1600px]:text-base"
+                >
                   Last Name
                   <Required />
                 </label>
@@ -118,11 +125,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Last Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                 />
               </div>
               <div className="flex flex-col">
-                <label htmlFor="email" className="mb-1.5 text-base">
+                <label
+                  htmlFor="email"
+                  className="mb-1.5 text-sm min-[1600px]:text-base"
+                >
                   Email
                   <Required />
                 </label>
@@ -134,7 +144,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Email"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                 />
               </div>{" "}
               <div className="flex flex-col">
@@ -145,7 +155,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                 <select
                   name="access"
                   id="access"
-                  className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                  className="glass outline-none border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                   value={data?.access}
                   onChange={(e) => {
                     setData({ ...data, access: e.target.value });
@@ -162,7 +172,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
               </div>
             </div>
           </div>
-          <div className="px-[5vw] w-full flex items-center justify-end py-5 text-base">
+          <div className="px-[5vw] w-full flex items-center justify-end py-5 text-sm min-[1600px]:text-base">
             <button
               onClick={() => {
                 if (page == maxPage) {

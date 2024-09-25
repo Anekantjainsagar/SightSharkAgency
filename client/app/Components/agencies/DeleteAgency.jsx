@@ -1,6 +1,7 @@
 "use client";
+import React, { useState } from "react";
 import Modal from "react-modal";
-import  { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -49,14 +50,14 @@ const DeleteAgency = ({ showSubscribe, setShowSubscribe }) => {
               />
             </svg>
           </div>
-          <h4 className="mainText20 mt-5">
+          <h4 className="min-[1600px]:text-xl text-center mt-5">
             Are you sure you want to delete the Agency?
           </h4>
-          <p className="bg-[#171C2A] p-3 text-[#ECECED] text-center text-base my-2.5">
+          <p className="bg-[#171C2A] p-3 text-[#ECECED] text-center text-sm min-[1600px]:text-base my-2.5">
             All Dashboards, Data sources and Templates will be lost and
             permanently deleted.
           </p>
-          <p className="text-[#B2B4BA] text-base my-2">
+          <p className="text-[#B2B4BA] text-sm min-[1600px]:text-base my-2">
             This action can’t be undone.
           </p>
           <p className="mainText18 mb-2 text-[#B2B4BA]">
@@ -66,12 +67,12 @@ const DeleteAgency = ({ showSubscribe, setShowSubscribe }) => {
           </p>
           <input
             type="text"
-            className="mb-4 glass outline-none text-lg px-4 py-2 w-full rounded-md"
+            className="mb-4 glass outline-none text-sm min-[1600px]:text-lg px-4 py-2 w-full rounded-md"
             placeholder="Enter here"
           />
-          <div className="flex items-center gap-x-4 w-full">
+          <div className="flex items-center gap-x-4 w-full text-sm min-[1600px]:text-base">
             <button
-              className={`bg-[#898989]/15 w-full py-2 rounded-lg text-center`}
+              className={`bg-[#898989]/15 w-full py-1.5 min-[1600px]:py-2 rounded-lg text-center`}
               onClick={() => {
                 closeModal();
               }}
@@ -79,7 +80,7 @@ const DeleteAgency = ({ showSubscribe, setShowSubscribe }) => {
               Cancel
             </button>
             <button
-              className={`bg-red-600 w-full py-2 rounded-lg text-center`}
+              className={`bg-red-600 w-full py-1.5 min-[1600px]:py-2 rounded-lg text-center`}
               onClick={() => {}}
             >
               Delete

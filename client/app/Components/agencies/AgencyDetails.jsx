@@ -4,7 +4,7 @@ import { PieChart } from "react-minimal-pie-chart";
 
 const AgencyDetails = () => {
   return (
-    <div className="border border-gray-500/5 h-[88vh] p-4 w-[30%] rounded-lg flex flex-col items-center justify-center">
+    <div className="border border-gray-500/5 min-[1600px]:h-[88vh] p-4 w-[30%] rounded-lg flex flex-col items-center justify-center">
       <Image
         width={1000}
         height={1000}
@@ -137,12 +137,14 @@ const AgencyDetails = () => {
             >
               <div className="flex items-center">
                 {e?.img}
-                <h6 className="text-textGrey ml-3">{e?.title}</h6>
+                <h6 className="text-textGrey text-sm min-[1600px]:text-base ml-3">
+                  {e?.title}
+                </h6>
               </div>
               <div
                 className={`${
                   e?.title == "Status" ? "text-[#12B76A]" : "text-[#ECECED]"
-                } flex items-center mainText14`}
+                } flex items-center text-sm min-[1600px]:text-base`}
               >
                 {e?.title == "Status" && (
                   <div className="w-[10px] mr-2 h-[10px] rounded-full bg-[#12B76A]"></div>
@@ -154,7 +156,7 @@ const AgencyDetails = () => {
         })}
       </div>{" "}
       <div className="border rounded-xl w-full border-gray-500/15">
-        <h5 className="w-full p-3 border-b border-b-gray-500/15">
+        <h5 className="w-full p-3 text-sm min-[1600px]:text-base border-b border-b-gray-500/15">
           Key Contact Info
         </h5>
         {[
@@ -184,8 +186,12 @@ const AgencyDetails = () => {
               key={i}
               className="w-full flex items-center justify-between px-4 my-3.5"
             >
-              <h6 className="text-textGrey text-base">{e?.title}</h6>
-              <p className={`text-[#ECECED] flex items-center mainText14`}>
+              <h6 className="text-textGrey text-sm min-[1600px]:text-base">
+                {e?.title}
+              </h6>
+              <p
+                className={`text-[#ECECED] flex items-center text-sm min-[1600px]:text-base`}
+              >
                 {e?.value}
               </p>
             </div>
@@ -193,12 +199,16 @@ const AgencyDetails = () => {
         })}{" "}
       </div>
       <div className="border rounded-xl w-full border-gray-500/15 mt-4">
-        <h5 className="w-full p-3 border-b border-b-gray-500/15">
+        <h5 className="w-full p-3 border-b text-sm min-[1600px]:text-base border-b-gray-500/15">
           License Limit
         </h5>
         <div className="w-4/12 mx-auto my-4 relative">
-          <p className="text-center text-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold">
-            15 <span className="text-sm font-normal">out of</span> 50
+          <p className="text-center text-sm min-[1600px]:text-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold">
+            15{" "}
+            <span className="text-xs min-[1600px]:text-sm font-normal">
+              out of
+            </span>{" "}
+            50
           </p>
           <PieChart
             data={[

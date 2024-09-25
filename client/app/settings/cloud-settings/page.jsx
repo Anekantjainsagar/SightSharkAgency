@@ -25,18 +25,21 @@ const CloudSettings = () => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-0 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5">
           <Navbar />
-          <div className="h-[85vh] w-full flex gap-x-5 justify-between items-start text-white">
+          <div className="h-[85vh] w-full flex gap-x-5 justify-between items-start text-white px-6">
             <SettingsLeftbar />
             <div className="w-8/12 h-fit justify-between flex flex-col items-start border border-gray-500/5 rounded-lg px-6 py-4 text-white">
               <div className="w-full">
                 <h4 className="mainLogoSize font-semibold">Cloud Settings</h4>{" "}
-                <div className="gradient-line my-4"></div>
-                <h6 className="text-[20px] font-medium mt-5">
+                <div className="gradient-line mt-2 min-[1600px]:mb-4 mb-0 min-[1600px]:mt-4"></div>
+                <h6 className="text-lg min-[1600px]:text-[20px] font-medium mt-5">
                   Google Cloud
                 </h6>{" "}
-                <div className="grid grid-cols-1 gap-y-6 mt-4 w-full">
+                <div className="grid grid-cols-1 gap-y-4 min-[1600px]:gap-y-6 mt-2 min-[1600px]:mt-4 w-full">
                   <div className="flex flex-col">
-                    <label htmlFor="cloudBucket" className="mb-1.5 text-base">
+                    <label
+                      htmlFor="cloudBucket"
+                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                    >
                       Google Cloud Bucket Name
                     </label>
                     <input
@@ -47,11 +50,14 @@ const CloudSettings = () => {
                       }}
                       type="text"
                       placeholder="Enter Google Cloud Bucket Name"
-                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md text-sm min-[1600px]:text-base"
                     />
                   </div>
                   <div className="flex flex-col">
-                    <label htmlFor="dataFreq" className="mb-1.5 text-base">
+                    <label
+                      htmlFor="dataFreq"
+                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                    >
                       Data Refresh Frequency
                     </label>
                     <select
@@ -61,13 +67,16 @@ const CloudSettings = () => {
                         setData({ ...data, dataFreq: e.target.value });
                       }}
                       type="text"
-                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md text-sm min-[1600px]:text-base"
                     >
                       <option></option>
                     </select>
                   </div>
                   <div className="flex flex-col">
-                    <label htmlFor="loadTimezone" className="mb-1.5 text-base">
+                    <label
+                      htmlFor="loadTimezone"
+                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                    >
                       Data Load Timezone
                     </label>
                     <select
@@ -77,21 +86,21 @@ const CloudSettings = () => {
                         setData({ ...data, loadTimezone: e.target.value });
                       }}
                       type="text"
-                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md"
+                      className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md text-sm min-[1600px]:text-base"
                     >
                       <option></option>
                     </select>
                   </div>
                 </div>
-                <div className="gradient-line my-8"></div>
-                <h6 className="text-[20px] font-medium mt-5">
+                <div className="gradient-line my-4 min-[1600px]:my-8"></div>
+                <h6 className="text-lg min-[1600px]:text-[20px] font-medium mt-5">
                   Service Accounts
                 </h6>{" "}
-                <div className="grid grid-cols-1 gap-y-6 mt-4 w-full">
+                <div className="grid grid-cols-1 gap-y-4 min-[1600px]:gap-y-6 mt-2 min-[1600px]:mt-4 w-full">
                   <div className="flex flex-col">
                     <label
                       htmlFor="switchAcc1"
-                      className="mb-1.5 text-base flex items-center"
+                      className="mb-1.5 text-sm min-[1600px]:text-base flex items-center"
                     >
                       Service Account 1<Info />
                     </label>
@@ -103,13 +112,13 @@ const CloudSettings = () => {
                       }}
                       rows={2}
                       placeholder="Service Account 1"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md text-sm min-[1600px]:text-base"
                     ></textarea>
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="switchAcc2"
-                      className="mb-1.5 text-base flex items-center"
+                      className="mb-1.5 text-sm min-[1600px]:text-base flex items-center"
                     >
                       Service Account 2 <Info />
                     </label>
@@ -121,20 +130,20 @@ const CloudSettings = () => {
                       }}
                       rows={2}
                       placeholder="Service Account 2"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md text-sm min-[1600px]:text-base"
                     ></textarea>
                   </div>
                 </div>
               </div>
-              <div className="mt-10 flex items-center justify-end w-full">
+              <div className="mt-7 min-[1600px]:mt-10 flex items-center justify-end w-full">
                 <button
-                  className={`bg-[#898989]/15 font-semibold w-[160px] px-8 py-3 rounded-xl ml-4`}
+                  className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
                   onClick={() => {}}
                 >
                   Discard
                 </button>
                 <button
-                  className={`bg-newBlue font-semibold w-[160px] px-8 py-3 rounded-xl ml-4`}
+                  className={`bg-newBlue font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
                   onClick={() => {}}
                 >
                   Save

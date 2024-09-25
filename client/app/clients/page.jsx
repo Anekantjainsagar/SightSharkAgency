@@ -1,45 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetailsBlock from "@/app/Components/Utils/AgencyDetails";
+import AddAgency from "@/app/Components/Agencies/AddAgency";
 import { FaPlus } from "react-icons/fa";
-import NewPopup from "@/app/Components/Utils/NewPopup";
 
 const Overview = () => {
   const [page, setPage] = useState(1);
-  const [showNewPopup, setShowNewPopup] = useState(false);
+  const [addAgency, setAddAgency] = useState(false);
 
   let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
     <div className="flex items-start h-[100vh]">
       <Leftbar />
-      <NewPopup
-        showSubscribe={showNewPopup}
-        setShowSubscribe={setShowNewPopup}
-      />
+      <AddAgency showSubscribe={addAgency} setShowSubscribe={setAddAgency} />
       <div className="w-[85%] bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg p-6">
+          <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-2xl">
-                Clients <span className="text-xl text-white/80">(25)</span>
+              <h3 className="text-xl min-[1600px]:text-2xl">
+                Clients{" "}
+                <span className="text-lg min-[1600px]:text-xl text-white/80">
+                  (25)
+                </span>
               </h3>
               <div className="flex items-center">
                 <button
                   onClick={() => {
-                    setShowNewPopup(!showNewPopup);
+                    setAddAgency(!addAgency);
                   }}
-                  className="bg-newBlue px-6 py-3 rounded-xl ml-4 flex items-center gap-x-2 text-base"
+                  className="bg-newBlue px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 flex items-center gap-x-2 text-sm min-[1600px]:text-base"
                 >
                   <FaPlus className="text-sm" /> Add Client
                 </button>
-                <button className="glass px-6 py-3 rounded-xl ml-4 text-base flex items-center gap-x-2 border border-gray-200/5">
+                <button className="glass px-6 py-2 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5">
                   <svg
                     width="24"
                     height="24"
@@ -61,7 +61,7 @@ const Overview = () => {
                   </svg>
                   Export as CSV
                 </button>
-                <button className="glass px-6 py-3 rounded-xl ml-4 text-base flex items-center gap-x-2 border border-gray-200/5">
+                <button className="glass px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5">
                   <svg
                     width="20"
                     height="20"
@@ -119,14 +119,14 @@ const Overview = () => {
                   return (
                     <h5
                       key={i}
-                      className="text-base font-light tracking-wider"
+                      className="text-[13px] min-[1600px]:text-base font-light tracking-wider"
                     >
                       {e}
                     </h5>
                   );
                 })}
               </div>
-              <div className="h-[70vh]">
+              <div className="h-[69.5vh] min-[1600px]:h-[70vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   <AgencyDetailsBlock status={"Active"} percentage={10} />
                   <AgencyDetailsBlock status={"Offline"} percentage={20} />
@@ -135,18 +135,11 @@ const Overview = () => {
                   <AgencyDetailsBlock status={"Active"} percentage={50} />
                   <AgencyDetailsBlock status={"Offline"} percentage={60} />
                   <AgencyDetailsBlock status={"Active"} percentage={70} />
-                  <AgencyDetailsBlock status={"Offline"} percentage={80} />
                 </div>
-                <div className="h-[11%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
+                <div className="h-[14%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
-                    <button
-                      className="text-white bg-[#898989]/15 flex items-center w-[145px] justify-center py-3 rounded-lg mainText14"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPage(page - 1);
-                      }}
-                    >
-                      <div className="mr-2 w-8">
+                    <button className="text-white bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
+                      <div className="mr-2 w-5 min-[1600px]:w-8">
                         <svg
                           className="w-full h-full"
                           viewBox="0 0 24 24"
@@ -169,7 +162,7 @@ const Overview = () => {
                       {data?.slice(0, 3)?.map((e, i) => {
                         return (
                           <div
-                            className={`w-[40px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                            className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
                               page == e ? "bg-newBlue" : "text-[#85888E]"
                             }`}
                             key={i}
@@ -187,7 +180,7 @@ const Overview = () => {
                           return (
                             <div
                               key={i}
-                              className={`w-[40px] h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                              className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
                                 page == e ? "bg-newBlue" : "text-[#85888E]"
                               }`}
                             >
@@ -196,15 +189,9 @@ const Overview = () => {
                           );
                         })}
                     </div>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPage(page + 1);
-                      }}
-                      className="text-white bg-newBlue flex items-center w-[145px] justify-center py-3 rounded-lg mainText14"
-                    >
+                    <button className="text-white bg-newBlue flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
                       Next
-                      <div className="ml-2 w-8">
+                      <div className="ml-2 w-5 min-[1600px]:w-8">
                         <svg
                           className="w-full h-full"
                           viewBox="0 0 24 24"
