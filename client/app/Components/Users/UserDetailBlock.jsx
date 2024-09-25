@@ -52,8 +52,8 @@ const UserDetailBlock = ({ status, acess }) => {
             <p className="mainText14 text-[#85888E]">olivia@gmail.com</p>
           </div>
         </div>
-        <h5>{acess}</h5>
-        <div className="w-full">
+        <h5 className="text-center">{acess}</h5>
+        <div className="w-full flex items-center justify-center">
           <div
             className={`status-${status?.toLowerCase()} flex items-center gap-x-2 w-fit px-3 border-2 py-0.5 rounded-2xl`}
           >
@@ -63,8 +63,8 @@ const UserDetailBlock = ({ status, acess }) => {
             {status}
           </div>
         </div>
-        <p>15-08-2024</p>
-        <p>6:30 PM, 16-08-2024</p>
+        <p className="text-center">15-08-2024</p>
+        <p className="text-center">6:30 PM, 16-08-2024</p>
         <div className="flex items-center justify-end">
           <div className="mr-4">
             <svg

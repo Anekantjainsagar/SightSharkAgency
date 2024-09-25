@@ -99,8 +99,8 @@ input[type="number"] {
 }
 
 .userBlockGrid {
-  /* grid-template-columns: 3% 20% 15% 15% 15% 17% 15%; */
-  grid-template-columns: 3% 25% 16% 18% 15% 18% 4%;
+  /* grid-template-columns: 3% 25% 16% 18% 15% 18% 4%; */
+  grid-template-columns: 3% 18% 17% 19% 16% 19% 7%;
 }
 
 .status-active {

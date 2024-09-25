@@ -46,7 +46,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             </span>
           </label>
         </div>
-        <h5>Alpha solutions</h5>
+        <h5 className="min-[1600px]:ml-0 ml-2">Alpha solutions</h5>
         <div className="w-full flex items-center justify-center">
           <div
             className={`status-${status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
