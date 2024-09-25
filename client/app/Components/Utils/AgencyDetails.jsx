@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import DeleteAgency from "../Agencies/DeleteAgency";
+import DeleteAgency from "../agencies/DeleteAgency";
 
 const AgencyDetailsBlock = ({ status, percentage }) => {
   const history = useRouter();
