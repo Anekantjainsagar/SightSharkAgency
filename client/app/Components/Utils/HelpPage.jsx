@@ -1,11 +1,9 @@
 "use client";
-import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
+// import { useRouter } from "next/navigation";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -22,7 +20,7 @@ const customStyles = {
 };
 
 const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
-  const history = useRouter();
+  // const history = useRouter();
   function closeModal() {
     setShowSubscribe(false);
   }

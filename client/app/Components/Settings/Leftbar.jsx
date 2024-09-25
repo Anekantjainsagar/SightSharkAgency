@@ -113,7 +113,7 @@ const SettingsLeftbar = () => {
   );
 };
 
-const Block = ({ e, idx }) => {
+const Block = ({ e, }) => {
   const pathname = usePathname();
   const history = useRouter();
 

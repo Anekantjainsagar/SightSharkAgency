@@ -369,7 +369,7 @@ const NewwBlock = ({ e, setShow, show }) => {
     </div>
   );
 };
-
+  
 const Block = ({ e }) => {
   const pathname = usePathname();
   const history = useRouter();

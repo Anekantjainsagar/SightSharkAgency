@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import DeleteUser from "./DeleteUser";
 
 const UserDetailBlock = ({ status, acess }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const history = useRouter();
+  // const history = useRouter();
 
   return (
     <>

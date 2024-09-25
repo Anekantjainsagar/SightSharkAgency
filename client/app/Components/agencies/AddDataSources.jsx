@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
 
 const customStyles = {
@@ -134,9 +134,6 @@ const connectorsData = [
 
 const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
   const [search, setSearch] = useState("");
-  const [data, setData] = useState({
-    dataSources: [],
-  });
 
   function closeModal() {
     setShowSubscribe(false);

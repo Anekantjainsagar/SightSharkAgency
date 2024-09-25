@@ -1,7 +1,7 @@
 "use client";
 import Context from "@/app/Context/Context";
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 
