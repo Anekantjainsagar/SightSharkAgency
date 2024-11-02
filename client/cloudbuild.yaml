@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'asia-south1-docker.pkg.dev/${PROJECT_ID}/admin-portal-backend/admin-backend:latest',
+      'client/'
+    ]
+
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push', 'asia-south1-docker.pkg.dev/${PROJECT_ID}/admin-portal-backend/admin-backend:latest'
+    ]
+
+images:
+  - 'asia-south1-docker.pkg.dev/${PROJECT_ID}/admin-portal-backend/admin-backend:latest'
