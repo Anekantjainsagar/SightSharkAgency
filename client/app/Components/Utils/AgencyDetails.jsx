@@ -1,26 +1,28 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import DeleteAgency from "../agencies/DeleteAgency";
+import DeleteAgency from "../Agencies/DeleteAgency";
 
-const AgencyDetailsBlock = ({ status, percentage }) => {
+const AgencyDetailsBlock = ({ status, percentage, data }) => {
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);
 
+  let name = data?.client_name?.replaceAll(" ", "-");
+
   return (
     <>
-      {" "}
       <DeleteAgency
         showSubscribe={deleteAgency}
         setShowSubscribe={setDeleteAgency}
+        name={data?.client_name}
+        id={data?.client_id}
       />
       <div
         onClick={() => {
-          history.push("/clients/alpha-solutions");
+          history.push(`/clients/${name}`);
         }}
         className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >
-        {" "}
         <div className="inline-flex items-start">
           <label className="relative flex items-center cursor-pointer">
             <input
@@ -46,15 +48,13 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             </span>
           </label>
         </div>
-        <h5 className="min-[1600px]:ml-0 ml-2">Alpha solutions</h5>
+        <h5 className="min-[1600px]:ml-0 ml-2">{data?.client_name}</h5>
         <div className="w-full flex items-center justify-center">
           <div
-            className={`status-${status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
-          >
-            {/* {status} */}
-          </div>
+            className={`status-${data?.status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
+          ></div>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-start pl-10">
           <Image
             src="/Agency/Avatar.png"
             width={1000}
@@ -62,12 +62,16 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             className="w-7 min-[1600px]:w-9 aspect-square rounded-full"
             alt="Key contact"
           />
-          <p className="ml-2 min-[1600px]:ml-4">Olivia Rhye</p>
+          <p className="ml-2 min-[1600px]:ml-4">{data?.key_contact_name}</p>
         </div>
         <p className="break-words w-full text-center">
-          alpha.solutions@example.com
+          {data?.key_contact_email_address}
         </p>
-        <p className="text-center">13-08-2024</p>
+        <p className="text-center">
+          {data?.deployment_date
+            ? new Date(data?.deployment_date).toString()?.slice(4, 21)
+            : ""}
+        </p>
         <div className="flex items-center justify-center">
           <div className="bg-[#343745] w-[6vw] rounded-full h-3">
             <div
@@ -87,7 +91,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               className="scale-110 w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               onClick={() => {
-                history.push("/clients/alpha-solutions");
+                history.push(`/clients/${name}`);
               }}
             >
               <path
@@ -114,7 +118,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               onClick={(e) => {
                 e.stopPropagation();
-                history.push("/clients/alpha-solutions/edit-profile");
+                history.push("/agencies/clientspha-solutions/edit-profile");
               }}
             >
               <path

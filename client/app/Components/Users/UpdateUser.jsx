@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
@@ -25,12 +25,11 @@ const customStyles = {
   },
 };
 
-const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
+const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
   let maxPage = 1;
   const { setUsers, users } = useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
   const [page, setPage] = useState(1);
-  const [file, setFile] = useState();
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -45,14 +44,20 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   });
   const fileInputRef = React.useRef(null);
 
+  useEffect(() => {
+    setData({
+      ...userData,
+      firstName: userData?.first_name,
+      lastName: userData?.last_name,
+      access: userData?.role,
+    });
+  }, [userData]);
+
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
+    console.log(file);
     if (file) {
-      console.log("Selected file:", file);
-      setFile(URL.createObjectURL(file));
-      setData({ ...data, profile: file }); // Update `data` state with the selected file
-    } else {
-      console.log("No file selected");
+      setData({ ...data, profile: file });
     }
   };
 
@@ -60,15 +65,8 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
     setShowSubscribe(false);
   }
 
-  const addUsers = () => {
-    if (
-      data?.firstName &&
-      data?.lastName &&
-      data?.email &&
-      data?.password &&
-      data?.access
-    ) {
-      // Construct URL with all non-file fields as query parameters
+  const updateUsers = () => {
+    if (data?.firstName && data?.lastName && data?.email && data?.access) {
       const queryParams = new URLSearchParams({
         email: data?.email,
         password: data?.password,
@@ -82,7 +80,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
       }).toString();
 
       let formdata = new FormData();
-      // Handle profile picture file upload
+
       if (data?.profile instanceof File || data?.profile instanceof Blob) {
         formdata.append("file_content", data?.profile); // The file itself
         formdata.append("filename", data?.profile.name); // The filename
@@ -94,36 +92,37 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
       }
 
       try {
-        fetch(`${BACKEND_URI}/user/create?${queryParams}`, {
+        fetch(`${BACKEND_URI}/user/update/${userData?.id}?${queryParams}`, {
           headers: {
             Accept:
               "application/json, application/xml, text/plain, text/html, *.*",
             Authorization: `Bearer ${getCookie("token")}`,
           },
-          method: "POST",
-          body: formdata, // Send the form data with the profile picture
+          method: "PUT",
+          body: formdata,
         })
-          .then((res) => res.json())
           .then((res) => {
-            console.log(res);
+            return res.json();
+          })
+          .then((res) => {
             if (res.msg) {
-              toast.success("User created successfully");
+              let temp = users?.data?.filter((e) => e?.id != userData?.id);
+              setUsers({ ...users, data: [...temp, res.data] });
+              toast.success("User updated successfully");
               closeModal();
-              setUsers({ ...users, data: [...users.data, res.data] });
-            } else if (res.detail) {
+            }
+            if (res.detail) {
               toast.error(res.detail);
             }
           })
           .catch((err) => {
-            console.error("Error creating user:", err);
-            toast.error("An error occurred while creating the user");
+            console.log(err);
           });
       } catch (error) {
-        console.error("Unexpected error:", error);
-        toast.error("An unexpected error occurred");
+        console.log(error);
       }
     } else {
-      toast.error("Please fill all the required details");
+      toast.error("Please fill all the details");
     }
   };
 
@@ -143,7 +142,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
           <div className="mb-5 text-center">
-            <h1 className="mainLogoSize font-semibold">User Details</h1>
+            <h1 className="mainLogoSize font-semibold">Update User Details</h1>
           </div>
           <div className="h-fit px-[8vw] w-full">
             <div className="flex items-center justify-center mb-6">
@@ -163,7 +162,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   +
                 </div>
                 <Image
-                  src={file ? file : "/Agency/temp_logo.png"}
+                  src={data?.profile ? data?.profile : "/Agency/temp_logo.png"}
                   alt="Agency Img"
                   width={1000}
                   height={1000}
@@ -252,13 +251,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   })}
                 </select>
               </div>{" "}
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 {" "}
                 <label
                   htmlFor="password"
                   className="text-sm min-[1600px]:text-base"
                 >
-                  Password <Required />
+                  Password
                 </label>
                 <div className="w-full relative mt-1.5">
                   <input
@@ -281,7 +280,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                     {showPassword ? <LuEye /> : <LuEyeOff />}
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col">
                 <label
                   htmlFor="phone"
@@ -342,14 +341,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
             <button
               onClick={() => {
                 if (page == maxPage) {
-                  addUsers();
+                  updateUsers();
                 } else {
                   setPage(page + 1);
                 }
               }}
               className={`text-white bg-newBlue w-[170px] h-12 rounded-lg`}
             >
-              Save
+              Update
             </button>
           </div>
         </div>
@@ -358,4 +357,4 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   );
 };
 
-export default AddUsers;
+export default UpdateUser;

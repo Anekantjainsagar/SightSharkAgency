@@ -1,16 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import UserDetailBlock from "@/app/Components/Users/UserDetailBlock";
 import { FaPlus } from "react-icons/fa";
 import AddUsers from "@/app/Components/Users/AddUsers";
+import Context from "../Context/Context";
 
 const Overview = () => {
-  const [page, setPage] = useState(1);
+  const { users, getUsers } = useContext(Context);
   const [showSubscribe, setShowSubscribe] = useState(false);
 
-  let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const showNextPage = () => {
+    getUsers("inc");
+  };
+
+  const showPrevPage = () => {
+    getUsers("dec");
+  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -27,7 +34,12 @@ const Overview = () => {
           <Navbar />
           <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl min-[1600px]:text-2xl">Users</h3>{" "}
+              <h3 className="text-xl min-[1600px]:text-2xl">
+                Users{" "}
+                <span className="text-lg min-[1600px]:text-xl text-white/80">
+                  ({users?.total_count})
+                </span>
+              </h3>{" "}
               <div className="flex items-center">
                 <button
                   onClick={() => {
@@ -37,7 +49,12 @@ const Overview = () => {
                 >
                   <FaPlus className="text-sm" /> Add Users
                 </button>
-                <button className="glass px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5">
+                <button
+                  onClick={() => {
+                    getUsers("", true);
+                  }}
+                  className="glass px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+                >
                   <svg
                     width="20"
                     height="20"
@@ -103,21 +120,22 @@ const Overview = () => {
               </div>
               <div className="h-[68vh] min-[1600px]:h-[70vh]">
                 <div className="overflow-y-auto small-scroller h-[89%]">
-                  <UserDetailBlock status={"Online"} acess={"Owner"} />
-                  <UserDetailBlock status={"Online"} acess={"Guest"} />
-                  <UserDetailBlock status={"Online"} acess={"Admin"} />
-                  <UserDetailBlock status={"Online"} acess={"Owner"} />{" "}
-                  <UserDetailBlock status={"Online"} acess={"Guest"} />
-                  <UserDetailBlock status={"Online"} acess={"Guest"} />
+                  {users?.data?.map((e, i) => {
+                    return (
+                      <UserDetailBlock status={"Online"} data={e} key={i} />
+                    );
+                  })}
                 </div>
                 <div className="h-[14%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setPage(page - 1);
-                      }}
-                      className="text-white bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]"
+                      onClick={showPrevPage}
+                      disabled={users?.current_page == 1}
+                      className={`text-white ${
+                        users?.current_page == 1
+                          ? "bg-gray-400"
+                          : "bg-[#898989]/15"
+                      } bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
                     >
                       <div className="mr-2 w-5 min-[1600px]:w-8">
                         <svg
@@ -139,37 +157,54 @@ const Overview = () => {
                       Previous
                     </button>
                     <div className="gap-x-4 flex items-center">
-                      {data?.slice(0, 3)?.map((e, i) => {
-                        return (
-                          <div
-                            className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                              page == e ? "bg-newBlue" : "text-[#85888E]"
-                            }`}
-                            key={i}
-                          >
-                            {e}
-                          </div>
-                        );
-                      })}
-                      {data?.length - 6 > 0 && (
-                        <span className="text-[#85888E]">...</span>
-                      )}
-                      {data
-                        ?.slice(data?.length - 3, data?.length)
+                      {[...Array(users?.total_pages).keys()]
+                        .map((i) => i + 1)
+                        ?.slice(0, 3)
                         ?.map((e, i) => {
                           return (
                             <div
-                              key={i}
                               className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                                page == e ? "bg-newBlue" : "text-[#85888E]"
+                                users?.current_page == e
+                                  ? "bg-newBlue"
+                                  : "text-[#85888E]"
                               }`}
+                              key={i}
                             >
                               {e}
                             </div>
                           );
                         })}
+                      {users?.total_pages - 6 > 0 && (
+                        <span className="text-[#85888E]">...</span>
+                      )}
+                      {users?.total_pages > 3 &&
+                        [...Array(users?.total_pages).keys()]
+                          .map((i) => i + 1)
+                          ?.slice(users?.total_pages - 3)
+                          ?.map((e, i) => {
+                            return (
+                              <div
+                                className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                                  users?.current_page == e
+                                    ? "bg-newBlue"
+                                    : "text-[#85888E]"
+                                }`}
+                                key={i}
+                              >
+                                {e}
+                              </div>
+                            );
+                          })}
                     </div>
-                    <button className="text-white bg-newBlue flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
+                    <button
+                      onClick={showNextPage}
+                      disabled={users?.total_pages == users?.current_page}
+                      className={`text-white ${
+                        users?.total_pages == users?.current_page
+                          ? "bg-gray-400"
+                          : "bg-newBlue"
+                      } flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
+                    >
                       Next
                       <div className="ml-2 w-5 min-[1600px]:w-8">
                         <svg

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
@@ -10,12 +10,24 @@ import { FaPlus } from "react-icons/fa";
 import AddTemplates from "../../Components/agencies/AddTemplates";
 import AddDataSouces from "../../Components/agencies/AddDataSources";
 import { useRouter } from "next/navigation";
+import Context from "@/app/Context/Context";
 
 const Overview = ({ params }) => {
   const history = useRouter();
+  const { agencies, getTemplates, getAgencyDataSources } = useContext(Context);
+  const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
   const { name } = params;
+
+  useEffect(() => {
+    let temp = agencies?.data?.find((e) => {
+      return e?.agency_name?.replaceAll(" ", "-") == name;
+    });
+    setData(temp);
+    getTemplates(temp?.agency_id);
+    getAgencyDataSources(temp?.agency_id);
+  }, [name, agencies]);
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -34,7 +46,7 @@ const Overview = ({ params }) => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg flex items-start justify-between px-6">
+          <div className="text-white w-full rounded-lg flex flex-row-reverse items-start justify-between px-6">
             <AgencyDetails />
             <div className="w-[69%]">
               <AgencyDetailsTopbar />
@@ -113,17 +125,7 @@ const Overview = ({ params }) => {
                   </div>
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4">
-                  <div className="flex items-center justify-between w-full">
-                    <h4 className="min-[1600px]:text-xl">Templates </h4>
-                    <button
-                      onClick={() => {
-                        setAddTemplates(!addTemplates);
-                      }}
-                      className="bg-newBlue px-5 py-2.5 min-[1600px]:py-3 w-[170px] min-[1600px]:w-[185px] rounded-xl flex items-center justify-center gap-x-2 text-sm min-[1600px]:text-base"
-                    >
-                      <FaPlus className="text-sm" /> Add Template
-                    </button>
-                  </div>{" "}
+                  <h4 className="min-[1600px]:text-xl">Templates </h4>
                   <div className="gradient-line my-4"></div>
                   <div className="grid grid-cols-5 gap-x-4 mt-2">
                     {[
@@ -160,7 +162,7 @@ const Overview = ({ params }) => {
                     <p
                       className="text-white text-sm min-[1600px]:text-base flex items-center cursor-pointer"
                       onClick={() =>
-                        history.push(`/agencies/${name}/recent-activities`)
+                        history.push(`/clients/${name}/recent-activities`)
                       }
                     >
                       View All
@@ -216,6 +218,5 @@ const Circle0 = () => {
     </div>
   );
 };
-
 
 export default Overview;

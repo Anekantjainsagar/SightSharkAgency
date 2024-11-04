@@ -4,7 +4,7 @@ import { PieChart } from "react-minimal-pie-chart";
 
 const AgencyDetails = () => {
   return (
-    <div className="border border-gray-500/5 min-[1600px]:h-[88vh] p-4 w-[30%] rounded-lg flex flex-col items-center justify-center">
+    <div className="border border-gray-500/5 min-[1600px]:h-[88vh] p-4 w-[30%] rounded-lg flex flex-col items-center">
       <Image
         width={1000}
         height={1000}
@@ -106,27 +106,6 @@ const AgencyDetails = () => {
             title: "Deployment Date",
             value: "15th August, 2024",
           },
-          {
-            img: (
-              <svg
-                width="16"
-                height="19"
-                viewBox="0 0 16 19"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.41835 17.3458C7.60284 17.4534 7.69509 17.5072 7.82528 17.5352C7.92631 17.5568 8.07371 17.5568 8.17474 17.5352C8.30493 17.5072 8.39718 17.4534 8.58167 17.3458C10.205 16.3987 14.6667 13.4238 14.6667 9.33339V6.16672C14.6667 5.27181 14.6667 4.82435 14.5287 4.50672C14.3885 4.18389 14.2488 4.01215 13.9613 3.80915C13.6784 3.60941 13.1239 3.49408 12.0148 3.26341C10.7923 3.00917 9.85358 2.55009 8.99533 1.88616C8.58377 1.56778 8.37799 1.40859 8.21696 1.36517C8.04704 1.31936 7.95298 1.31936 7.78306 1.36517C7.62203 1.40859 7.41625 1.56778 7.00469 1.88616C6.14644 2.55009 5.20768 3.00917 3.98526 3.26341C2.87616 3.49408 2.3216 3.60941 2.03872 3.80915C1.75119 4.01215 1.6115 4.18389 1.47129 4.50672C1.33334 4.82435 1.33334 5.27181 1.33334 6.16672V9.33339C1.33334 13.4238 5.79498 16.3987 7.41835 17.3458Z"
-                  stroke="#B2B4BA"
-                  strokeWidth="1.66667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ),
-            title: "Warranty Period",
-            value: "6 Months",
-          },
         ].map((e, i) => {
           return (
             <div
@@ -197,27 +176,6 @@ const AgencyDetails = () => {
             </div>
           );
         })}{" "}
-      </div>
-      <div className="border rounded-xl w-full border-gray-500/15 mt-4">
-        <h5 className="w-full p-3 border-b text-sm min-[1600px]:text-base border-b-gray-500/15">
-          License Limit
-        </h5>
-        <div className="w-4/12 mx-auto my-4 relative">
-          <p className="text-center text-sm min-[1600px]:text-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 font-semibold">
-            15{" "}
-            <span className="text-xs min-[1600px]:text-sm font-normal">
-              out of
-            </span>{" "}
-            50
-          </p>
-          <PieChart
-            data={[
-              { title: "One", value: 50, color: "#FFAE4C" },
-              { title: "Two", value: 15, color: "#3836FF" },
-            ]}
-            lineWidth={25}
-          />
-        </div>
       </div>
     </div>
   );

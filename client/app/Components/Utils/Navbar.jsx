@@ -14,7 +14,7 @@ const Navbar = () => {
       <div>
         <h3 className="bigFont font-semibold">Hello {userData?.name},</h3>
         <p className="text-sm min-[1600px]:text-base text-[#85888E]">
-          Here’s your overview of the agencies
+          Here’s your overview of the clients
         </p>
       </div>
       <div className="flex items-center gap-x-4">

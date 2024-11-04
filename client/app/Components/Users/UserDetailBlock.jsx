@@ -1,17 +1,25 @@
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import DeleteUser from "./DeleteUser";
+import UpdateUser from "./UpdateUser";
 
-const UserDetailBlock = ({ status, acess }) => {
+const UserDetailBlock = ({ status, data }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  // const history = useRouter();
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const history = useRouter();
 
   return (
     <>
       <DeleteUser
         showSubscribe={showDeletePopup}
         setShowSubscribe={setShowDeletePopup}
+        data={data}
+      />
+      <UpdateUser
+        showSubscribe={showUpdatePopup}
+        setShowSubscribe={setShowUpdatePopup}
+        userData={data}
       />
       <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
         <div className="inline-flex items-start">
@@ -40,19 +48,31 @@ const UserDetailBlock = ({ status, acess }) => {
           </label>
         </div>{" "}
         <div className="flex items-start min-[1600px]:ml-0 ml-2">
-          <Image
-            src="/Agency/Avatar.png"
-            width={1000}
-            height={1000}
-            className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
-            alt="Key contact"
-          />
+          {!data?.profile_picture ? (
+            <Image
+              src={"/Agency/Avatar.png"}
+              width={1000}
+              height={1000}
+              className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
+              alt="Key contact"
+            />
+          ) : (
+            <Image
+              src={data?.profile_picture}
+              width={1000}
+              height={1000}
+              className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
+              alt="Key contact"
+            />
+          )}
           <div className="ml-2.5 min-[1600px]:ml-4">
-            <p className="mainText14">Olivia Rhye</p>
-            <p className="mainText14 text-[#85888E]">olivia@gmail.com</p>
+            <p className="mainText14">
+              {data?.first_name} {data?.last_name}
+            </p>
+            <p className="mainText14 text-[#85888E]">{data?.email}</p>
           </div>
         </div>
-        <h5 className="text-center">{acess}</h5>
+        <h5 className="text-center">{data?.role}</h5>
         <div className="w-full flex items-center justify-center">
           <div
             className={`status-${status?.toLowerCase()} flex items-center gap-x-2 w-fit px-3 border-2 py-0.5 rounded-2xl`}
@@ -63,8 +83,12 @@ const UserDetailBlock = ({ status, acess }) => {
             {status}
           </div>
         </div>
-        <p className="text-center">15-08-2024</p>
-        <p className="text-center">6:30 PM, 16-08-2024</p>
+        <p className="text-center">
+          {new Date(data?.created_at).toString().slice(4, 21)}
+        </p>
+        <p className="text-center">
+          {new Date(data?.updated_at).toString().slice(4, 21)}
+        </p>
         <div className="flex items-center justify-end">
           <div className="mr-4">
             <svg
@@ -74,6 +98,7 @@ const UserDetailBlock = ({ status, acess }) => {
               xmlns="http://www.w3.org/2000/svg"
               onClick={(e) => {
                 e.stopPropagation();
+                setShowUpdatePopup(!showUpdatePopup);
               }}
             >
               <path

@@ -1,16 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetailsBlock from "@/app/Components/Utils/AgencyDetails";
 import AddAgency from "@/app/Components/agencies/AddAgency";
 import { FaPlus } from "react-icons/fa";
+import Context from "../Context/Context";
 
 const Overview = () => {
-  const [page, setPage] = useState(1);
+  const { agencies, getAgencies } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
-  let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const showNextPage = () => {
+    getAgencies("inc");
+  };
+
+  const showPrevPage = () => {
+    getAgencies("dec");
+  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -109,7 +116,7 @@ const Overview = () => {
                   </label>
                 </div>
                 {[
-                  "Agency Name",
+                  "Client Name",
                   "Status",
                   "Key Contact",
                   "Email",
@@ -132,21 +139,27 @@ const Overview = () => {
               </div>
               <div className="h-[69.5vh] min-[1600px]:h-[70vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
-                  <AgencyDetailsBlock status={"Active"} percentage={10} />
-                  <AgencyDetailsBlock status={"Offline"} percentage={20} />
-                  <AgencyDetailsBlock status={"Active"} percentage={30} />
-                  <AgencyDetailsBlock status={"Offline"} percentage={40} />
-                  <AgencyDetailsBlock status={"Active"} percentage={50} />
-                  <AgencyDetailsBlock status={"Offline"} percentage={60} />
-                  <AgencyDetailsBlock status={"Active"} percentage={70} />
+                  {agencies?.data?.map((e, i) => {
+                    return (
+                      <AgencyDetailsBlock
+                        key={i}
+                        data={e}
+                        status={"Offline"}
+                        percentage={20}
+                      />
+                    );
+                  })}
                 </div>
                 <div className="h-[14%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
                   <div className="flex items-center justify-between w-full">
                     <button
-                      onClick={() => {
-                        setPage(page - 1);
-                      }}
-                      className="text-white bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]"
+                      onClick={showPrevPage}
+                      disabled={agencies?.current_page == 1}
+                      className={`text-white ${
+                        agencies?.current_page == 1
+                          ? "bg-gray-400"
+                          : "bg-[#898989]/15"
+                      } bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
                     >
                       <div className="mr-2 w-5 min-[1600px]:w-8">
                         <svg
@@ -168,37 +181,54 @@ const Overview = () => {
                       Previous
                     </button>
                     <div className="gap-x-4 flex items-center">
-                      {data?.slice(0, 3)?.map((e, i) => {
-                        return (
-                          <div
-                            className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                              page == e ? "bg-newBlue" : "text-[#85888E]"
-                            }`}
-                            key={i}
-                          >
-                            {e}
-                          </div>
-                        );
-                      })}
-                      {data?.length - 6 > 0 && (
-                        <span className="text-[#85888E]">...</span>
-                      )}
-                      {data
-                        ?.slice(data?.length - 3, data?.length)
+                      {[...Array(agencies?.total_pages).keys()]
+                        .map((i) => i + 1)
+                        ?.slice(0, 3)
                         ?.map((e, i) => {
                           return (
                             <div
-                              key={i}
                               className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                                page == e ? "bg-newBlue" : "text-[#85888E]"
+                                agencies?.current_page == e
+                                  ? "bg-newBlue"
+                                  : "text-[#85888E]"
                               }`}
+                              key={i}
                             >
                               {e}
                             </div>
                           );
                         })}
+                      {agencies?.total_pages - 6 > 0 && (
+                        <span className="text-[#85888E]">...</span>
+                      )}
+                      {agencies?.total_pages > 3 &&
+                        [...Array(agencies?.total_pages).keys()]
+                          .map((i) => i + 1)
+                          ?.slice(agencies?.total_pages - 3)
+                          ?.map((e, i) => {
+                            return (
+                              <div
+                                className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
+                                  users?.current_page == e
+                                    ? "bg-newBlue"
+                                    : "text-[#85888E]"
+                                }`}
+                                key={i}
+                              >
+                                {e}
+                              </div>
+                            );
+                          })}
                     </div>
-                    <button className="text-white bg-newBlue flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]">
+                    <button
+                      onClick={showNextPage}
+                      disabled={agencies?.total_pages == agencies?.current_page}
+                      className={`text-white ${
+                        agencies?.total_pages == agencies?.current_page
+                          ? "bg-gray-400"
+                          : "bg-newBlue"
+                      } flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
+                    >
                       Next
                       <div className="ml-2 w-5 min-[1600px]:w-8">
                         <svg
