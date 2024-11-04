@@ -44,7 +44,8 @@ const State = (props) => {
     let limit = users?.limit ? users?.limit : 7;
     let order = users?.order == "asc" ? "desc" : "asc";
     let sort_by = "created_at";
-
+    let order_by_temp = order_by;
+    console.log(order_by_temp);
     if (grow == "inc") {
       page++;
     } else if (grow == "dec") {

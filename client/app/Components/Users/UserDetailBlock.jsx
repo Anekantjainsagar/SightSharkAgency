@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
@@ -7,7 +6,6 @@ import UpdateUser from "./UpdateUser";
 const UserDetailBlock = ({ status, data }) => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
-  const history = useRouter();
 
   return (
     <>

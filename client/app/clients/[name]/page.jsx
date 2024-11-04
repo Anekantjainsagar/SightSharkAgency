@@ -49,7 +49,7 @@ const Overview = ({ params }) => {
           <div className="text-white w-full rounded-lg flex flex-row-reverse items-start justify-between px-6">
             <AgencyDetails />
             <div className="w-[69%]">
-              <AgencyDetailsTopbar />
+              <AgencyDetailsTopbar data={data} />
               <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5">
                   <div className="flex items-center justify-between w-full">

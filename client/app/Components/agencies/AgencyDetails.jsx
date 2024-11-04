@@ -1,6 +1,4 @@
 import Image from "next/image";
-import React from "react";
-import { PieChart } from "react-minimal-pie-chart";
 
 const AgencyDetails = () => {
   return (

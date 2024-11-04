@@ -8,7 +8,6 @@ import Required from "../Utils/Required";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import Context from "@/app/Context/Context";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -28,7 +27,6 @@ const customStyles = {
 const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
   let maxPage = 1;
   const { setUsers, users } = useContext(Context);
-  const [showPassword, setShowPassword] = useState(false);
   const [page, setPage] = useState(1);
   const [data, setData] = useState({
     firstName: "",

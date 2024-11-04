@@ -59,7 +59,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     const file = event.target.files[0];
     if (file) {
       setFileInput(file);
-      console.log(file);
       setData({ ...data, profile: URL.createObjectURL(file) });
     } else {
       console.log("No file selected");
@@ -74,6 +73,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         ...data,
         keyContact: { ...data.keyContact, profile: URL.createObjectURL(file) },
       });
+      console.log(fileInputAgency);
     } else {
       console.log("No file selected");
     }
@@ -91,64 +91,64 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Dashboard Templates",
   ];
 
-const handleSave = async () => {
-  if (
-    data?.name &&
-    data?.website &&
-    data?.keyContact?.email &&
-    data?.parent_name
-  ) {
-    // Construct query parameters
-    const queryParams = new URLSearchParams({
-      client_name: data?.name,
-      parent_name: data?.parent_name,
-      website: data?.website,
-      deployment_date: data?.deployment,
-      location: data?.location,
-      key_contact_name: data?.keyContact?.name,
-      key_contact_designation: data?.keyContact?.designation,
-      key_contact_email_address: data?.keyContact?.email,
-      key_contact_phone: data?.keyContact?.phone,
-      template_link: data?.templates?.template_link,
-      template_name: data?.templates?.template_name,
-    }).toString();
+  const handleSave = async () => {
+    if (
+      data?.name &&
+      data?.website &&
+      data?.keyContact?.email &&
+      data?.parent_name
+    ) {
+      // Construct query parameters
+      const queryParams = new URLSearchParams({
+        client_name: data?.name,
+        parent_name: data?.parent_name,
+        website: data?.website,
+        deployment_date: data?.deployment,
+        location: data?.location,
+        key_contact_name: data?.keyContact?.name,
+        key_contact_designation: data?.keyContact?.designation,
+        key_contact_email_address: data?.keyContact?.email,
+        key_contact_phone: data?.keyContact?.phone,
+        template_link: data?.templates?.template_link,
+        template_name: data?.templates?.template_name,
+      }).toString();
 
-    const formData = new FormData();
-    formData.append("platform_name", data?.platforms);
+      const formData = new FormData();
+      formData.append("platform_name", data?.platforms);
 
-    // Only append file if it exists
-    if (fileInput) {
-      formData.append("profile_picture", fileInput);
-      formData.append("profile_picture_filename", fileInput?.name);
-      formData.append("profile_picture_content_type", fileInput?.type);
-    }
-
-    try {
-      const response = await axios.post(
-        `${BACKEND_URI}/client/create?${queryParams}`,
-        formData,
-        {
-          headers: {
-            ...formData.getHeaders(), // Automatically sets correct headers for FormData
-            Accept:
-              "application/json, application/xml, text/plain, text/html, *.*",
-            Authorization: `Bearer ${getCookie("token")}`,
-          },
-        }
-      );
-
-      if (response.data) {
-        console.log("Success:", response);
-        console.log(credentialsState);
+      // Only append file if it exists
+      if (fileInput) {
+        formData.append("profile_picture", fileInput);
+        formData.append("profile_picture_filename", fileInput?.name);
+        formData.append("profile_picture_content_type", fileInput?.type);
       }
-    } catch (error) {
-      console.error("Error creating user:", error);
-      toast.error("An error occurred while creating the user");
+
+      try {
+        const response = await axios.post(
+          `${BACKEND_URI}/client/create?${queryParams}`,
+          formData,
+          {
+            headers: {
+              ...formData.getHeaders(), // Automatically sets correct headers for FormData
+              Accept:
+                "application/json, application/xml, text/plain, text/html, *.*",
+              Authorization: `Bearer ${getCookie("token")}`,
+            },
+          }
+        );
+
+        if (response.data) {
+          console.log("Success:", response);
+          console.log(credentialsState);
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("An error occurred while creating the user");
+      }
+    } else {
+      toast.error("Please fill all the required details");
     }
-  } else {
-    toast.error("Please fill all the required details");
-  }
-};
+  };
 
   return (
     <div className="z-50">
