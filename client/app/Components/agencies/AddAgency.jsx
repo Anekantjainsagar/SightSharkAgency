@@ -10,6 +10,7 @@ import Required from "../Utils/Required";
 import Context from "@/app/Context/Context";
 import axios from "axios";
 import { BACKEND_URI } from "@/app/utils/url";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 import { getCookie } from "cookies-next";
 
 const customStyles = {
@@ -28,13 +29,14 @@ const customStyles = {
 };
 
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
-  const { mainDataSource, mainTemplates } = useContext(Context);
-  let maxPage = 5;
+  const { mainDataSource, mainTemplates, getAgencies } = useContext(Context);
+  let maxPage = 6;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [fileInput, setFileInput] = useState();
   const [fileInputAgency, setFileInputAgency] = useState();
   const [credentialsState, setCredentialsState] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     profile: "",
     name: "",
@@ -50,6 +52,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     },
     platforms: [],
     templates: {},
+    credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
   const fileInputRefAgent = React.useRef(null);
@@ -88,6 +91,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Data Sources",
     "Data Sources Ids",
     "Dashboard Templates",
+    "Credentials",
   ];
 
   const handleSave = async () => {
@@ -106,6 +110,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         key_contact_name: data?.keyContact?.name,
         key_contact_designation: data?.keyContact?.designation,
         key_contact_email_address: data?.keyContact?.email,
+        email_address: data?.credentials?.email || "",
+        password: data?.credentials?.password || "",
         key_contact_phone: data?.keyContact?.phone,
         template_link: data?.templates?.template_link,
         template_name: data?.templates?.template_name,
@@ -127,7 +133,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           formData,
           {
             headers: {
-              ...formData.getHeaders(), // Automatically sets correct headers for FormData
               Accept:
                 "application/json, application/xml, text/plain, text/html, *.*",
               Authorization: `Bearer ${getCookie("token")}`,
@@ -136,8 +141,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         );
 
         if (response.data) {
-          console.log("Success:", response);
-          console.log(credentialsState);
+          getAgencies();
+          setShowSubscribe(false);
         }
       } catch (error) {
         console.error("Error creating user:", error);
@@ -190,7 +195,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
-            <div className="grid grid-cols-5 text-sm min-[1600px]:text-base justify-between mt-2 px-[4vw]">
+            <div className="grid grid-cols-6 text-sm min-[1600px]:text-base justify-between mt-2 px-[3vw] ml-5">
               {nav_data.map((e, i) => {
                 return (
                   <p className="text-center" key={i}>
@@ -542,7 +547,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   allowedPlatforms={data?.platforms}
                 />
               </div>
-            ) : (
+            ) : page === 5 ? (
               <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
                 <div className="grid grid-cols-4 gap-x-4 mt-2">
                   {mainTemplates?.map((e, i) => {
@@ -571,6 +576,70 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                     );
                   })}
                 </div>
+              </div>
+            ) : (
+              <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
+                <div className="grid grid-cols-1 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="emailKey"
+                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="emailKey"
+                      value={data?.credentials?.email}
+                      onChange={(e) => {
+                        setData({
+                          ...data,
+                          credentials: {
+                            ...data?.credentials,
+                            email: e.target.value,
+                          },
+                        });
+                      }}
+                      type="text"
+                      placeholder="Enter Email"
+                      className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                    />
+                  </div>
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="passwordKey"
+                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                    >
+                      Password
+                    </label>
+                    <div className="w-full relative">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="passwordKey"
+                        value={data?.credentials?.password}
+                        onChange={(e) => {
+                          setData({
+                            ...data,
+                            credentials: {
+                              ...data?.credentials,
+                              password: e.target.value,
+                            },
+                          });
+                        }}
+                        placeholder="Enter Password"
+                        className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                      />
+                      <div
+                        className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowPassword(!showPassword);
+                        }}
+                      >
+                        {showPassword ? <LuEye /> : <LuEyeOff />}
+                      </div>
+                    </div>
+                  </div>{" "}
+                </div>{" "}
               </div>
             )}
           </div>

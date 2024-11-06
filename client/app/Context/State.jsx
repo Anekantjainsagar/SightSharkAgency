@@ -9,7 +9,6 @@ const State = (props) => {
   const [userData, setUserData] = useState();
   const [users, setUsers] = useState([]);
   const [agencies, setAgencies] = useState([]);
-  const [agency_templates, setAgency_templates] = useState([]);
   const [mainDataSource, setMainDataSource] = useState();
   const [mainTemplates, setMainTemplates] = useState();
   const [dataSourceStructure, setDataSourceStructure] = useState();
@@ -122,30 +121,6 @@ const State = (props) => {
     }
   };
 
-  const getTemplates = (id) => {
-    let cookie = getCookie("token");
-    if (cookie?.length > 5 && id) {
-      try {
-        axios
-          .get(`${BACKEND_URI}/template/templates?agency_id=${id}`, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${cookie}`,
-            },
-          })
-          .then((res) => {
-            setAgency_templates(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
-
   const getMainDataSources = (id) => {
     let cookie = getCookie("token");
     if (cookie?.length > 5 && id) {
@@ -248,8 +223,6 @@ const State = (props) => {
         checkToken,
         setUsers,
         getUsers,
-        agency_templates,
-        getTemplates,
         users,
         agencies,
         getAgencies,

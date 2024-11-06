@@ -1,16 +1,20 @@
 import Image from "next/image";
 
-const AgencyDetails = () => {
+const AgencyDetails = ({ data }) => {
   return (
-    <div className="border border-gray-500/5 min-[1600px]:h-[88vh] p-4 w-[30%] rounded-lg flex flex-col items-center">
+    <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
       <Image
         width={1000}
         height={1000}
-        src="/Agency/individual/logo.png"
+        src={
+          data?.profile_picture
+            ? data?.profile_picture
+            : "/Agency/individual/logo.png"
+        }
         alt="Agency logo"
         className="w-[60px] aspect-square border border-gray-200/30 rounded-full"
       />
-      <h3 className="mainLogoSize">Prowiz Analytics</h3>
+      <h3 className="mainLogoSize">{data?.client_name}</h3>
       <div className="w-full mb-4 mt-2">
         {[
           {
@@ -32,7 +36,9 @@ const AgencyDetails = () => {
               </svg>
             ),
             title: "Status",
-            value: "Active",
+            value:
+              data?.status &&
+              data?.status[0]?.toUpperCase() + data?.status.slice(1),
           },
           {
             img: (
@@ -53,7 +59,49 @@ const AgencyDetails = () => {
               </svg>
             ),
             title: "Website",
-            value: "www.prowiz.io",
+            value: data?.website,
+          },
+          {
+            img: (
+              <svg
+                width="20"
+                height="21"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.49999 14.5001H5.83332C3.53214 14.5001 1.66666 12.6346 1.66666 10.3334C1.66666 8.03223 3.53214 6.16675 5.83332 6.16675H7.49999M12.5 14.5001H14.1667C16.4678 14.5001 18.3333 12.6346 18.3333 10.3334C18.3333 8.03223 16.4678 6.16675 14.1667 6.16675H12.5M5.83332 10.3334L14.1667 10.3334"
+                  stroke="#B2B4BA"
+                  strokeWidth="1.66667"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ),
+            title: "Agency Portal Link",
+            value: data?.agency_portal,
+          },
+          {
+            img: (
+              <svg
+                width="20"
+                height="21"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.49999 14.5001H5.83332C3.53214 14.5001 1.66666 12.6346 1.66666 10.3334C1.66666 8.03223 3.53214 6.16675 5.83332 6.16675H7.49999M12.5 14.5001H14.1667C16.4678 14.5001 18.3333 12.6346 18.3333 10.3334C18.3333 8.03223 16.4678 6.16675 14.1667 6.16675H12.5M5.83332 10.3334L14.1667 10.3334"
+                  stroke="#B2B4BA"
+                  strokeWidth="1.66667"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ),
+            title: "Client Portal Link",
+            value: data?.client_portal,
           },
           {
             img: (
@@ -81,7 +129,7 @@ const AgencyDetails = () => {
               </svg>
             ),
             title: "Location",
-            value: "Chandigarh, India",
+            value: data?.location,
           },
           {
             img: (
@@ -102,13 +150,15 @@ const AgencyDetails = () => {
               </svg>
             ),
             title: "Deployment Date",
-            value: "15th August, 2024",
+            value: data?.deployment_date
+              ? new Date(data?.deployment_date).toString()?.slice(4, 21)
+              : "",
           },
         ].map((e, i) => {
           return (
             <div
               key={i}
-              className={`w-full flex items-center justify-between text-base p-3 border border-gray-500/15 ${
+              className={`w-full flex items-center justify-between text-base px-3 py-2 border border-gray-500/15 ${
                 i == 0 && "rounded-t-xl"
               } ${i == 4 && "rounded-b-xl"}`}
             >
@@ -120,13 +170,28 @@ const AgencyDetails = () => {
               </div>
               <div
                 className={`${
-                  e?.title == "Status" ? "text-[#12B76A]" : "text-[#ECECED]"
+                  e?.title == "Status"
+                    ? `status-text-${e?.value?.toLowerCase()}`
+                    : "text-[#ECECED]"
                 } flex items-center text-sm min-[1600px]:text-base`}
               >
                 {e?.title == "Status" && (
-                  <div className="w-[10px] mr-2 h-[10px] rounded-full bg-[#12B76A]"></div>
+                  <div
+                    className={`w-[10px] mr-2 h-[10px] rounded-full status-${e?.value?.toLowerCase()}`}
+                  ></div>
                 )}
-                <span>{e?.value}</span>
+                {e?.title === "Website" ? (
+                  <span
+                    className="hover:underline cursor-pointer transition-all"
+                    onClick={() => {
+                      window.open(e?.value, "__blank");
+                    }}
+                  >
+                    {e?.value?.slice(0, 25) + "..."}
+                  </span>
+                ) : (
+                  <span>{e?.value}</span>
+                )}
               </div>
             </div>
           );
@@ -140,28 +205,28 @@ const AgencyDetails = () => {
           {
             img: "/Agency/individual/icons/status.png",
             title: "Name",
-            value: "Varun Sethi",
+            value: data?.key_contact_name,
           },
           {
             img: "/Agency/individual/icons/website.png",
             title: "Designation",
-            value: "Co-Founder",
+            value: data?.key_contact_designation,
           },
           {
             img: "/Agency/individual/icons/location.png",
             title: "Email Address",
-            value: "varun@prowiz.io",
+            value: data?.key_contact_email_address,
           },
           {
             img: "/Agency/individual/icons/deployment.png",
             title: "Phone Number",
-            value: "+91 1234567890",
+            value: data?.key_contact_phone,
           },
         ].map((e, i) => {
           return (
             <div
               key={i}
-              className="w-full flex items-center justify-between px-4 my-3.5"
+              className="w-full flex items-center justify-between px-4 my-2.5"
             >
               <h6 className="text-textGrey text-sm min-[1600px]:text-base">
                 {e?.title}

@@ -10,22 +10,22 @@ import { FaPlus } from "react-icons/fa";
 import AddTemplates from "../../Components/agencies/AddTemplates";
 import AddDataSouces from "../../Components/agencies/AddDataSources";
 import { useRouter } from "next/navigation";
+import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies, getTemplates } = useContext(Context);
+  const { agencies } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
   const { name } = params;
 
   useEffect(() => {
-    let temp = agencies?.data?.find((e) => {
-      return e?.agency_name?.replaceAll(" ", "-") == name;
-    });
+    let temp = agencies?.data?.find(
+      (e) => e?.client_name?.replaceAll(" ", "-") == name
+    );
     setData(temp);
-    getTemplates(temp?.agency_id);
   }, [name, agencies]);
 
   return (
@@ -46,9 +46,9 @@ const Overview = ({ params }) => {
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
           <div className="text-white w-full rounded-lg flex flex-row-reverse items-start justify-between px-6">
-            <AgencyDetails />
+            <AgencyDetails data={data} />
             <div className="w-[69%]">
-              <AgencyDetailsTopbar data={data} />
+              <AgencyDetailsTopbar name={name} />
               <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5">
                   <div className="flex items-center justify-between w-full">
@@ -126,34 +126,22 @@ const Overview = ({ params }) => {
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4">
                   <h4 className="min-[1600px]:text-xl">Templates </h4>
                   <div className="gradient-line my-4"></div>
-                  <div className="grid grid-cols-5 gap-x-4 mt-2">
-                    {[
-                      {
-                        img: "/Agency/individual/templates/1 (2).png",
-                      },
-                      {
-                        img: "/Agency/individual/templates/1 (1).png",
-                      },
-                      { img: "/Agency/individual/templates/1 (4).png" },
-                      {
-                        img: "/Agency/individual/templates/1 (3).png",
-                      },
-                      {
-                        img: "/Agency/individual/templates/1 (2).png",
-                      },
-                    ].map((e, i) => {
-                      return (
-                        <div key={i}>
-                          <Image
-                            src={e?.img}
-                            alt={e?.img?.src}
-                            width={1000}
-                            height={1000}
-                          />
-                        </div>
-                      );
-                    })}
-                  </div>
+                  {data?.template_name?.length > 0 ? (
+                    <div className="grid grid-cols-5 gap-x-4 mt-2 relative">
+                      <TemplateBlock
+                        data={{
+                          template_name: data?.template_name,
+                          template_link: data?.template_link,
+                          template_link: data?.template_link,
+                        }}
+                        original_data={data}
+                      />
+                    </div>
+                  ) : (
+                    <div className="mt-2 text-center">
+                      No Templates Available Please Add some of the Templates
+                    </div>
+                  )}
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[32vh]">
                   <div className="flex items-center justify-between w-full">
