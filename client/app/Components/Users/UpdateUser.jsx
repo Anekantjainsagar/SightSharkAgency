@@ -8,7 +8,6 @@ import Required from "../Utils/Required";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import Context from "@/app/Context/Context";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const customStyles = {
   overlay: { zIndex: 50 },
