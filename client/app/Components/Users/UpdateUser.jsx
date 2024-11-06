@@ -8,6 +8,7 @@ import Required from "../Utils/Required";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import Context from "@/app/Context/Context";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -26,20 +27,24 @@ const customStyles = {
 
 const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
   let maxPage = 1;
-  const { setUsers, users } = useContext(Context);
+  const context = useContext(Context);
+  const { getUsers } = useContext(Context);
   const [page, setPage] = useState(1);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    access: "guest",
+    access: "admin",
     profile: "",
     phone: "",
     postal_code: "",
     country: "India",
     password: "",
     profile: "",
+    status: "",
   });
+  const [availableRoles, setAvailableRoles] = useState([]);
+  const [file, setFile] = useState("");
   const fileInputRef = React.useRef(null);
 
   useEffect(() => {
@@ -49,12 +54,26 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
       lastName: userData?.last_name,
       access: userData?.role,
     });
+    setFile(userData?.profile_picture);
   }, [userData]);
+
+  useEffect(() => {
+    if (context?.userData?.role == "superadmin") {
+      setAvailableRoles(["admin", "guest"]);
+      setData({ ...data, access: "admin" });
+    } else if (context?.userData?.role == "admin") {
+      setAvailableRoles(["guest"]);
+      setData({ ...data, access: "guest" });
+    } else if (context?.userData?.role == "owner") {
+      setAvailableRoles(["superadmin", "admin", "guest"]);
+      setData({ ...data, access: "superadmin" });
+    }
+  }, [context?.userData]);
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
-    console.log(file);
     if (file) {
+      setFile(URL.createObjectURL(file));
       setData({ ...data, profile: file });
     }
   };
@@ -78,15 +97,14 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
       }).toString();
 
       let formdata = new FormData();
-
       if (data?.profile instanceof File || data?.profile instanceof Blob) {
-        formdata.append("file_content", data?.profile); // The file itself
-        formdata.append("filename", data?.profile.name); // The filename
-        formdata.append("content_type", data?.profile.type); // The MIME type
+        formdata.append("profile_picture", data?.profile);
+        formdata.append("profile_picture_filename", data?.profile.name);
+        formdata.append("profile_picture_content_type", data?.profile.type);
       } else {
-        console.log(
-          "Profile picture is not a valid file or blob, skipping upload."
-        );
+        formdata.append("profile_picture", "");
+        formdata.append("profile_picture_filename", "");
+        formdata.append("profile_picture_content_type", "");
       }
 
       try {
@@ -104,8 +122,7 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
           })
           .then((res) => {
             if (res.msg) {
-              let temp = users?.data?.filter((e) => e?.id != userData?.id);
-              setUsers({ ...users, data: [...temp, res.data] });
+              getUsers();
               toast.success("User updated successfully");
               closeModal();
             }
@@ -160,11 +177,11 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
                   +
                 </div>
                 <Image
-                  src={data?.profile ? data?.profile : "/Agency/temp_logo.png"}
+                  src={file || "/Agency/temp_logo.png"}
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[6vw] min-[1600px]:w-[4vw] rounded-full"
+                  className="w-[6vw] aspect-squre min-[1600px]:w-[4vw] rounded-full"
                 />
               </div>
             </div>
@@ -240,10 +257,10 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
                     setData({ ...data, access: e.target.value });
                   }}
                 >
-                  {["admin", "superadmin", "guest"].map((e, i) => {
+                  {availableRoles?.map((e, i) => {
                     return (
                       <option value={e} key={i} className="bg-main">
-                        {e}
+                        {e[0]?.toUpperCase() + e.slice(1)}
                       </option>
                     );
                   })}
@@ -332,6 +349,30 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
                   placeholder="Enter Country"
                   className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                 />
+              </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="status"
+                  className="mb-1.5 text-sm min-[1600px]:text-base"
+                >
+                  Status
+                </label>
+                <select
+                  id="status"
+                  value={data?.status}
+                  onChange={(e) => {
+                    setData({ ...data, status: e.target.value });
+                  }}
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                >
+                  {["active", "inactive"].map((e, i) => {
+                    return (
+                      <option key={i} className="bg-main" value={e}>
+                        {e[0]?.toUpperCase() + e.slice(1)}
+                      </option>
+                    );
+                  })}
+                </select>
               </div>
             </div>
           </div>

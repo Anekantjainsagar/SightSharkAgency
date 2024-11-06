@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
@@ -27,15 +27,17 @@ const customStyles = {
 
 const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   let maxPage = 1;
-  const { setUsers, users } = useContext(Context);
+  const fileInputRef = React.useRef(null);
+  const { getUsers, userData } = useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
   const [page, setPage] = useState(1);
   const [file, setFile] = useState();
+  const [availableRoles, setAvailableRoles] = useState([]);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    access: "guest",
+    access: "",
     profile: "",
     phone: "",
     postal_code: "",
@@ -43,12 +45,23 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
     password: "",
     profile: "",
   });
-  const fileInputRef = React.useRef(null);
+
+  useEffect(() => {
+    if (userData?.role == "superadmin") {
+      setAvailableRoles(["admin", "guest"]);
+      setData({ ...data, access: "admin" });
+    } else if (userData?.role == "admin") {
+      setAvailableRoles(["guest"]);
+      setData({ ...data, access: "guest" });
+    } else if (userData?.role == "owner") {
+      setAvailableRoles(["superadmin", "admin", "guest"]);
+      setData({ ...data, access: "superadmin" });
+    }
+  }, [userData]);
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file);
       setFile(URL.createObjectURL(file));
       setData({ ...data, profile: file }); // Update `data` state with the selected file
     } else {
@@ -68,7 +81,6 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
       data?.password &&
       data?.access
     ) {
-      // Construct URL with all non-file fields as query parameters
       const queryParams = new URLSearchParams({
         email: data?.email,
         password: data?.password,
@@ -82,15 +94,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
       }).toString();
 
       let formdata = new FormData();
-      // Handle profile picture file upload
       if (data?.profile instanceof File || data?.profile instanceof Blob) {
-        formdata.append("file_content", data?.profile); // The file itself
-        formdata.append("filename", data?.profile.name); // The filename
-        formdata.append("content_type", data?.profile.type); // The MIME type
+        formdata.append("profile_picture", data?.profile);
+        formdata.append("profile_picture_filename", data?.profile.name);
+        formdata.append("profile_picture_content_type", data?.profile.type);
       } else {
-        console.log(
-          "Profile picture is not a valid file or blob, skipping upload."
-        );
+        formdata.append("profile_picture", "");
+        formdata.append("profile_picture_filename", "");
+        formdata.append("profile_picture_content_type", "");
       }
 
       try {
@@ -101,15 +112,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
             Authorization: `Bearer ${getCookie("token")}`,
           },
           method: "POST",
-          body: formdata, // Send the form data with the profile picture
+          body: formdata,
         })
           .then((res) => res.json())
           .then((res) => {
-            console.log(res);
             if (res.msg) {
               toast.success("User created successfully");
               closeModal();
-              setUsers({ ...users, data: [...users.data, res.data] });
+              getUsers();
             } else if (res.detail) {
               toast.error(res.detail);
             }
@@ -243,10 +253,10 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                     setData({ ...data, access: e.target.value });
                   }}
                 >
-                  {["admin", "superadmin", "guest"].map((e, i) => {
+                  {availableRoles.map((e, i) => {
                     return (
                       <option value={e} key={i} className="bg-main">
-                        {e}
+                        {e[0]?.toUpperCase() + e.slice(1)}
                       </option>
                     );
                   })}

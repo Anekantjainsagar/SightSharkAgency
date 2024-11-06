@@ -7,9 +7,23 @@ import { FaPlus } from "react-icons/fa";
 import AddUsers from "@/app/Components/Users/AddUsers";
 import Context from "../Context/Context";
 
+let sort_by_options = [
+  "Created Date Ascending",
+  "Created Date Descending",
+  "User Name Ascending",
+  "User Name Descending",
+  "Status Ascending",
+  "Status Descending",
+  "Last Online Ascending",
+  "Last Online Descending",
+  "Acess Ascending",
+  "Acess Descending",
+];
+
 const Overview = () => {
-  const { users, getUsers } = useContext(Context);
+  const { users, getUsers, setSelectedUsers } = useContext(Context);
   const [showSubscribe, setShowSubscribe] = useState(false);
+  const [showSortBy, setShowSortBy] = useState(false);
 
   const showNextPage = () => {
     getUsers("inc");
@@ -50,10 +64,10 @@ const Overview = () => {
                   <FaPlus className="text-sm" /> Add Users
                 </button>
                 <button
-                  onClick={() => {
-                    getUsers("", true);
+                  className="bg-gray-700 relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+                  onClick={(e) => {
+                    setShowSortBy(!showSortBy);
                   }}
-                  className="glass px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
                 >
                   <svg
                     width="20"
@@ -71,6 +85,45 @@ const Overview = () => {
                     />
                   </svg>
                   Sort By
+                  {showSortBy && (
+                    <div className="absolute right-0 top-[56px] rounded-xl w-[15vw] bg-main z-50 small-scroller h-[20vh] overflow-y-auto">
+                      {sort_by_options?.map((e, i) => {
+                        return (
+                          <p
+                            key={i}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              if (e == sort_by_options[0]) {
+                                getUsers(null, "created_by", true);
+                              } else if (e == sort_by_options[1]) {
+                                getUsers(null, "created_by", false);
+                              } else if (e === sort_by_options[2]) {
+                                getUsers(null, "first_name", true);
+                              } else if (e === sort_by_options[3]) {
+                                getUsers(null, "first_name", false);
+                              } else if (e === sort_by_options[4]) {
+                                getUsers(null, "status", true);
+                              } else if (e === sort_by_options[5]) {
+                                getUsers(null, "status", false);
+                              } else if (e === sort_by_options[6]) {
+                                getUsers(null, "updated_at", true);
+                              } else if (e === sort_by_options[7]) {
+                                getUsers(null, "updated_at", false);
+                              } else if (e === sort_by_options[8]) {
+                                getUsers(null, "role", true);
+                              } else if (e === sort_by_options[9]) {
+                                getUsers(null, "role", false);
+                              }
+                              setShowSortBy(false);
+                            }}
+                            className="text-gray-200 py-2 hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
+                          >
+                            {e}
+                          </p>
+                        );
+                      })}
+                    </div>
+                  )}
                 </button>
               </div>
             </div>
@@ -82,6 +135,13 @@ const Overview = () => {
                       type="checkbox"
                       className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
                       id="check"
+                      onChange={(e) => {
+                        if (e?.target?.checked) {
+                          setSelectedUsers(users?.data?.map((e) => e?.id));
+                        } else {
+                          setSelectedUsers([]);
+                        }
+                      }}
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                       <svg

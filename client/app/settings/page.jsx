@@ -1,18 +1,76 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import SettingsLeftbar from "@/app/Components/Settings/Leftbar";
+import { BACKEND_URI } from "../utils/url";
+import { getCookie } from "cookies-next";
+import Context from "../Context/Context";
+import toast from "react-hot-toast";
 
 const Settings = () => {
+  const { userData, checkToken } = useContext(Context);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
     country: "",
-    postal: "",
+    postal_code: "",
   });
+
+  useEffect(() => {
+    setData({
+      firstName: userData?.first_name,
+      lastName: userData?.last_name,
+      ...userData,
+    });
+  }, [userData]);
+
+  const updateUsers = () => {
+    if (data?.firstName && data?.lastName && data?.email) {
+      const queryParams = new URLSearchParams({
+        ...userData,
+        email: data?.email,
+        password: data?.password,
+        first_name: data?.firstName,
+        last_name: data?.lastName,
+        phone: data?.phone || "",
+        country: data?.country,
+        postal_code: data?.postal_code,
+      }).toString();
+
+      try {
+        fetch(`${BACKEND_URI}/user/update/${userData?.id}?${queryParams}`, {
+          headers: {
+            Accept:
+              "application/json, application/xml, text/plain, text/html, *.*",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+          method: "PUT",
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            if (res.msg) {
+              toast.success("Super Admin updated successfully");
+              checkToken();
+            }
+            if (res.detail) {
+              toast.error(res.detail);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast.error("Please fill all the details");
+    }
+  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -148,13 +206,17 @@ const Settings = () => {
               <div className="mt-10 flex items-center justify-end w-full">
                 <button
                   className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
-                  onClick={() => {}}
+                  onClick={() => {
+                    history.push("/overview");
+                  }}
                 >
                   Discard
                 </button>
                 <button
                   className={`bg-newBlue font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
-                  onClick={() => {}}
+                  onClick={() => {
+                    updateUsers();
+                  }}
                 >
                   Save
                 </button>
