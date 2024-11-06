@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DeleteAgency from "../agencies/DeleteAgency";
+import Context from "@/app/Context/Context";
 
 const AgencyDetailsBlock = ({ percentage, data }) => {
+  const { selectedAgencies, setSelectedAgencies } = useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);
 
@@ -23,12 +25,30 @@ const AgencyDetailsBlock = ({ percentage, data }) => {
         }}
         className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >
-        <div className="inline-flex items-start">
+        <div
+          className="inline-flex items-start"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (
+              selectedAgencies?.find((e) => e?.agency_id === data?.agency_id)
+            ) {
+              setSelectedAgencies(
+                selectedAgencies?.filter((e) => e?.agency_id != data?.agency_id)
+              );
+            } else {
+              setSelectedAgencies([...selectedAgencies, data]);
+            }
+          }}
+        >
           <label className="relative flex items-center cursor-pointer">
             <input
               type="checkbox"
               className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
               id="check"
+              checked={
+                selectedAgencies &&
+                selectedAgencies?.find((e) => e?.agency_id === data?.agency_id)
+              }
             />
             <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
               <svg
@@ -72,17 +92,11 @@ const AgencyDetailsBlock = ({ percentage, data }) => {
             ? new Date(data?.deployment_date).toString()?.slice(4, 21)
             : ""}
         </p>
-        <div className="flex items-center justify-center">
-          <div className="bg-[#343745] w-[6vw] rounded-full h-3">
-            <div
-              className={`bg-white text-transparent rounded-full h-full text-xs`}
-              style={{ width: `${percentage}%` }}
-            >
-              .
-            </div>
-          </div>
-          <p className="ml-4">{percentage}%</p>
-        </div>
+        <p className="text-center">
+          {data?.created_at
+            ? new Date(data?.created_at).toString()?.slice(4, 21)
+            : ""}
+        </p>
         <div className="flex items-center justify-end">
           <div className="mr-5">
             <svg

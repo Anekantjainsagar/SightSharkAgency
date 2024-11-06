@@ -14,7 +14,7 @@ import Context from "@/app/Context/Context";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies, getTemplates, getAgencyDataSources } = useContext(Context);
+  const { agencies, getTemplates } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
@@ -26,7 +26,6 @@ const Overview = ({ params }) => {
     });
     setData(temp);
     getTemplates(temp?.agency_id);
-    getAgencyDataSources(temp?.agency_id);
   }, [name, agencies]);
 
   return (

@@ -41,7 +41,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     parent_name: "",
     website: "",
     location: "",
-    deployment: "",
     keyContact: {
       name: "",
       profile: "",
@@ -103,7 +102,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         client_name: data?.name,
         parent_name: data?.parent_name,
         website: data?.website,
-        deployment_date: data?.deployment,
         location: data?.location,
         key_contact_name: data?.keyContact?.name,
         key_contact_designation: data?.keyContact?.designation,
@@ -305,24 +303,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Location"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="deployment"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
-                    >
-                      Deployment Date
-                    </label>
-                    <input
-                      id="deployment"
-                      value={data?.deployment}
-                      onChange={(e) => {
-                        setData({ ...data, deployment: e.target.value });
-                      }}
-                      type="date"
-                      placeholder="Enter deployment Period"
                       className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>

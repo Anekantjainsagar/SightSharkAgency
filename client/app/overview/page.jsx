@@ -101,7 +101,7 @@ const Overview = () => {
                 Templates
               </h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[22vh]">
+              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[21.5vh]">
                 {mainTemplates?.map((e, i) => {
                   return (
                     <div
@@ -109,7 +109,7 @@ const Overview = () => {
                       onClick={() => {
                         window.open(e?.template_link, "__blank");
                       }}
-                      className="border flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer"
+                      className="border flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer p-3"
                     >
                       {e?.template_image ? (
                         <Image
