@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import DeleteAgency from "../agencies/DeleteAgency";
 import Context from "@/app/Context/Context";
 
-const AgencyDetailsBlock = ({ percentage, data }) => {
+const AgencyDetailsBlock = ({  data }) => {
   const { selectedAgencies, setSelectedAgencies } = useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);

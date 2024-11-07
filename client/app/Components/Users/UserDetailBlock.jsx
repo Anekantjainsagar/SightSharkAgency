@@ -4,7 +4,7 @@ import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
 import Context from "@/app/Context/Context";
 
-const UserDetailBlock = ({ status, data }) => {
+const UserDetailBlock = ({  data }) => {
   const { selectedUsers, setSelectedUsers, userData } = useContext(Context);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
