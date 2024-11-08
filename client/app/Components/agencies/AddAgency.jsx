@@ -97,7 +97,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const addClientCredentials = async (client_id, parent_name) => {
     if ((client_id, parent_name)) {
       try {
-        const platforms = credentialsState.reduce((acc, e, index) => {
+        const platforms = credentialsState.reduce((acc, e) => {
           acc[e?.platform] = {
             ...e.creds_structure,
             report_start_date: "2024-01-11",
