@@ -96,25 +96,34 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
 
   const addClientCredentials = async (client_id, parent_name) => {
     if ((client_id, parent_name)) {
-        try {
-          const response = await axios.post(
-            `${BACKEND_URI}/client/add_client_credentials?client_id=${client_id}&parent_name=${parent_name}`,
-            { platforms: credentialsState?.map((e) => e?.creds_structure) },
-            {
-              headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${getCookie("token")}`,
-              },
-            }
-          );
+      try {
+        const platforms = credentialsState.reduce((acc, e, index) => {
+          acc[e?.platform] = {
+            ...e.creds_structure,
+            report_start_date: "2024-01-11",
+            account_filter: "blank",
+          };
+          return acc;
+        }, {});
 
-          if (response.data) {
-            console.log(response.data);
+        const response = await axios.post(
+          `${BACKEND_URI}/client/add_client_credentials?client_id=${client_id}&parent_name=${parent_name}`,
+          { platforms },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${getCookie("token")}`,
+            },
           }
-        } catch (error) {
-          console.error("Error creating user:", error);
-          toast.error("An error occurred while creating the user");
+        );
+
+        if (response.data) {
+          toast.success(response.data.msg);
         }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("An error occurred while creating the user");
+      }
     }
   };
 

@@ -14,6 +14,7 @@ const State = (props) => {
   const [dataSourceStructure, setDataSourceStructure] = useState();
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedAgencies, setSelectedAgencies] = useState([]);
+  const [clientCreds, setClientCreds] = useState();
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -204,6 +205,30 @@ const State = (props) => {
     }
   };
 
+  const getCredentialsForClient = (id) => {
+    let cookie = getCookie("token");
+    if (cookie?.length > 5 && id) {
+      try {
+        axios
+          .get(`${BACKEND_URI}/client/get_client_credentials?client_id=${id}`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          })
+          .then(async (response) => {
+            setClientCreds(response.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     checkToken();
   }, []);
@@ -234,6 +259,8 @@ const State = (props) => {
         setSelectedUsers,
         selectedAgencies,
         setSelectedAgencies,
+        getCredentialsForClient,
+        clientCreds,
       }}
     >
       {props.children}

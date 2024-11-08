@@ -15,7 +15,8 @@ import Context from "@/app/Context/Context";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies } = useContext(Context);
+  const { agencies, getCredentialsForClient, clientCreds, mainDataSource } =
+    useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
@@ -26,6 +27,7 @@ const Overview = ({ params }) => {
       (e) => e?.client_name?.replaceAll(" ", "-") == name
     );
     setData(temp);
+    getCredentialsForClient(temp?.client_id);
   }, [name, agencies]);
 
   return (
@@ -63,65 +65,48 @@ const Overview = ({ params }) => {
                     </button>
                   </div>
                   <div className="gradient-line my-4"></div>
-                  <div className="bg-[#171C2A] grid grid-cols-4 gap-y-2 rounded-lg p-3 min-[1600px]:p-4">
-                    {[
-                      {
-                        img: "/Agency/logo/facebook.svg",
-                        title: "Meta Ads",
-                      },
-                      {
-                        img: "/Agency/logo/facebook.svg",
-                        title: "Meta Insights",
-                      },
-                      {
-                        img: "/Agency/logo/google analytics.svg",
-                        title: "Google Analytics",
-                      },
-                      {
-                        img: "/Agency/logo/hubspot.svg",
-                        title: "HubSpot",
-                      },
-                      {
-                        img: "/Agency/logo/amazon.svg",
-                        title: "Amazon",
-                      },
-                      {
-                        img: "/Agency/logo/shopify.svg",
-                        title: "Shopify",
-                      },
-                      {
-                        img: "/Agency/logo/google ads.svg",
-                        title: "Google Ads",
-                      },
-                      {
-                        img: "/Agency/logo/linkedin.svg",
-                        title: "Linkedin",
-                      },
-                    ].map((e, i) => {
-                      return (
-                        <div
-                          key={i}
-                          className="flex items-center px-2 py-1 rounded-full"
-                        >
-                          <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
-                            <Image
-                              src={e?.img}
-                              alt={e?.img?.src}
-                              width={1000}
-                              height={1000}
-                              className="object-contain"
-                            />
-                          </div>
-                          <label
-                            htmlFor={e?.title}
-                            className="text-sm min-[1600px]:text-base"
-                          >
-                            {e?.title}
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  {clientCreds?.data?.length > 0 ? (
+                    <div className="bg-[#171C2A] grid grid-cols-4 gap-y-2 rounded-lg p-3 min-[1600px]:p-4">
+                      {clientCreds?.data
+                        ?.map((e) => {
+                          return {
+                            ...e,
+                            img_link: mainDataSource?.find(
+                              (event) => event?.name == e?.platform_name
+                            )?.img_link,
+                          };
+                        })
+                        ?.map((e, i) => {
+                          return (
+                            <div
+                              key={i}
+                              className="flex items-center px-2 py-1 rounded-full"
+                            >
+                              <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
+                                <Image
+                                  src={e?.img_link}
+                                  alt={e?.img_link?.src}
+                                  width={1000}
+                                  height={1000}
+                                  className="object-contain"
+                                />
+                              </div>
+                              <label
+                                htmlFor={e?.platform_name}
+                                className="text-sm min-[1600px]:text-base"
+                              >
+                                {e?.platform_name}
+                              </label>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <div className="bg-[#171C2A] rounded-lg p-3 min-[1600px]:p-4 text-center">
+                      No Data Sources Available Please Add some of the Data
+                      Sources
+                    </div>
+                  )}
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4">
                   <h4 className="min-[1600px]:text-xl">Templates </h4>
