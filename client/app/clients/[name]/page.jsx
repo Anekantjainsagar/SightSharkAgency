@@ -132,7 +132,7 @@ const Overview = ({ params }) => {
                         data={{
                           template_name: data?.template_name,
                           template_link: data?.template_link,
-                          template_link: data?.template_link,
+                          templat_image: data?.templat_image,
                         }}
                         original_data={data}
                       />

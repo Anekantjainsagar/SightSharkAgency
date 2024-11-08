@@ -8,10 +8,10 @@ const TemplateBlock = ({ data }) => {
         window.open(data?.template_link, "__blank");
       }}
     >
-      {data?.template_image && (
+      {data?.templat_image && (
         <Image
-          src={data?.template_image}
-          alt={data?.template_image?.src}
+          src={data?.templat_image}
+          alt={data?.templat_image?.src}
           width={1000}
           height={1000}
           className="rounded-md cursor-pointer h-[10vh] object-cover"

@@ -94,6 +94,30 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Credentials",
   ];
 
+  const addClientCredentials = async (client_id, parent_name) => {
+    if ((client_id, parent_name)) {
+        try {
+          const response = await axios.post(
+            `${BACKEND_URI}/client/add_client_credentials?client_id=${client_id}&parent_name=${parent_name}`,
+            { platforms: credentialsState?.map((e) => e?.creds_structure) },
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${getCookie("token")}`,
+              },
+            }
+          );
+
+          if (response.data) {
+            console.log(response.data);
+          }
+        } catch (error) {
+          console.error("Error creating user:", error);
+          toast.error("An error occurred while creating the user");
+        }
+    }
+  };
+
   const handleSave = async () => {
     if (
       data?.name &&
@@ -115,6 +139,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         key_contact_phone: data?.keyContact?.phone,
         template_link: data?.templates?.template_link,
         template_name: data?.templates?.template_name,
+        templat_image: data?.templates?.template_image,
       }).toString();
 
       const formData = new FormData();
@@ -142,6 +167,10 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
 
         if (response.data) {
           getAgencies();
+          addClientCredentials(
+            response.data?.data?.client_id,
+            response?.data?.data?.parent_name
+          );
           setShowSubscribe(false);
         }
       } catch (error) {

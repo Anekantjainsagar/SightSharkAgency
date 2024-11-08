@@ -84,7 +84,8 @@ const Overview = () => {
                             />{" "}
                           </div>
                           <p className="text-sm min-[1600px]:text-base cursor-pointer">
-                            {e?.name}
+                            {e?.name.replaceAll("_", " ")[0]?.toUpperCase() +
+                              e?.name?.replaceAll("_", " ")?.slice(1)}
                           </p>
                         </div>
                       </div>

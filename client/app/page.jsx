@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RightSide from "@/app/Components/Login/RightSide";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,9 +13,28 @@ const App = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({ password: "", email: "" });
   const [showOtp, setShowOtp] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMe = () => {
+    localStorage.setItem("email", user?.email);
+    localStorage.setItem("password", user?.password);
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("email")) {
+      setRememberMe(true);
+    }
+    setUser({
+      email: localStorage.getItem("email"),
+      password: localStorage.getItem("password"),
+    });
+  }, []);
 
   const onLogin = () => {
     if (user?.email && user?.password) {
+      if (rememberMe) {
+        handleRememberMe();
+      }
       try {
         const loginData = new URLSearchParams({
           username: user?.email,
@@ -33,7 +52,9 @@ const App = () => {
             return res.json();
           })
           .then((res) => {
-            if (res) {
+            if (res.detail) {
+              toast.error(res.detail);
+            } else {
               toast.success("Login Successfully check otp for verification");
               setShowOtp(true);
             }
@@ -133,6 +154,8 @@ const App = () => {
                       type="checkbox"
                       className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
                       id="check"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                       <svg
