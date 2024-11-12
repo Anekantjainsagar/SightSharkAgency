@@ -57,7 +57,7 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
               Forgot your Password?
             </h4>
             <p className="w-10/12 mx-auto text-center">
-              Enter your Email an we'll help you reset your password.
+              Enter your Email an we&apos;ll help you reset your password.
             </p>
             <div className="flex flex-col mt-4">
               <input

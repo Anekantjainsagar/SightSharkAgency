@@ -131,7 +131,7 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
             />
             <div className="flex items-center justify-end w-full mt-2">
               <p>
-                Didn't got the code?{" "}
+                Didn&apos;t got the code?{" "}
                 <span className="text-newBlue cursor-pointer">Resend</span>
               </p>
             </div>
