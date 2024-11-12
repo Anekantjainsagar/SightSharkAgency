@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 export default function ResetPassword() {
   const history = useRouter();
   const [password, setPassword] = useState("");
+  const [cpassword, setCpassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [token, setToken] = useState("");
 
@@ -23,32 +24,36 @@ export default function ResetPassword() {
 
   const onChangePassword = () => {
     if (token && password) {
-      try {
-        const formData = new URLSearchParams();
-        formData.append("token", token);
-        formData.append("new_password", password);
+      if (password == cpassword) {
+        try {
+          const formData = new URLSearchParams();
+          formData.append("token", token);
+          formData.append("new_password", password);
 
-        axios
-          .post(`${BACKEND_URI}/user/reset-password`, formData, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: `Bearer ${getCookie("token")}`,
-            },
-          })
-          .then((res) => {
-            if (res.status == 200) {
-              toast.success("Password reset successfully");
-              history.push("/");
-            }
-          })
-          .catch((err) => {
-            if (err.status === 400) {
-              toast.error("User not found");
-            }
-          });
-      } catch (error) {
-        console.log(error);
+          axios
+            .post(`${BACKEND_URI}/user/reset-password`, formData, {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: `Bearer ${getCookie("token")}`,
+              },
+            })
+            .then((res) => {
+              if (res.status == 200) {
+                toast.success("Password reset successfully");
+                history.push("/");
+              }
+            })
+            .catch((err) => {
+              if (err.status === 400) {
+                toast.error("User not found");
+              }
+            });
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        toast.error("Both password does not match please try again");
       }
     } else {
       toast.error("Please fill all the details");
@@ -83,7 +88,7 @@ export default function ResetPassword() {
             >
               New Password
             </label>
-            <div className="w-full relative mt-1.5">
+            <div className="w-full relative mb-4 mt-1.5">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -92,6 +97,33 @@ export default function ResetPassword() {
                   setPassword(e.target.value);
                 }}
                 placeholder="Enter New Password"
+                className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+              />
+              <div
+                className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowPassword(!showPassword);
+                }}
+              >
+                {showPassword ? <LuEye /> : <LuEyeOff />}
+              </div>
+            </div>
+            <label
+              htmlFor="cpassword"
+              className="text-sm min-[1600px]:text-base"
+            >
+              Confirm Password
+            </label>
+            <div className="w-full relative mt-1.5">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="cpassword"
+                value={cpassword}
+                onChange={(e) => {
+                  setCpassword(e.target.value);
+                }}
+                placeholder="Enter Confirm Password"
                 className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
               />
               <div
