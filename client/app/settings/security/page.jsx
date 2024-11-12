@@ -1,20 +1,69 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import SettingsLeftbar from "@/app/Components/Settings/Leftbar";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-
 import Required from "@/app/Components/Utils/Required";
+import Context from "@/app/Context/Context";
+import { getCookie } from "cookies-next";
+import { BACKEND_URI } from "@/app/utils/url";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Settings = () => {
+  const { userData, setUserData } = useContext(Context);
   const [showOriginalPassword, setShowOriginalPassword] = useState(false);
+  const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [data, setData] = useState({
     oldPass: "",
     newPassword: "",
     reNewPassword: "",
   });
+
+  useEffect(() => {
+    if (userData?.two_factor_authentication) {
+      setTwoFactorAuth(userData?.two_factor_authentication !== "disabled");
+    }
+  }, [userData]);
+
+  const toggle2factorAuth = (checked) => {
+    let cookie = getCookie("token");
+    setTwoFactorAuth(!twoFactorAuth);
+    if (cookie) {
+      axios
+        .put(
+          `${BACKEND_URI}/client/two-factor-authentication?user_id=${userData?.id}`,
+          {
+            two_factor_authentication: checked ? "enabled" : "disabled",
+          },
+          {
+            headers: {
+              Accept: "application/x-www-form-urlencoded",
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: `Bearer ${cookie}`,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.data.id) {
+            setUserData({
+              ...userData,
+              two_factor_authentication: checked ? "enabled" : "disabled",
+            });
+            if (checked) {
+              toast.success("Two Factor Authentication Enabled");
+            } else {
+              toast.success("Two Factor Authentication Disabled");
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -143,7 +192,15 @@ const Settings = () => {
                     Enable two-step authentication
                   </h6>
                   <label className="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" value="" className="sr-only peer" />
+                    <input
+                      type="checkbox"
+                      value=""
+                      className="sr-only peer"
+                      checked={twoFactorAuth}
+                      onChange={(e) => {
+                        toggle2factorAuth(e.target.checked);
+                      }}
+                    />
                     <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                   </label>
                 </div>

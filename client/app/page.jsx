@@ -1,19 +1,24 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import RightSide from "@/app/Components/Login/RightSide";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
 import { BACKEND_URI } from "./utils/url";
 import LoginOtp from "@/app/Components/LoginOtp";
-import { getCookie } from "cookies-next";
-import axios from "axios";
+import PasswordReset from "@/app/Components/PasswordReset";
+import { useRouter } from "next/navigation";
+import Context from "./Context/Context";
+import { setCookie } from "cookies-next";
 
 const App = () => {
+  const history = useRouter();
+  const { checkToken } = useContext(Context);
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({ password: "", email: "" });
   const [showOtp, setShowOtp] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [recoverPassword, setRecoverPassword] = useState(false);
 
   const handleRememberMe = () => {
     localStorage.setItem("email", user?.email);
@@ -54,12 +59,18 @@ const App = () => {
           .then((res) => {
             if (res.detail) {
               toast.error(res.detail);
+            } else if (res.access_token) {
+              setCookie("token", res.access_token);
+              checkToken();
+              history.push("/overview");
+              toast.success("Login Successfully");
             } else {
               toast.success("Login Successfully check otp for verification");
               setShowOtp(true);
             }
           })
           .catch((err) => {
+            console.log(err);
             if (err.status == 401) {
               toast.error("Invalid credentials");
             }
@@ -79,6 +90,10 @@ const App = () => {
         showSubscribe={showOtp}
         setShowSubscribe={setShowOtp}
         email={user?.email}
+      />{" "}
+      <PasswordReset
+        showSubscribe={recoverPassword}
+        setShowSubscribe={setRecoverPassword}
       />
       <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
         <div className="text-white flex flex-col items-center w-7/12 px-5">
@@ -181,31 +196,7 @@ const App = () => {
               </div>
               <button
                 onClick={() => {
-                  if (user?.email) {
-                    const formData = new URLSearchParams();
-                    formData.append("email", user.email);
-
-                    axios
-                      .post(`${BACKEND_URI}/user/recover-password`, formData, {
-                        headers: {
-                          Accept: "application/json",
-                          "Content-Type": "application/x-www-form-urlencoded",
-                          Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                      })
-                      .then((res) => {
-                        if (res.status == 200) {
-                          toast.success("Password reset email sent");
-                        }
-                      })
-                      .catch((err) => {
-                        if (err.response.status === 404) {
-                          toast.error("User not found");
-                        }
-                      });
-                  } else {
-                    toast.error("Please enter an email address");
-                  }
+                  setRecoverPassword(true);
                 }}
                 className="text-[#F04438] mainText18"
               >
