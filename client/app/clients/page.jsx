@@ -7,31 +7,19 @@ import AddAgency from "@/app/Components/agencies/AddAgency";
 import { FaPlus } from "react-icons/fa";
 import Context from "../Context/Context";
 import { CSVLink } from "react-csv";
+import SortByButton from "../Components/agencies/SortByButton";
 
 let sort_by_options = [
-  "Created Date Ascending",
-  "Created Date Descending",
-  "Client Name Ascending",
-  "Client Name Descending",
-  "Status Ascending",
-  "Status Descending",
-  "Deployment Date Ascending",
-  "Deployment Date Descending",
+  "created_at",
+  "client_name",
+  "status",
+  "deployment_date",
 ];
 
 const Overview = () => {
   const { agencies, getAgencies, setSelectedAgencies, selectedAgencies } =
     useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
-  const [showSortBy, setShowSortBy] = useState(false);
-
-  const showNextPage = () => {
-    getAgencies("inc");
-  };
-
-  const showPrevPage = () => {
-    getAgencies("dec");
-  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -89,63 +77,7 @@ const Overview = () => {
                     </button>
                   </CSVLink>
                 )}
-                <button
-                  className="bg-gray-700 relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
-                  onClick={() => {
-                    setShowSortBy(!showSortBy);
-                  }}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5.83333 3.33337V16.6667M5.83333 16.6667L2.5 13.3334M5.83333 16.6667L9.16667 13.3334M14.1667 16.6667V3.33337M14.1667 3.33337L10.8333 6.66671M14.1667 3.33337L17.5 6.66671"
-                      stroke="#ECECED"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Sort By
-                  {showSortBy && (
-                    <div className="absolute right-0 top-[56px] rounded-xl w-[15vw] bg-main z-50 small-scroller h-[20vh] overflow-y-auto">
-                      {sort_by_options?.map((e, i) => {
-                        return (
-                          <p
-                            key={i}
-                            onClick={() => {
-                              if (e == sort_by_options[0]) {
-                                getAgencies(null, "created_at", true);
-                              } else if (e == sort_by_options[1]) {
-                                getAgencies(null, "created_at", false);
-                              } else if (e === sort_by_options[2]) {
-                                getAgencies(null, "agency_name", true);
-                              } else if (e === sort_by_options[3]) {
-                                getAgencies(null, "agency_name", false);
-                              } else if (e === sort_by_options[4]) {
-                                getAgencies(null, "status", true);
-                              } else if (e === sort_by_options[5]) {
-                                getAgencies(null, "status", false);
-                              } else if (e === sort_by_options[6]) {
-                                getAgencies(null, "deployment_date", true);
-                              } else if (e === sort_by_options[7]) {
-                                getAgencies(null, "deployment_date", false);
-                              }
-                              setShowSortBy(false);
-                            }}
-                            className="text-gray-200 py-2 hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
-                          >
-                            {e}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  )}
-                </button>
+                <SortByButton sort_by_options={sort_by_options} />
               </div>
             </div>
             <div className="mt-5 border border-gray-200/5 rounded-2xl">
@@ -217,104 +149,26 @@ const Overview = () => {
                     );
                   })}
                 </div>
-                <div className="h-[14%] px-6 flex items-center justify-between bg-[#030021]/40 rounded-2xl">
-                  <div className="flex items-center justify-between w-full">
-                    <button
-                      onClick={showPrevPage}
-                      disabled={agencies?.current_page == 1}
-                      className={`text-white ${
-                        agencies?.current_page == 1
-                          ? "bg-gray-400"
-                          : "bg-[#898989]/15"
-                      } bg-[#898989]/15 flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
-                    >
-                      <div className="mr-2 w-5 min-[1600px]:w-8">
-                        <svg
-                          className="w-full h-full"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{ rotate: "180deg" }}
+                <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
+                  {[...Array(agencies?.total_pages).keys()]
+                    .map((i) => i + 1)
+                    ?.map((e, i) => {
+                      return (
+                        <div
+                          className={`w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
+                            agencies?.current_page == e
+                              ? "bg-newBlue"
+                              : "text-[#85888E]"
+                          }`}
+                          key={i}
+                          onClick={() => {
+                            getAgencies(e);
+                          }}
                         >
-                          <path
-                            d="M21 12L16 7M21 12L16 17M21 12H3"
-                            stroke="#fff"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                      </div>
-                      Previous
-                    </button>
-                    <div className="gap-x-4 flex items-center">
-                      {[...Array(agencies?.total_pages).keys()]
-                        .map((i) => i + 1)
-                        ?.slice(0, 3)
-                        ?.map((e, i) => {
-                          return (
-                            <div
-                              className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                                agencies?.current_page == e
-                                  ? "bg-newBlue"
-                                  : "text-[#85888E]"
-                              }`}
-                              key={i}
-                            >
-                              {e}
-                            </div>
-                          );
-                        })}
-                      {agencies?.total_pages - 6 > 0 && (
-                        <span className="text-[#85888E]">...</span>
-                      )}
-                      {agencies?.total_pages > 3 &&
-                        [...Array(agencies?.total_pages).keys()]
-                          .map((i) => i + 1)
-                          ?.slice(agencies?.total_pages - 3)
-                          ?.map((e, i) => {
-                            return (
-                              <div
-                                className={`w-[30px] min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center cursor-pointer ${
-                                  users?.current_page == e
-                                    ? "bg-newBlue"
-                                    : "text-[#85888E]"
-                                }`}
-                                key={i}
-                              >
-                                {e}
-                              </div>
-                            );
-                          })}
-                    </div>
-                    <button
-                      onClick={showNextPage}
-                      disabled={agencies?.total_pages == agencies?.current_page}
-                      className={`text-white ${
-                        agencies?.total_pages == agencies?.current_page
-                          ? "bg-gray-400"
-                          : "bg-newBlue"
-                      } flex items-center w-[120px] min-[1600px]:w-[150px] justify-center py-2.5 min-[1600px]:py-3 rounded-lg text-[14px] min-[1600px]:text-[18px]`}
-                    >
-                      Next
-                      <div className="ml-2 w-5 min-[1600px]:w-8">
-                        <svg
-                          className="w-full h-full"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M21 12L16 7M21 12L16 17M21 12H3"
-                            stroke="#fff"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          ></path>
-                        </svg>
-                      </div>
-                    </button>
-                  </div>
+                          {e}
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>

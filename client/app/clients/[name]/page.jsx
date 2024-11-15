@@ -13,6 +13,13 @@ import { useRouter } from "next/navigation";
 import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
 
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 const Overview = ({ params }) => {
   const history = useRouter();
   const { agencies, getCredentialsForClient, clientCreds, mainDataSource } =
@@ -95,7 +102,7 @@ const Overview = ({ params }) => {
                                 htmlFor={e?.platform_name}
                                 className="text-sm min-[1600px]:text-base"
                               >
-                                {e?.platform_name}
+                                {formatName(e?.platform_name)}
                               </label>
                             </div>
                           );

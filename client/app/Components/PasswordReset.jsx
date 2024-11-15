@@ -46,67 +46,58 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
               closeModal();
             }}
           />
-          <Image
-            src="/forgot.png"
-            alt="Forgot"
-            width={1000}
-            height={1000}
-            className=""
-          />
-          <div>
-            <h4 className="mainText20 w-11/12 text-center mb-1.5 mt-5">
-              Forgot your Password?
-            </h4>
-            <p className="w-10/12 mx-auto text-center">
-              {sent
-                ? "Password reset email sent."
-                : "Enter your Email an we'll help you reset your password."}
-            </p>
-            <div className="flex flex-col mt-4">
-              <input
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="text"
-                disabled={sent}
-                placeholder="Enter Email"
-                className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
-              />
-            </div>
-            <button
-              className={`bg-newBlue w-full py-2 mt-5 rounded-lg text-sm min-[1600px]:text-base text-center`}
-              onClick={() => {
-                if (email) {
-                  const formData = new URLSearchParams();
-                  formData.append("email", email);
-
-                  axios
-                    .post(`${BACKEND_URI}/user/recover-password`, formData, {
-                      headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        Authorization: `Bearer ${getCookie("token")}`,
-                      },
-                    })
-                    .then((res) => {
-                      if (res.status == 200) {
-                        toast.success("Password reset email sent");
-                        setSent(true);
-                      }
-                    })
-                    .catch((err) => {
-                      if (err.response.status === 404) {
-                        toast.error("User not found");
-                      }
-                    });
-                } else {
-                  toast.error("Please enter an email address");
-                }
-              }}
-            >
-              Submit
-            </button>{" "}
+          <h4 className="mainText20 w-11/12 text-center mb-1.5 mt-5">
+            Forgot your Password?
+          </h4>
+          <p className="w-10/12 mx-auto text-center">
+            {sent
+              ? "Password reset email sent."
+              : "Enter your Email an we'll help you reset your password."}
+          </p>
+          <div className="flex flex-col mt-4 w-full">
+            <input
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              disabled={sent}
+              placeholder="Enter Email"
+              className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+            />
           </div>
+          <button
+            className={`bg-newBlue w-full py-2 mt-5 rounded-lg text-sm min-[1600px]:text-base text-center`}
+            onClick={() => {
+              if (email) {
+                const formData = new URLSearchParams();
+                formData.append("email", email);
+
+                axios
+                  .post(`${BACKEND_URI}/user/recover-password`, formData, {
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/x-www-form-urlencoded",
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  })
+                  .then((res) => {
+                    if (res.status == 200) {
+                      toast.success("Password reset email sent");
+                      setSent(true);
+                    }
+                  })
+                  .catch((err) => {
+                    if (err.response.status === 404) {
+                      toast.error("User not found");
+                    }
+                  });
+              } else {
+                toast.error("Please enter an email address");
+              }
+            }}
+          >
+            Submit
+          </button>{" "}
         </div>
       </Modal>
     </div>

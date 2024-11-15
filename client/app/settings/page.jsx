@@ -192,9 +192,9 @@ const Settings = () => {
                     </label>
                     <input
                       id="postal"
-                      value={data?.postal}
+                      value={data?.postal_code}
                       onChange={(e) => {
-                        setData({ ...data, postal: e.target.value });
+                        setData({ ...data, postal_code: e.target.value });
                       }}
                       type="number"
                       placeholder="Enter Postal Code"

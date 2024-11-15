@@ -31,13 +31,12 @@ const Settings = () => {
   const toggle2factorAuth = (checked) => {
     let cookie = getCookie("token");
     setTwoFactorAuth(!twoFactorAuth);
-    if (cookie) {
+    if (cookie && userData?.id) {
       axios
         .put(
-          `${BACKEND_URI}/client/two-factor-authentication?user_id=${userData?.id}`,
-          {
-            two_factor_authentication: checked ? "enabled" : "disabled",
-          },
+          `${BACKEND_URI}/client/two-factor-authentication?agency_id=${
+            userData?.id
+          }&two_factor_authentication=${checked ? "enabled" : "disabled"}`,
           {
             headers: {
               Accept: "application/x-www-form-urlencoded",
@@ -62,6 +61,8 @@ const Settings = () => {
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      toast.error("Login Error");
     }
   };
 

@@ -5,6 +5,13 @@ import Image from "next/image";
 import Context from "../Context/Context";
 import { useContext } from "react";
 
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 const Overview = () => {
   const { mainDataSource, mainTemplates } = useContext(Context);
 
@@ -84,8 +91,7 @@ const Overview = () => {
                             />{" "}
                           </div>
                           <p className="text-sm min-[1600px]:text-base cursor-pointer">
-                            {e?.name.replaceAll("_", " ")[0]?.toUpperCase() +
-                              e?.name?.replaceAll("_", " ")?.slice(1)}
+                            {formatName(e?.name)}
                           </p>
                         </div>
                       </div>

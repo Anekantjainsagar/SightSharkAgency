@@ -40,15 +40,9 @@ const State = (props) => {
     }
   };
 
-  const getUsers = (grow, order_by = "created_at", type = "asc") => {
+  const getUsers = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
-    let page = users?.current_page ? users?.current_page : 1;
     let limit = users?.limit ? users?.limit : 7;
-    if (grow == "inc") {
-      page++;
-    } else if (grow == "dec") {
-      page--;
-    }
 
     if (cookie?.length > 5) {
       try {
@@ -81,15 +75,9 @@ const State = (props) => {
     }
   };
 
-  const getAgencies = (grow, order_by = "created_at", type = "asc") => {
+  const getAgencies = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
-    let page = agencies?.current_page ? agencies?.current_page : 1;
     let limit = agencies?.limit ? agencies?.limit : 8;
-    if (grow == "inc") {
-      page++;
-    } else if (grow == "dec") {
-      page--;
-    }
 
     if (cookie?.length > 5) {
       try {
