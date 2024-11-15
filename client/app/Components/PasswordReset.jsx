@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Modal from "react-modal";
-import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
