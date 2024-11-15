@@ -28,13 +28,19 @@ const customStyles = {
   },
 };
 
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const { mainDataSource, mainTemplates, getAgencies } = useContext(Context);
   let maxPage = 6;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [fileInput, setFileInput] = useState();
-  const [fileInputAgency, setFileInputAgency] = useState();
   const [credentialsState, setCredentialsState] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
@@ -55,27 +61,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
-  const fileInputRefAgent = React.useRef(null);
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
       setFileInput(file);
       setData({ ...data, profile: URL.createObjectURL(file) });
-    } else {
-      console.log("No file selected");
-    }
-  };
-
-  const handleFileChangeAgent = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFileInputAgency(file);
-      setData({
-        ...data,
-        keyContact: { ...data.keyContact, profile: URL.createObjectURL(file) },
-      });
-      console.log(fileInputAgency);
     } else {
       console.log("No file selected");
     }
@@ -353,35 +344,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
               </div>
             ) : page == 2 ? (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
-                <div className="flex items-center justify-center mb-6">
-                  <div className="relative">
-                    <input
-                      type="file"
-                      ref={fileInputRefAgent}
-                      style={{ display: "none" }}
-                      onChange={handleFileChangeAgent}
-                    />
-                    <div
-                      onClick={() => {
-                        fileInputRefAgent.current.click();
-                      }}
-                      className="absolute bg-newBlue flex items-center justify-center text-2xl px-2 -bottom-2 cursor-pointer -right-2 rounded-full"
-                    >
-                      +
-                    </div>
-                    <Image
-                      src={
-                        data?.keyContact?.profile
-                          ? data?.keyContact?.profile
-                          : "/Agency/temp_logo.png"
-                      }
-                      alt="Agency Img"
-                      width={1000}
-                      height={1000}
-                      className="w-[4vw] rounded-full"
-                    />
-                  </div>
-                </div>
                 <div className="grid grid-cols-2 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
                   <div className="flex flex-col">
                     <label
@@ -523,11 +485,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                               htmlFor={e?.name}
                               className="text-[13px] min-[1600px]:text-base cursor-pointer"
                             >
-                              {e?.name
-                                ?.replaceAll("_", " ")
-                                .charAt(0)
-                                .toUpperCase() +
-                                e?.name?.replaceAll("_", " ").slice(1)}
+                              {formatName(e?.name)}
                             </label>
                           </div>
                           <div className="inline-flex items-start mr-1">

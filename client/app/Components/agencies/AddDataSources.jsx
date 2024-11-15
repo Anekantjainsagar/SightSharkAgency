@@ -1,11 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import { Toaster } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
+import Context from "@/app/Context/Context";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -133,7 +134,15 @@ const connectorsData = [
   },
 ];
 
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
+  const { mainDataSource } = useContext(Context);
   let maxPage = 2;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -211,10 +220,10 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                 />
               </div>
               <div className="grid grid-cols-3 gap-3 mt-5">
-                {connectorsData
+                {mainDataSource
                   ?.filter((e) => {
                     if (search) {
-                      return e?.title
+                      return e?.name
                         ?.toLowerCase()
                         ?.includes(search?.toLowerCase());
                     }
@@ -228,17 +237,17 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                       >
                         <div className="flex items-center">
                           <Image
-                            src={e?.img}
-                            alt={e?.img?.src}
+                            src={e?.img_link}
+                            alt={e?.img_link?.src}
                             width={1000}
                             height={1000}
                             className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-squre object-contain"
                           />
                           <label
-                            htmlFor={e?.title}
+                            htmlFor={e?.name}
                             className="text-[13px] min-[1600px]:text-base cursor-pointer"
                           >
-                            {e?.title}
+                            {formatName(e?.name)}
                           </label>
                         </div>
                         <div className="inline-flex items-start mr-1">
@@ -246,7 +255,11 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                             <input
                               type="checkbox"
                               className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-                              id="check"
+                              id={e?.name}
+                              onChange={(e) => {
+                                let id = e.target.id;
+                              }}
+                              // checked={data?.platforms?.includes(e?.name)}
                             />
                             <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                               <svg

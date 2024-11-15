@@ -8,21 +8,18 @@ import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import { BiPencil } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import DeleteAgency from "@/app/Components/agencies/DeleteAgency";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 import Context from "@/app/Context/Context";
 import { useRouter } from "next/navigation";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import Required from "@/app/Components/Utils/Required";
-
-let databar = ["Agency Details", "Key Contact Information", "Credentials"];
+let databar = ["Agency Details", "Key Contact Information"];
 
 const Overview = ({ params }) => {
   const [status, setStatus] = useState("Active");
   const [selected, setSelected] = useState("Agency Details");
   const [deleteAgency, setDeleteAgency] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [original_data, setOriginal_data] = useState();
   const [file, setFile] = useState("");
   const [data, setData] = useState({
@@ -42,12 +39,15 @@ const Overview = ({ params }) => {
     credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
-  const fileInputRefAgent = React.useRef(null);
   const { agencies, getAgencies } = useContext(Context);
   const { name } = params;
   const history = useRouter();
 
   useEffect(() => {
+    updateDataTemp();
+  }, [name, agencies]);
+
+  const updateDataTemp = () => {
     let temp = agencies?.data?.find(
       (e) => e?.client_name?.replaceAll(" ", "-") == name
     );
@@ -69,16 +69,9 @@ const Overview = ({ params }) => {
     });
     setStatus(temp?.status);
     setFile(temp?.profile_picture);
-  }, [name, agencies]);
-
-  const handleFileChangeProfile = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      console.log("Selected file:", file.name);
-    }
   };
 
-  const handleFileChangeAgent = (event) => {
+  const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
       console.log("Selected file:", file.name);
@@ -92,9 +85,8 @@ const Overview = ({ params }) => {
         showSubscribe={deleteAgency}
         setShowSubscribe={setDeleteAgency}
         name={data?.name}
-        id={data?.agency_id}
+        id={original_data?.client_id}
       />
-
       <div className="w-[85%] bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
@@ -233,38 +225,9 @@ const Overview = ({ params }) => {
                         </div>
                       </div>
                     </div>
-                  ) : selected === databar[1] ? (
+                  ) : (
                     <div className="flex items-start justify-between mt-4 px-3">
-                      <div className="flex items-center w-1/12">
-                        <div className="relative flex items-center justify-center">
-                          <div
-                            onClick={() => {
-                              fileInputRefAgent.current.click();
-                            }}
-                            className="absolute bg-newBlue text-xl py-1.5 px-1.5 -bottom-1 cursor-pointer -right-1 rounded-full"
-                          >
-                            <BiPencil />
-                          </div>{" "}
-                          <input
-                            type="file"
-                            ref={fileInputRefAgent}
-                            style={{ display: "none" }}
-                            onChange={handleFileChangeAgent}
-                          />
-                          <Image
-                            src={
-                              data?.keyContact?.profile
-                                ? data?.keyContact?.profile
-                                : "/Agency/individual/agent.png"
-                            }
-                            alt="Agency Img"
-                            width={1000}
-                            height={1000}
-                            className="rounded-full border border-gray-300/30"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-11/12 pl-[2vw]">
+                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full">
                         <div className="flex flex-col">
                           <label
                             htmlFor="namekey"
@@ -363,70 +326,6 @@ const Overview = ({ params }) => {
                         </div>
                       </div>
                     </div>
-                  ) : (
-                    <div className="flex flex-col items-start justify-between mt-4 px-3">
-                      <div className="w-full">
-                        <div className="flex flex-col">
-                          <label
-                            htmlFor="emailKey"
-                            className="mb-1.5 text-sm min-[1600px]:text-base"
-                          >
-                            Email
-                          </label>
-                          <input
-                            id="emailKey"
-                            value={data?.credentials?.email}
-                            onChange={(e) => {
-                              setData({
-                                ...data,
-                                credentials: {
-                                  ...data?.credentials,
-                                  email: e.target.value,
-                                },
-                              });
-                            }}
-                            type="text"
-                            placeholder="Enter Email"
-                            className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
-                          />
-                        </div>
-                        <div className="flex flex-col mt-8 min-[1600px]:mt-6">
-                          <label
-                            htmlFor="passwordKey"
-                            className="mb-1.5 text-sm min-[1600px]:text-base"
-                          >
-                            Password
-                          </label>
-                          <div className="w-full relative">
-                            <input
-                              type={showPassword ? "text" : "password"}
-                              id="passwordKey"
-                              value={data?.credentials?.password}
-                              onChange={(e) => {
-                                setData({
-                                  ...data,
-                                  credentials: {
-                                    ...data?.credentials,
-                                    password: e.target.value,
-                                  },
-                                });
-                              }}
-                              placeholder="Enter Password"
-                              className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
-                            />
-                            <div
-                              className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setShowPassword(!showPassword);
-                              }}
-                            >
-                              {showPassword ? <LuEye /> : <LuEyeOff />}
-                            </div>
-                          </div>
-                        </div>
-                      </div>{" "}
-                    </div>
                   )}
                 </div>
                 <div className="flex h-[10%] items-center justify-between min-[1600px]:mt-0 mt-6">
@@ -442,9 +341,7 @@ const Overview = ({ params }) => {
                   <div>
                     <button
                       className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
-                      onClick={() => {
-                        history.push(`/clients/`);
-                      }}
+                      onClick={updateDataTemp}
                     >
                       Discard
                     </button>
