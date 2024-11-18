@@ -1,1 +1,1 @@
-export const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URI || "http://localhost:5000/api";
+export const BACKEND_URI = process.env.NEXT_PUBLIC_BACKEND_URI 
