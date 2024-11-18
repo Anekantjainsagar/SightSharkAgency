@@ -2,121 +2,11 @@
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
+import Context from "../Context/Context";
+import { useContext } from "react";
 
 const Overview = () => {
-  // const history = useRouter();
-
-  const connectorsData = [
-    {
-      title: "Amazon Selling Partner",
-      img: "/Agency/connectors/Amazon Selling Partner.svg",
-    },
-    {
-      title: "Bamboo HR",
-      img: "/Agency/connectors/BambooHR.svg",
-    },
-    {
-      title: "Facebook Ads",
-      img: "/Agency/connectors/Facebook Ads.svg",
-    },
-    {
-      title: "Facebook Insights",
-      img: "/Agency/connectors/Facebook Insights.svg",
-    },
-    {
-      title: "Google Ads Manager",
-      img: "/Agency/connectors/Google Ads Manager.svg",
-    },
-    {
-      title: "Google Ads",
-      img: "/Agency/connectors/Google Ads.svg",
-    },
-    {
-      title: "Google Analytics",
-      img: "/Agency/connectors/Google Analytics 4.svg",
-    },
-    {
-      title: "Google DV360",
-      img: "/Agency/connectors/Google DV360.svg",
-    },
-    {
-      title: "Google My Business",
-      img: "/Agency/connectors/Google My Business.svg",
-    },
-    {
-      title: "Google Search Console",
-      img: "/Agency/connectors/Google Search Console.svg",
-    },
-    {
-      title: "Google Sheets",
-      img: "/Agency/connectors/Google Sheets.svg",
-    },
-    {
-      title: "HubSpot",
-      img: "/Agency/connectors/HubSpot.svg",
-    },
-    {
-      title: "Instagram Ads",
-      img: "/Agency/connectors/Instagram Ads.svg",
-    },
-    {
-      title: "Instagram Insights",
-      img: "/Agency/connectors/Instagram Insights.svg",
-    },
-    {
-      title: "JSON",
-      img: "/Agency/connectors/JSON.svg",
-    },
-    {
-      title: "Klaviyo",
-      img: "/Agency/connectors/Klaviyo.svg",
-    },
-    {
-      title: "LinkedIn",
-      img: "/Agency/connectors/LinkedIn.svg",
-    },
-    {
-      title: "Outbrain",
-      img: "/Agency/connectors/Outbrain.svg",
-    },
-    {
-      title: "PayPal",
-      img: "/Agency/connectors/PayPal.svg",
-    },
-    {
-      title: "Shopify",
-      img: "/Agency/connectors/Shopify.svg",
-    },
-    {
-      title: "Stripe",
-      img: "/Agency/connectors/Stripe.svg",
-    },
-    {
-      title: "Taboola",
-      img: "/Agency/connectors/Taboola.svg",
-    },
-    {
-      title: "TikTok",
-      img: "/Agency/connectors/TikTok.svg",
-    },
-    {
-      title: "X Ads",
-      img: "/Agency/connectors/X Ads.svg",
-    },
-    {
-      title: "Xero",
-      img: "/Agency/connectors/Xero.svg",
-    },
-    {
-      title: "Klaviyo",
-      img: "/Agency/connectors/Klaviyo.svg",
-    },
-    {
-      title: "YouTube",
-      img: "/Agency/connectors/YouTube.svg",
-    },
-  ];
+  const { mainDataSource, mainTemplates } = useContext(Context);
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -178,27 +68,30 @@ const Overview = () => {
             <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
               <h3 className="text-lg min-[1600px]:text-[20px]">Data Sources</h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[26vh] overflow-y-auto small-scroller grid grid-cols-3 gap-y-3 min-[1600px]:gap-y-5 bg-[#171C2A]/70 p-3 min-[1600px]:p-4 rounded-lg border border-gray-500/5">
-                {connectorsData?.map((e, i) => {
-                  return (
-                    <div key={i} className="flex items-center">
-                      <div className="flex items-center">
-                        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-9 min-[1600px]:w-10 aspect-square p-2 mr-3 min-[1600px]:mr-4">
-                          <Image
-                            src={e?.img}
-                            alt={e?.img?.src}
-                            width={1000}
-                            height={1000}
-                            className="aspect-squre object-contain"
-                          />{" "}
+              <div className="h-[26vh] bg-[#171C2A]/70 rounded-lg border border-gray-500/5">
+                <div className="h-fit overflow-y-auto small-scroller grid grid-cols-3 gap-y-3 min-[1600px]:gap-y-5 p-3 min-[1600px]:p-4 rounded-lg">
+                  {mainDataSource?.map((e, i) => {
+                    return (
+                      <div key={i} className="flex items-center">
+                        <div className="flex items-center">
+                          <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-9 min-[1600px]:w-10 aspect-square p-2 mr-3 min-[1600px]:mr-4">
+                            <Image
+                              src={e?.img_link}
+                              alt={e?.img_link?.src}
+                              width={1000}
+                              height={1000}
+                              className="aspect-squre object-contain"
+                            />{" "}
+                          </div>
+                          <p className="text-sm min-[1600px]:text-base cursor-pointer">
+                            {e?.name.replaceAll("_", " ")[0]?.toUpperCase() +
+                              e?.name?.replaceAll("_", " ")?.slice(1)}
+                          </p>
                         </div>
-                        <p className="text-sm min-[1600px]:text-base cursor-pointer">
-                          {e?.title}
-                        </p>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
             <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
@@ -209,27 +102,26 @@ const Overview = () => {
                 Templates
               </h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2">
-                {[
-                  {
-                    img: "/Agency/individual/templates/1 (2).png",
-                  },
-                  {
-                    img: "/Agency/individual/templates/1 (1).png",
-                  },
-                  { img: "/Agency/individual/templates/1 (4).png" },
-                  {
-                    img: "/Agency/individual/templates/1 (3).png",
-                  },
-                ].map((e, i) => {
+              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[21.5vh]">
+                {mainTemplates?.map((e, i) => {
                   return (
-                    <div key={i}>
-                      <Image
-                        src={e?.img}
-                        alt={e?.img?.src}
-                        width={1000}
-                        height={1000}
-                      />
+                    <div
+                      key={i}
+                      onClick={() => {
+                        window.open(e?.template_link, "__blank");
+                      }}
+                      className="border flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer p-3"
+                    >
+                      {e?.template_image ? (
+                        <Image
+                          src={e?.template_image}
+                          alt={e?.template_image?.src}
+                          width={1000}
+                          height={1000}
+                        />
+                      ) : (
+                        <p>{e?.template_name}</p>
+                      )}
                     </div>
                   );
                 })}

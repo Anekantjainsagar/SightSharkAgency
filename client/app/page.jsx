@@ -1,24 +1,85 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RightSide from "@/app/Components/Login/RightSide";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { useRouter } from "next/navigation";
-import { Toaster } from "react-hot-toast";
-// import axios from "axios";
-// import { BACKEND_URI } from "@/app/utils/url";
-// import Cookies from "js-cookie";
-// import Context from "./Context/Context";
+import toast, { Toaster } from "react-hot-toast";
 import Image from "next/image";
+import { BACKEND_URI } from "./utils/url";
+import LoginOtp from "@/app/Components/LoginOtp";
+import { getCookie } from "cookies-next";
+import axios from "axios";
 
 const App = () => {
-  const history = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState({ password: "", email: "" });
-  // const { checkToken } = useContext(Context);
+  const [showOtp, setShowOtp] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleRememberMe = () => {
+    localStorage.setItem("email", user?.email);
+    localStorage.setItem("password", user?.password);
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("email")) {
+      setRememberMe(true);
+    }
+    setUser({
+      email: localStorage.getItem("email"),
+      password: localStorage.getItem("password"),
+    });
+  }, []);
+
+  const onLogin = () => {
+    if (user?.email && user?.password) {
+      if (rememberMe) {
+        handleRememberMe();
+      }
+      try {
+        const loginData = new URLSearchParams({
+          username: user?.email,
+          password: user?.password,
+        });
+
+        fetch(`${BACKEND_URI}/auth/login`, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          method: "POST",
+          body: loginData,
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .then((res) => {
+            if (res.detail) {
+              toast.error(res.detail);
+            } else {
+              toast.success("Login Successfully check otp for verification");
+              setShowOtp(true);
+            }
+          })
+          .catch((err) => {
+            if (err.status == 401) {
+              toast.error("Invalid credentials");
+            }
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast.error("Please fill all the details");
+    }
+  };
 
   return (
     <div className="bg-[#091022] w-full flex items-start justify-between h-[100vh]">
-      <Toaster />
+      <Toaster />{" "}
+      <LoginOtp
+        showSubscribe={showOtp}
+        setShowSubscribe={setShowOtp}
+        email={user?.email}
+      />
       <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
         <div className="text-white flex flex-col items-center w-7/12 px-5">
           <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-8 min-[1600px]:mb-20">
@@ -36,7 +97,9 @@ const App = () => {
           <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
             Welcome Back
           </h1>
-          <p className="mainText18 text-white/80 mt-2">Login into your account</p>
+          <p className="mainText18 text-white/80 mt-2">
+            Login into your account
+          </p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label
@@ -91,6 +154,8 @@ const App = () => {
                       type="checkbox"
                       className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
                       id="check"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                       <svg
@@ -114,26 +179,42 @@ const App = () => {
                   Remember Me
                 </label>
               </div>
-              <button className="text-[#F04438] mainText18">
+              <button
+                onClick={() => {
+                  if (user?.email) {
+                    const formData = new URLSearchParams();
+                    formData.append("email", user.email);
+
+                    axios
+                      .post(`${BACKEND_URI}/user/recover-password`, formData, {
+                        headers: {
+                          Accept: "application/json",
+                          "Content-Type": "application/x-www-form-urlencoded",
+                          Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                      })
+                      .then((res) => {
+                        if (res.status == 200) {
+                          toast.success("Password reset email sent");
+                        }
+                      })
+                      .catch((err) => {
+                        if (err.response.status === 404) {
+                          toast.error("User not found");
+                        }
+                      });
+                  } else {
+                    toast.error("Please enter an email address");
+                  }
+                }}
+                className="text-[#F04438] mainText18"
+              >
                 Recover Password
               </button>
             </div>
             <button
               onClick={() => {
-                // if (!user?.email || !user?.password) {
-                //   toast.error("Please enter the details");
-                // } else {
-                //   axios
-                //     .post(`${BACKEND_URI}/login/login`, { ...user })
-                //     .then((res) => {
-                //       Cookies.set("token", res.data);
-                history.push("/register");
-                //       checkToken();
-                //     })
-                //     .catch((err) => {
-                //       console.log(err);
-                //     });
-                // }
+                onLogin();
               }}
               className="w-full py-3 bg-newBlue rounded-[10px] mainText18"
             >

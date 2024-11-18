@@ -1,6 +1,10 @@
 "use client";
+import React, { useContext, useState } from "react";
 import Modal from "react-modal";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { getCookie } from "cookies-next";
+import { BACKEND_URI } from "@/app/utils/url";
+import Context from "@/app/Context/Context";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -17,10 +21,50 @@ const customStyles = {
   },
 };
 
-const DeleteUser = ({ showSubscribe, setShowSubscribe }) => {
+const DeleteUser = ({ showSubscribe, setShowSubscribe, data }) => {
+  const [val, setVal] = useState("");
+  const { setUsers, users } = useContext(Context);
   function closeModal() {
     setShowSubscribe(false);
   }
+
+  const deleteUser = () => {
+    if (val == `${data?.first_name} ${data?.last_name}`) {
+      try {
+        fetch(`${BACKEND_URI}/user/delete/${data?.id}`, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getCookie("token")}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((res) => {
+            if (res.msg) {
+              setShowSubscribe(false);
+              toast.success("User Deleted Successfully");
+              let temp = users?.data?.filter((e) => {
+                return e?.id != data?.id;
+              });
+              setUsers({ ...users, data: temp });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      toast.error("Please enter the correct value");
+    }
+  };
 
   return (
     <div className="z-50">
@@ -59,13 +103,18 @@ const DeleteUser = ({ showSubscribe, setShowSubscribe }) => {
             This action can’t be undone.
           </p>
           <p className="mainText18 mb-2 text-[#B2B4BA]">
-            Type <span className="font-semibold text-white">Olivia Rhye</span>{" "}
+            Type{" "}
+            <span className="font-semibold text-white">
+              {data?.first_name} {data?.last_name}{" "}
+            </span>
             to confirm
           </p>
           <input
             type="text"
-            className="mb-4 glass outline-none text-sm min-[1600px]:text-lg px-4 py-2 w-full rounded-md"
             placeholder="Enter here"
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            className="mb-4 glass outline-none text-sm min-[1600px]:text-lg px-4 py-2 w-full rounded-md"
           />
           <div className="flex items-center gap-x-4 w-full text-sm min-[1600px]:text-base">
             <button
@@ -78,7 +127,9 @@ const DeleteUser = ({ showSubscribe, setShowSubscribe }) => {
             </button>
             <button
               className={`bg-red-600 w-full py-1.5 min-[1600px]:py-2 rounded-lg text-center`}
-              onClick={() => {}}
+              onClick={() => {
+                deleteUser();
+              }}
             >
               Delete
             </button>{" "}

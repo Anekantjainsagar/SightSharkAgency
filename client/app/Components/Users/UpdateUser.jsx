@@ -8,7 +8,6 @@ import Required from "../Utils/Required";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import Context from "@/app/Context/Context";
-import { LuEye, LuEyeOff } from "react-icons/lu";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -25,47 +24,56 @@ const customStyles = {
   },
 };
 
-const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
+const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
   let maxPage = 1;
-  const fileInputRef = React.useRef(null);
-  const { getUsers, userData } = useContext(Context);
-  const [showPassword, setShowPassword] = useState(false);
+  const context = useContext(Context);
+  const { getUsers } = useContext(Context);
   const [page, setPage] = useState(1);
-  const [file, setFile] = useState();
-  const [availableRoles, setAvailableRoles] = useState([]);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
     email: "",
-    access: "",
+    access: "admin",
     profile: "",
     phone: "",
     postal_code: "",
     country: "India",
     password: "",
     profile: "",
+    status: "",
   });
+  const [availableRoles, setAvailableRoles] = useState([]);
+  const [file, setFile] = useState("");
+  const fileInputRef = React.useRef(null);
 
   useEffect(() => {
-    if (userData?.role == "superadmin") {
+    setData({
+      ...userData,
+      firstName: userData?.first_name,
+      lastName: userData?.last_name,
+      access: userData?.role,
+    });
+    setFile(userData?.profile_picture);
+  }, [userData]);
+
+  useEffect(() => {
+    if (context?.userData?.role == "superadmin") {
       setAvailableRoles(["admin", "guest"]);
       setData({ ...data, access: "admin" });
-    } else if (userData?.role == "admin") {
+    } else if (context?.userData?.role == "admin") {
       setAvailableRoles(["guest"]);
       setData({ ...data, access: "guest" });
-    } else if (userData?.role == "owner") {
+    } else if (context?.userData?.role == "owner") {
       setAvailableRoles(["superadmin", "admin", "guest"]);
       setData({ ...data, access: "superadmin" });
     }
-  }, [userData]);
+  }, [context?.userData]);
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
       setFile(URL.createObjectURL(file));
-      setData({ ...data, profile: file }); // Update `data` state with the selected file
-    } else {
-      console.log("No file selected");
+      setData({ ...data, profile: file });
     }
   };
 
@@ -73,14 +81,8 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
     setShowSubscribe(false);
   }
 
-  const addUsers = () => {
-    if (
-      data?.firstName &&
-      data?.lastName &&
-      data?.email &&
-      data?.password &&
-      data?.access
-    ) {
+  const updateUsers = () => {
+    if (data?.firstName && data?.lastName && data?.email && data?.access) {
       const queryParams = new URLSearchParams({
         email: data?.email,
         password: data?.password,
@@ -105,35 +107,36 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
       }
 
       try {
-        fetch(`${BACKEND_URI}/user/create?${queryParams}`, {
+        fetch(`${BACKEND_URI}/user/update/${userData?.id}?${queryParams}`, {
           headers: {
             Accept:
               "application/json, application/xml, text/plain, text/html, *.*",
             Authorization: `Bearer ${getCookie("token")}`,
           },
-          method: "POST",
+          method: "PUT",
           body: formdata,
         })
-          .then((res) => res.json())
+          .then((res) => {
+            return res.json();
+          })
           .then((res) => {
             if (res.msg) {
-              toast.success("User created successfully");
-              closeModal();
               getUsers();
-            } else if (res.detail) {
+              toast.success("User updated successfully");
+              closeModal();
+            }
+            if (res.detail) {
               toast.error(res.detail);
             }
           })
           .catch((err) => {
-            console.error("Error creating user:", err);
-            toast.error("An error occurred while creating the user");
+            console.log(err);
           });
       } catch (error) {
-        console.error("Unexpected error:", error);
-        toast.error("An unexpected error occurred");
+        console.log(error);
       }
     } else {
-      toast.error("Please fill all the required details");
+      toast.error("Please fill all the details");
     }
   };
 
@@ -153,7 +156,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
           <div className="mb-5 text-center">
-            <h1 className="mainLogoSize font-semibold">User Details</h1>
+            <h1 className="mainLogoSize font-semibold">Update User Details</h1>
           </div>
           <div className="h-fit px-[8vw] w-full">
             <div className="flex items-center justify-center mb-6">
@@ -173,11 +176,11 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   +
                 </div>
                 <Image
-                  src={file ? file : "/Agency/temp_logo.png"}
+                  src={file || "/Agency/temp_logo.png"}
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[6vw] min-[1600px]:w-[4vw] rounded-full"
+                  className="w-[6vw] aspect-squre min-[1600px]:w-[4vw] rounded-full"
                 />
               </div>
             </div>
@@ -253,7 +256,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                     setData({ ...data, access: e.target.value });
                   }}
                 >
-                  {availableRoles.map((e, i) => {
+                  {availableRoles?.map((e, i) => {
                     return (
                       <option value={e} key={i} className="bg-main">
                         {e[0]?.toUpperCase() + e.slice(1)}
@@ -262,13 +265,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   })}
                 </select>
               </div>{" "}
-              <div className="flex flex-col">
+              {/* <div className="flex flex-col">
                 {" "}
                 <label
                   htmlFor="password"
                   className="text-sm min-[1600px]:text-base"
                 >
-                  Password <Required />
+                  Password
                 </label>
                 <div className="w-full relative mt-1.5">
                   <input
@@ -291,7 +294,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                     {showPassword ? <LuEye /> : <LuEyeOff />}
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="flex flex-col">
                 <label
                   htmlFor="phone"
@@ -346,20 +349,44 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
                 />
               </div>
+              <div className="flex flex-col">
+                <label
+                  htmlFor="status"
+                  className="mb-1.5 text-sm min-[1600px]:text-base"
+                >
+                  Status
+                </label>
+                <select
+                  id="status"
+                  value={data?.status}
+                  onChange={(e) => {
+                    setData({ ...data, status: e.target.value });
+                  }}
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                >
+                  {["active", "inactive"].map((e, i) => {
+                    return (
+                      <option key={i} className="bg-main" value={e}>
+                        {e[0]?.toUpperCase() + e.slice(1)}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
             </div>
           </div>
           <div className="px-[5vw] w-full flex items-center justify-end py-5 text-sm min-[1600px]:text-base">
             <button
               onClick={() => {
                 if (page == maxPage) {
-                  addUsers();
+                  updateUsers();
                 } else {
                   setPage(page + 1);
                 }
               }}
               className={`text-white bg-newBlue w-[170px] h-12 rounded-lg`}
             >
-              Save
+              Update
             </button>
           </div>
         </div>
@@ -368,4 +395,4 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   );
 };
 
-export default AddUsers;
+export default UpdateUser;

@@ -116,16 +116,40 @@ input[type="number"] {
 }
 
 .status-hold {
-  background-color: rgba(233, 197, 91, 0.3);
-  color: #e9c55b;
+  background-color: #e9c55b;
+  border-color: #ffa500;
+  color: #e69d00;
 }
 
-.status-online {
+.status-text-active {
+  color: #73e2a7;
+}
+
+.status-text-offline {
+  color: #94969c;
+}
+
+.status-text-hold {
+  color: #e69d00;
+}
+.status-user-active {
   background-color: #094b31;
   color: #73e2a7;
   border-color: #73e2a7;
 }
 
-.dot-online {
-  background-color: #73e2a7;
+.status-user-inactive {
+  background-color: #e9c55b;
+  border-color: #ffa500;
+  color: #ff8800;
+}
+
+.dot-status-user-active {
+  background-color: #00ff99;
+  border-color: #73e2a7;
+}
+
+.dot-status-user-inactive {
+  background-color: #ff8800;
+  border-color: #ffa500;
 }

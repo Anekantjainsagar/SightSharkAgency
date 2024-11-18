@@ -1,32 +1,53 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import DeleteAgency from "../agencies/DeleteAgency";
+import Context from "@/app/Context/Context";
 
-const AgencyDetailsBlock = ({ status, percentage }) => {
+const AgencyDetailsBlock = ({ data }) => {
+  const { selectedAgencies, setSelectedAgencies } = useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);
+  let name = data?.client_name?.replaceAll(" ", "-");
 
   return (
     <>
-      {" "}
       <DeleteAgency
         showSubscribe={deleteAgency}
         setShowSubscribe={setDeleteAgency}
+        name={data?.client_name}
+        id={data?.client_id}
       />
       <div
         onClick={() => {
-          history.push("/clients/alpha-solutions");
+          history.push(`/clients/${name}`);
         }}
         className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >
-        {" "}
-        <div className="inline-flex items-start">
+        <div
+          className="inline-flex items-start"
+          onClick={(e) => {
+            e.stopPropagation();
+            if (
+              selectedAgencies?.find((e) => e?.client_id === data?.client_id)
+            ) {
+              setSelectedAgencies(
+                selectedAgencies?.filter((e) => e?.client_id != data?.client_id)
+              );
+            } else {
+              setSelectedAgencies([...selectedAgencies, data]);
+            }
+          }}
+        >
           <label className="relative flex items-center cursor-pointer">
             <input
               type="checkbox"
               className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
               id="check"
+              checked={
+                selectedAgencies?.find((e) => e?.client_id === data?.client_id)
+                  ?.client_id?.length > 0
+              }
             />
             <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
               <svg
@@ -46,15 +67,13 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             </span>
           </label>
         </div>
-        <h5 className="min-[1600px]:ml-0 ml-2">Alpha solutions</h5>
+        <h5 className="min-[1600px]:ml-0 ml-2">{data?.client_name}</h5>
         <div className="w-full flex items-center justify-center">
           <div
-            className={`status-${status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
-          >
-            {/* {status} */}
-          </div>
+            className={`status-${data?.status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
+          ></div>
         </div>
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-start pl-10">
           <Image
             src="/Agency/Avatar.png"
             width={1000}
@@ -62,23 +81,21 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
             className="w-7 min-[1600px]:w-9 aspect-square rounded-full"
             alt="Key contact"
           />
-          <p className="ml-2 min-[1600px]:ml-4">Olivia Rhye</p>
+          <p className="ml-2 min-[1600px]:ml-4">{data?.key_contact_name}</p>
         </div>
         <p className="break-words w-full text-center">
-          alpha.solutions@example.com
+          {data?.key_contact_email_address}
         </p>
-        <p className="text-center">13-08-2024</p>
-        <div className="flex items-center justify-center">
-          <div className="bg-[#343745] w-[6vw] rounded-full h-3">
-            <div
-              className={`bg-white text-transparent rounded-full h-full text-xs`}
-              style={{ width: `${percentage}%` }}
-            >
-              .
-            </div>
-          </div>
-          <p className="ml-4">{percentage}%</p>
-        </div>
+        <p className="text-center">
+          {data?.deployment_date
+            ? new Date(data?.deployment_date).toString()?.slice(4, 21)
+            : ""}
+        </p>
+        <p className="text-center">
+          {data?.created_at
+            ? new Date(data?.created_at).toString()?.slice(4, 21)
+            : ""}
+        </p>
         <div className="flex items-center justify-end">
           <div className="mr-5">
             <svg
@@ -87,7 +104,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               className="scale-110 w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
               onClick={() => {
-                history.push("/clients/alpha-solutions");
+                history.push(`/clients/${name}`);
               }}
             >
               <path
@@ -114,7 +131,7 @@ const AgencyDetailsBlock = ({ status, percentage }) => {
               xmlns="http://www.w3.org/2000/svg"
               onClick={(e) => {
                 e.stopPropagation();
-                history.push("/clients/alpha-solutions/edit-profile");
+                history.push(`/clients/${name}/edit-profile`);
               }}
             >
               <path

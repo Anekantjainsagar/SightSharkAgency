@@ -12,9 +12,9 @@ const Navbar = () => {
   return (
     <div className="text-white py-4 flex items-center justify-between w-full px-6">
       <div>
-        <h3 className="bigFont font-semibold">Hello {userData?.name},</h3>
+        <h3 className="bigFont font-semibold">Hello {userData?.first_name},</h3>
         <p className="text-sm min-[1600px]:text-base text-[#85888E]">
-          Here’s your overview of the agencies
+          Here’s your overview of the clients
         </p>
       </div>
       <div className="flex items-center gap-x-4">

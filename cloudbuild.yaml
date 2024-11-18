@@ -4,6 +4,8 @@ steps:
       [
         "build",
         "--build-arg",
+        "NEXT_PUBLIC_ADMIN_BACKEND_URI=${_NEXT_PUBLIC_ADMIN_BACKEND_URI}",
+        "--build-arg",
         "NEXT_PUBLIC_BACKEND_URI=${_NEXT_PUBLIC_BACKEND_URI}",
         "-t",
         "${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO_NAME}/${_CLOUD_RUN_SERVICE_NAME}:latest",
