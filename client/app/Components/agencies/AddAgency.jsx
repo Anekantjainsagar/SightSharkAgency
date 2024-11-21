@@ -227,7 +227,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
             <div className="grid grid-cols-6 text-sm min-[1600px]:text-base justify-between mt-2 px-[3vw] ml-5">
               {nav_data.map((e, i) => {
                 return (
-                  <p className="text-center" key={i}>
+                  <p
+                    className={`text-center ${
+                      i + 1 == page ? "" : "opacity-0"
+                    }`}
+                    key={i}
+                  >
                     {e}
                   </p>
                 );
@@ -656,7 +661,23 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 if (page == maxPage) {
                   handleSave();
                 } else {
-                  setPage(page + 1);
+                  if (
+                    page == 1 &&
+                    data?.name &&
+                    data?.website &&
+                    data?.warrenty &&
+                    data?.license
+                  ) {
+                    setPage(page + 1);
+                  } else {
+                    if (page == 2 && data?.keyContact?.email) {
+                      setPage(page + 1);
+                    } else if (page == 3 || page == 4) {
+                      setPage(page + 1);
+                    } else {
+                      toast.error("Please fill all the details");
+                    }
+                  }
                 }
               }}
               className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}

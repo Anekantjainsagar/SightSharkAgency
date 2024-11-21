@@ -4,8 +4,10 @@ import Context from "./Context";
 import axios from "axios";
 import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 const State = (props) => {
+  const history = useRouter();
   const [userData, setUserData] = useState();
   const [users, setUsers] = useState([]);
   const [agencies, setAgencies] = useState([]);
@@ -32,7 +34,10 @@ const State = (props) => {
             setUserData(res.data);
           })
           .catch((err) => {
-            console.log(err);
+            if (err.status) {
+              toast.error("Login Error Occured Please try again");
+              history.push("/");
+            }
           });
       } catch (error) {
         console.log(error);
