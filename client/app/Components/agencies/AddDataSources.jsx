@@ -256,8 +256,8 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                               type="checkbox"
                               className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
                               id={e?.name}
-                              onChange={(e) => {
-                                let id = e.target.id;
+                              onChange={() => {
+                                // let id = e.target.id;
                               }}
                               // checked={data?.platforms?.includes(e?.name)}
                             />
