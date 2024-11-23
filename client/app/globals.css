@@ -95,6 +95,11 @@ input[type="number"] {
   grid-template-columns: 3% 18% 29% 25% 25%;
 }
 
+.dashboardPage {
+  /* grid-template-columns: 3% 14% 10% 14% 22% 14% 10% 12%; */
+  grid-template-columns: 30% 23% 24% 24%;
+}
+
 .agencyBlockGrid {
   /* grid-template-columns: 3% 14% 10% 14% 22% 14% 10% 12%; */
   grid-template-columns: 3% 11% 7% 17% 20% 17% 15% 10%;
