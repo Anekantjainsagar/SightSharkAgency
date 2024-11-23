@@ -5,6 +5,7 @@ import axios from "axios";
 import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const State = (props) => {
   const history = useRouter();
