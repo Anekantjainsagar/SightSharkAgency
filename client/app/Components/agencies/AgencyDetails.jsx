@@ -12,7 +12,7 @@ const AgencyDetails = ({ data }) => {
             : "/Agency/individual/logo.png"
         }
         alt="Agency logo"
-        className="w-[60px] aspect-square border border-gray-200/30 rounded-full"
+        className="w-[60px] object-cover aspect-square border border-gray-200/30 rounded-full"
       />
       <h3 className="mainLogoSize">{data?.client_name}</h3>
       <div className="w-full mb-4 mt-2">

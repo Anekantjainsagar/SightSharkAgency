@@ -4,8 +4,8 @@ import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
 import Context from "@/app/Context/Context";
 
-const UserDetailBlock = ({  data }) => {
-  const { selectedUsers, setSelectedUsers, userData } = useContext(Context);
+const UserDetailBlock = ({ data }) => {
+  const { userData } = useContext(Context);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
 
@@ -22,42 +22,6 @@ const UserDetailBlock = ({  data }) => {
         userData={data}
       />
       <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            if (selectedUsers?.includes(data?.id)) {
-              setSelectedUsers(selectedUsers?.filter((e) => e != data?.id));
-            } else {
-              setSelectedUsers([...selectedUsers, data?.id]);
-            }
-          }}
-          className="inline-flex items-start"
-        >
-          <label className="relative flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-              id="check"
-              checked={selectedUsers?.includes(data?.id)}
-            />
-            <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                stroke="currentColor"
-                strokeWidth="1"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-            </span>
-          </label>
-        </div>{" "}
         <div className="flex items-start min-[1600px]:ml-0 ml-2">
           {!data?.profile_picture ? (
             <Image
@@ -100,7 +64,7 @@ const UserDetailBlock = ({  data }) => {
           {new Date(data?.created_at).toString().slice(4, 21)}
         </p>
         <p className="text-center">
-          {new Date(data?.updated_at).toString().slice(4, 21)}
+          {new Date(data?.last_online).toString().slice(4, 21)}
         </p>
         <div className="flex items-center justify-end">
           {userData?.role != "guest" && (

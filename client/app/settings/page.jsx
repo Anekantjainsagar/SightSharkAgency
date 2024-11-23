@@ -207,7 +207,12 @@ const Settings = () => {
                 <button
                   className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
                   onClick={() => {
-                    history.push("/overview");
+                    setData({
+                      firstName: userData?.first_name,
+                      lastName: userData?.last_name,
+                      ...userData,
+                    });
+                    toast.success("Updates Discarded");
                   }}
                 >
                   Discard

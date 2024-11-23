@@ -209,7 +209,14 @@ const Settings = () => {
               <div className="mt-10 flex items-center justify-end w-full">
                 <button
                   className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
-                  onClick={() => {}}
+                  onClick={() => {
+                    setData({
+                      oldPass: "",
+                      newPassword: "",
+                      reNewPassword: "",
+                    });
+                    toast.success("Data Discarded Successfully");
+                  }}
                 >
                   Discard
                 </button>

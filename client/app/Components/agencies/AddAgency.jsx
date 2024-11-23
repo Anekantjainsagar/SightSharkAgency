@@ -144,13 +144,9 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
 
       const formData = new FormData();
       formData.append("platform_name", data?.platforms);
-
-      // Only append file if it exists
-      if (fileInput) {
-        formData.append("profile_picture", fileInput);
-        formData.append("profile_picture_filename", fileInput?.name);
-        formData.append("profile_picture_content_type", fileInput?.type);
-      }
+      formData.append("profile_picture", fileInput || "");
+      formData.append("profile_picture_filename", fileInput?.name || "");
+      formData.append("profile_picture_content_type", fileInput?.type || "");
 
       try {
         const response = await axios.post(
@@ -403,7 +399,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       htmlFor="email"
                       className="mb-1.5 text-sm min-[1600px]:text-base"
                     >
-                      Email Address
+                      Email Address <Required />
                     </label>
                     <input
                       id="email"
@@ -665,14 +661,18 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                     page == 1 &&
                     data?.name &&
                     data?.website &&
-                    data?.warrenty &&
-                    data?.license
+                    data?.parent_name
                   ) {
                     setPage(page + 1);
                   } else {
                     if (page == 2 && data?.keyContact?.email) {
                       setPage(page + 1);
-                    } else if (page == 3 || page == 4) {
+                    } else if (
+                      page == 3 ||
+                      page == 4 ||
+                      page == 5 ||
+                      page == 6
+                    ) {
                       setPage(page + 1);
                     } else {
                       toast.error("Please fill all the details");
@@ -751,7 +751,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                   htmlFor={e?.platform}
                   className="text-[13px] min-[1600px]:text-base cursor-pointer"
                 >
-                  {e?.platform}
+                  {formatName(e?.platform)}
                 </label>
               </div>
               <div className="mt-3">
@@ -778,7 +778,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     <input
                       key={key}
                       type="text"
-                      placeholder={key.replace("_", " ").toUpperCase()}
+                      placeholder={formatName(key)}
                       // value={e?.creds_structure?.credentials[key] || ""}
                       onChange={(event) =>
                         handleInputChange(

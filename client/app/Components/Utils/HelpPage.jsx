@@ -60,7 +60,7 @@ const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
             onClick={() => {
               window.navigator.clipboard.writeText("info@prowiz.io");
               window.open(
-                "https://mail.google.com/mail/u/0/#inbox?compose=CllgCJvqrzHxdSbzTnJJBXPfCsstgGRGnmLrfzcjZFXvQKpdJcpmlSFFLjRjSGkdzXWrwfdDhbB",
+                "https://mail.google.com/mail/u/0/#inbox?compose=CllgCKCJFGLmMqszhnpbMGjMzrDTxnsvddZqRvtbmvLMvXkWJgmpRbLBvjqBzxCKNSZFWMQlgrL",
                 "__blank"
               );
               setShowSubscribe(!showSubscribe);

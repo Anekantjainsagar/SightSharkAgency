@@ -17,7 +17,7 @@ let sort_by_options = [
 ];
 
 const Overview = () => {
-  const { users, getUsers, setSelectedUsers } = useContext(Context);
+  const { users, getUsers } = useContext(Context);
   const [showSubscribe, setShowSubscribe] = useState(false);
 
   return (
@@ -53,40 +53,8 @@ const Overview = () => {
                 <SortByButton sort_by_options={sort_by_options} />
               </div>
             </div>
-            <div className="mt-5 border border-gray-200/5 rounded-2xl">
+            <div className="min-[1600px]:mt-5 mt-4 border border-gray-200/5 rounded-2xl">
               <div className="grid bg-[#030021]/40 py-4 px-7 userBlockGrid items-center rounded-2xl">
-                <div className="inline-flex items-start">
-                  <label className="relative flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-                      id="check"
-                      onChange={(e) => {
-                        if (e?.target?.checked) {
-                          setSelectedUsers(users?.data?.map((e) => e?.id));
-                        } else {
-                          setSelectedUsers([]);
-                        }
-                      }}
-                    />
-                    <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        ></path>
-                      </svg>
-                    </span>
-                  </label>
-                </div>
                 {["Name", "Access", "Status", "Joined", "Last Online"].map(
                   (e, i) => {
                     return (
@@ -112,7 +80,7 @@ const Overview = () => {
                     );
                   })}
                 </div>
-                <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
+                <div className="h-[10%] min-[1600px]:h-[14%] gap-x-4 px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
                   {[...Array(users?.total_pages).keys()]
                     .map((i) => i + 1)
                     ?.map((e, i) => {

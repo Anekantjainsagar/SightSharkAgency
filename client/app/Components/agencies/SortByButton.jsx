@@ -35,7 +35,7 @@ const SortByButton = ({ sort_by_options }) => {
   return (
     <button
       ref={sortRef}
-      className="bg-gray-700 relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+      className="bg-white/10 backdrop-blur-sm bg-gray-700 px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
       onClick={() => setShowSortBy(!showSortBy)}
     >
       <svg

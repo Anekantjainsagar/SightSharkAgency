@@ -11,12 +11,7 @@ const Navbar = () => {
 
   return (
     <div className="text-white py-4 flex items-center justify-between w-full px-6">
-      <div>
-        <h3 className="bigFont font-semibold">Hello {userData?.first_name},</h3>
-        <p className="text-sm min-[1600px]:text-base text-[#85888E]">
-          Here’s your overview of the clients
-        </p>
-      </div>
+      <h3 className="bigFont font-semibold">Hello {userData?.first_name},</h3>
       <div className="flex items-center gap-x-4">
         <div className="relative flex items-center w-[340px] min-[1600px]:w-[500px]">
           <FaSearch className="absolute left-4 z-40 text-white" />{" "}
@@ -55,7 +50,10 @@ const Navbar = () => {
             />
           )}
           {showNotifications && (
-            <div className="absolute top-[6vh] right-0 w-[22vw] min-[1600px]:w-[20vw] z-50 bg-main border border-gray-500/20 rounded-xl p-2 small-scroller h-[20vh] overflow-y-auto">
+            <div
+              className="absolute top-[6vh] right-0 w-[22vw] min-[1600px]:w-[20vw] z-[1000] border border-gray-500/20 rounded-xl p-2 small-scroller h-[20vh] overflow-y-auto"
+              style={{ backgroundColor: "rgba(0,0,0,0.9)" }}
+            >
               {[1, 2, 3].map((e) => {
                 return (
                   <div

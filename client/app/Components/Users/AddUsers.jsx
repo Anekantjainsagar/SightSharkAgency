@@ -177,7 +177,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[6vw] min-[1600px]:w-[4vw] rounded-full"
+                  className="w-[6vw] min-[1600px]:w-[4vw] h-[6vw] min-[1600px]:h-[4vw] object-cover rounded-full"
                 />
               </div>
             </div>

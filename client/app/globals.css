@@ -42,9 +42,11 @@ input[type="number"] {
 }
 
 .glass {
+  position: relative; /* or absolute, fixed, sticky */
   background-color: rgba(255, 255, 255, 0.11);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
+  z-index: 10;
 }
 
 .gradient-line {
@@ -100,7 +102,7 @@ input[type="number"] {
 
 .userBlockGrid {
   /* grid-template-columns: 3% 25% 16% 18% 15% 18% 4%; */
-  grid-template-columns: 3% 18% 17% 19% 16% 19% 7%;
+  grid-template-columns: 21% 17% 19% 16% 19% 7%;
 }
 
 .status-active {

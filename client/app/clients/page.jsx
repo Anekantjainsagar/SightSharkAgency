@@ -52,7 +52,7 @@ const Overview = () => {
                   <CSVLink filename={"clients.csv"} data={selectedAgencies}>
                     <button
                       onClick={() => {}}
-                      className="glass px-6 py-2 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+                      className="bg-white/10 backdrop-blur-sm px-6 py-2 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
                     >
                       <svg
                         width="24"
@@ -95,6 +95,9 @@ const Overview = () => {
                           setSelectedAgencies([]);
                         }
                       }}
+                      checked={
+                        selectedAgencies?.length == agencies?.data?.length
+                      }
                     />
                     <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                       <svg

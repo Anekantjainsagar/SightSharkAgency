@@ -14,7 +14,6 @@ const State = (props) => {
   const [mainDataSource, setMainDataSource] = useState();
   const [mainTemplates, setMainTemplates] = useState();
   const [dataSourceStructure, setDataSourceStructure] = useState();
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedAgencies, setSelectedAgencies] = useState([]);
   const [clientCreds, setClientCreds] = useState();
 
@@ -47,7 +46,7 @@ const State = (props) => {
 
   const getUsers = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
-    let limit = users?.limit ? users?.limit : 7;
+    let limit = users?.limit ? users?.limit : 6;
 
     if (cookie?.length > 5) {
       try {
@@ -248,8 +247,6 @@ const State = (props) => {
         mainDataSource,
         mainTemplates,
         dataSourceStructure,
-        selectedUsers,
-        setSelectedUsers,
         selectedAgencies,
         setSelectedAgencies,
         getCredentialsForClient,

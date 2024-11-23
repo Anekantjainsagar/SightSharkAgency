@@ -83,9 +83,7 @@ const AgencyDetailsBlock = ({ data }) => {
           />
           <p className="ml-2 min-[1600px]:ml-4">{data?.key_contact_name}</p>
         </div>
-        <p className="break-words w-full text-center">
-          {data?.key_contact_email_address}
-        </p>
+        <p className="break-words w-full text-center">{data?.email_address}</p>
         <p className="text-center">
           {data?.deployment_date
             ? new Date(data?.deployment_date).toString()?.slice(4, 21)

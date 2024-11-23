@@ -14,6 +14,7 @@ import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import Required from "@/app/Components/Utils/Required";
+import axios from "axios";
 let databar = ["Agency Details", "Key Contact Information"];
 
 const Overview = ({ params }) => {
@@ -22,6 +23,7 @@ const Overview = ({ params }) => {
   const [deleteAgency, setDeleteAgency] = useState(false);
   const [original_data, setOriginal_data] = useState();
   const [file, setFile] = useState("");
+  const [fileInput, setFileInput] = useState();
   const [data, setData] = useState({
     name: "",
     profile: "",
@@ -74,7 +76,8 @@ const Overview = ({ params }) => {
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
     if (file) {
-      console.log("Selected file:", file.name);
+      setFileInput(file);
+      setFile(URL.createObjectURL(file));
     }
   };
 
@@ -128,7 +131,7 @@ const Overview = ({ params }) => {
                             className="absolute bg-newBlue text-xl py-1.5 px-1.5 -bottom-1 cursor-pointer -right-1 rounded-full"
                           >
                             <BiPencil />
-                          </div>{" "}
+                          </div>
                           <input
                             type="file"
                             ref={fileInputRef}
@@ -140,7 +143,7 @@ const Overview = ({ params }) => {
                             alt="Agency Img"
                             width={1000}
                             height={1000}
-                            className="rounded-full border border-gray-300/30"
+                            className="rounded-full aspect-square object-cover border border-gray-300/30"
                           />
                         </div>
                       </div>
@@ -368,29 +371,48 @@ const Overview = ({ params }) => {
                             status,
                           }).toString();
 
+                          const formData = new FormData();
+                          formData.append(
+                            "profile_picture",
+                            fileInput ? fileInput : ""
+                          );
+                          formData.append(
+                            "profile_picture_filename",
+                            fileInput?.name ? fileInput?.name : ""
+                          );
+                          formData.append(
+                            "profile_picture_content_type",
+                            fileInput?.type ? fileInput?.type : ""
+                          );
+
                           try {
-                            fetch(
-                              `${BACKEND_URI}/client/update/${original_data?.client_id}?${queryParams}`,
-                              {
-                                headers: {
-                                  Accept:
-                                    "application/json, application/xml, text/plain, text/html, *.*",
-                                  Authorization: `Bearer ${getCookie("token")}`,
-                                },
-                                method: "PUT",
-                              }
-                            )
+                            axios
+                              .put(
+                                `${BACKEND_URI}/client/update/${original_data?.client_id}?${queryParams}`,
+                                formData, // Send formData directly
+                                {
+                                  headers: {
+                                    Accept:
+                                      "application/json, application/xml, text/plain, text/html, *.*",
+                                    Authorization: `Bearer ${getCookie(
+                                      "token"
+                                    )}`,
+                                  },
+                                }
+                              )
                               .then((res) => {
-                                return res.json();
-                              })
-                              .then((res) => {
-                                if (res.msg) {
+                                if (res.data.msg) {
                                   getAgencies();
                                   toast.success("Client updated successfully");
-                                  history.push("/clients");
+                                  history.push(
+                                    `/clients/${data?.name?.replaceAll(
+                                      " ",
+                                      "-"
+                                    )}/edit-profile`
+                                  );
                                 }
-                                if (res.detail) {
-                                  toast.error(res.detail);
+                                if (res.data.detail) {
+                                  toast.error(res.data.detail);
                                 }
                               })
                               .catch((err) => {
