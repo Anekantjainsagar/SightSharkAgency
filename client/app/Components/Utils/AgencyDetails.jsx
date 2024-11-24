@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState } from "react";
 import DeleteAgency from "../agencies/DeleteAgency";
@@ -73,16 +72,9 @@ const AgencyDetailsBlock = ({ data }) => {
             className={`status-${data?.status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
           ></div>
         </div>
-        <div className="flex items-center justify-start pl-10">
-          <Image
-            src="/Agency/Avatar.png"
-            width={1000}
-            height={1000}
-            className="w-7 min-[1600px]:w-9 aspect-square rounded-full"
-            alt="Key contact"
-          />
-          <p className="ml-2 min-[1600px]:ml-4">{data?.key_contact_name}</p>
-        </div>
+        <p className="flex items-center justify-center">
+          {data?.key_contact_name}
+        </p>
         <p className="break-words w-full text-center">{data?.email_address}</p>
         <p className="text-center">
           {data?.deployment_date
@@ -95,32 +87,6 @@ const AgencyDetailsBlock = ({ data }) => {
             : ""}
         </p>
         <div className="flex items-center justify-end">
-          <div className="mr-5">
-            <svg
-              viewBox="0 0 20 14"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="scale-110 w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
-              onClick={() => {
-                history.push(`/clients/${name}`);
-              }}
-            >
-              <path
-                d="M2.01677 7.59434C1.90328 7.41464 1.84654 7.32479 1.81477 7.1862C1.79091 7.0821 1.79091 6.91794 1.81477 6.81384C1.84654 6.67525 1.90328 6.5854 2.01677 6.40571C2.95461 4.92072 5.74617 1.16669 10.0003 1.16669C14.2545 1.16669 17.0461 4.92072 17.9839 6.4057C18.0974 6.5854 18.1541 6.67525 18.1859 6.81384C18.2098 6.91794 18.2098 7.0821 18.1859 7.1862C18.1541 7.32479 18.0974 7.41464 17.9839 7.59434C17.0461 9.07932 14.2545 12.8334 10.0003 12.8334C5.74617 12.8334 2.95461 9.07932 2.01677 7.59434Z"
-                stroke="#85888E"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M10.0003 9.50002C11.381 9.50002 12.5003 8.38073 12.5003 7.00002C12.5003 5.61931 11.381 4.50002 10.0003 4.50002C8.61962 4.50002 7.50034 5.61931 7.50034 7.00002C7.50034 8.38073 8.61962 9.50002 10.0003 9.50002Z"
-                stroke="#85888E"
-                strokeWidth="1.66667"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
           <div className="mr-4">
             <svg
               className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"

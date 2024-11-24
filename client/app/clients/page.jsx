@@ -142,14 +142,7 @@ const Overview = () => {
               <div className="h-[69.5vh] min-[1600px]:h-[70vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   {agencies?.data?.map((e, i) => {
-                    return (
-                      <AgencyDetailsBlock
-                        key={i}
-                        data={e}
-                        status={"Offline"}
-                        percentage={20}
-                      />
-                    );
+                    return <AgencyDetailsBlock key={i} data={e} />;
                   })}
                 </div>
                 <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">

@@ -30,6 +30,7 @@ const customStyles = {
 
 function formatName(input) {
   return input
+    .toLowerCase()
     .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
@@ -70,6 +71,17 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     } else {
       console.log("No file selected");
     }
+  };
+
+  const handleClearProfile = () => {
+    setFileInput(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setData({
+      ...data,
+      profile: "",
+    });
   };
 
   function closeModal() {
@@ -238,7 +250,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
             {page === 1 ? (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
-                <div className="flex items-center justify-center mb-6">
+                <div className="flex flex-col items-center justify-center mb-6">
                   <div className="relative">
                     <input
                       type="file"
@@ -248,11 +260,19 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                     />
                     <div
                       onClick={() => {
-                        fileInputRef.current.click();
+                        if (data?.profile) {
+                          handleClearProfile();
+                        } else {
+                          fileInputRef.current.click();
+                        }
                       }}
-                      className="absolute bg-newBlue flex items-center justify-center text-2xl px-2 -bottom-2 cursor-pointer -right-2 rounded-full"
+                      className="absolute bg-newBlue flex items-center justify-center text-2xl w-[1.6vw] aspect-square -bottom-2 cursor-pointer -right-2 rounded-full"
                     >
-                      +
+                      {data?.profile ? (
+                        <AiOutlineClose className="text-sm" />
+                      ) : (
+                        "+"
+                      )}
                     </div>
                     <Image
                       src={
@@ -261,9 +281,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       alt="Agency Img"
                       width={1000}
                       height={1000}
-                      className="w-[4vw] rounded-full"
+                      className="w-[4vw] aspect-square object-cover rounded-full"
                     />
                   </div>
+                  <p className="text-center mt-3 text-gray-300">
+                    {fileInput?.name}
+                  </p>
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
                   <div className="flex flex-col">
@@ -320,7 +343,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Website"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none 
+h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -338,7 +362,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Location"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none 
+h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                 </div>
@@ -391,7 +416,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Designation"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none 
+h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -415,7 +441,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="email"
                       placeholder="Enter Email Address"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none 
+h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -439,7 +466,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="number"
                       placeholder="Enter Phone no."
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none 
+h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                 </div>
@@ -772,7 +800,6 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                   className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
                 />
 
-                {/* Dynamically render all credential fields for current platform */}
                 {Object.keys(e?.creds_structure?.credentials || {}).map(
                   (key) => (
                     <input

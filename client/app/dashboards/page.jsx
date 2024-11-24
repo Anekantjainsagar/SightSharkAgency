@@ -41,10 +41,11 @@ const Overview = () => {
             <div className="mt-5 border border-gray-200/5 rounded-2xl">
               <div className="grid bg-[#030021]/40 py-4 px-7 dashboardPage items-center rounded-2xl">
                 {[
-                  "Client Name",
-                  "Created Date",
+                  "Report Name",
+                  "Report Type",
                   "Template Name",
                   "Actions",
+                  "Created Date",
                 ].map((e, i) => {
                   return (
                     <h5
@@ -69,17 +70,11 @@ const Overview = () => {
                         <h5 className="min-[1600px]:ml-0 ml-2">
                           {data?.client_name}
                         </h5>
-                        <p className="text-center">
-                          {data?.created_at
-                            ? new Date(data?.created_at)
-                                .toString()
-                                ?.slice(4, 21)
-                            : ""}
-                        </p>
+                        <p className="text-center">Parent Report</p>
                         <h5 className="text-center">{data?.template_name}</h5>
-                        {data?.template_link && (
+                        {data?.template_link ? (
                           <p
-                            className="hover:underline transition-all text-center hover:text-blue-400"
+                            className="underline transition-all text-center hover:text-blue-400"
                             onClick={() => {
                               if (data?.template_link) {
                                 window.open(data?.template_link, "__blank");
@@ -90,7 +85,16 @@ const Overview = () => {
                           >
                             View Template
                           </p>
+                        ) : (
+                          <p></p>
                         )}
+                        <p className="text-center">
+                          {data?.created_at
+                            ? new Date(data?.created_at)
+                                .toString()
+                                ?.slice(4, 21)
+                            : ""}
+                        </p>
                       </div>
                     );
                   })}

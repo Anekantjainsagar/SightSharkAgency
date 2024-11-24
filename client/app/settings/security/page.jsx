@@ -30,27 +30,30 @@ const Settings = () => {
 
   const toggle2factorAuth = (checked) => {
     let cookie = getCookie("token");
-    setTwoFactorAuth(!twoFactorAuth);
     if (cookie && userData?.id) {
       axios
         .put(
-          `${BACKEND_URI}/client/two-factor-authentication?agency_id=${
-            userData?.id
-          }&two_factor_authentication=${checked ? "enabled" : "disabled"}`,
+          `${BACKEND_URI}/user/two-factor-authentication?agency_id=${userData?.id.trim()}&two_factor_authentication=${
+            checked ? "enabled" : "disabled"
+          }`,
+          {}, // empty object for the data (payload) since it's a PUT without a body
           {
             headers: {
-              Accept: "application/x-www-form-urlencoded",
-              "Content-Type": "application/x-www-form-urlencoded",
+              Accept: "application/json",
               Authorization: `Bearer ${cookie}`,
             },
           }
         )
         .then((res) => {
-          if (res.data.data.id) {
+          if (res.status === 200) {
+            // Update state after the successful response
             setUserData({
               ...userData,
               two_factor_authentication: checked ? "enabled" : "disabled",
             });
+            setTwoFactorAuth(checked); // update local state
+
+            // Show success message
             if (checked) {
               toast.success("Two Factor Authentication Enabled");
             } else {
@@ -59,7 +62,8 @@ const Settings = () => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
+          toast.error("Error enabling/disabling Two Factor Authentication");
         });
     } else {
       toast.error("Login Error");
@@ -90,7 +94,7 @@ const Settings = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="currentPass"
-                        className="mb-1.5 text-sm min-[1600px]:text-base"
+                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         Current Password <Required />
                       </label>
@@ -120,7 +124,7 @@ const Settings = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="newPass"
-                        className="mb-1.5 text-sm min-[1600px]:text-base"
+                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         New Password
                         <Required />
@@ -151,7 +155,7 @@ const Settings = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="retypeNewPassword"
-                        className="mb-1.5 text-sm min-[1600px]:text-base"
+                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         Retype New Password
                         <Required />

@@ -75,8 +75,8 @@ const Overview = () => {
             <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
               <h3 className="text-lg min-[1600px]:text-[20px]">Data Sources</h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[26vh] bg-[#171C2A]/70 rounded-lg border border-gray-500/5">
-                <div className="h-fit overflow-y-auto small-scroller grid grid-cols-3 gap-y-3 min-[1600px]:gap-y-5 p-3 min-[1600px]:p-4 rounded-lg">
+              <div className="h-[13vh] overflow-y-auto small-scroller bg-[#171C2A]/70 rounded-lg border border-gray-500/5">
+                <div className="h-fit overflow-y-auto small-scroller grid grid-cols-5 gap-y-3 min-[1600px]:gap-y-5 p-3 min-[1600px]:p-4 rounded-lg">
                   {mainDataSource?.map((e, i) => {
                     return (
                       <div key={i} className="flex items-center">
@@ -108,7 +108,7 @@ const Overview = () => {
                 Templates
               </h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="grid grid-cols-4 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[21.5vh]">
+              <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[34.5vh]">
                 {mainTemplates?.map((e, i) => {
                   return (
                     <div
@@ -116,18 +116,15 @@ const Overview = () => {
                       onClick={() => {
                         window.open(e?.template_link, "__blank");
                       }}
-                      className="border flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer p-3"
+                      className="border flex flex-col items-center justify-center border-gray-300/20 rounded-xl cursor-pointer p-3"
                     >
-                      {e?.template_image ? (
-                        <Image
-                          src={e?.template_image}
-                          alt={e?.template_image?.src}
-                          width={1000}
-                          height={1000}
-                        />
-                      ) : (
-                        <p>{e?.template_name}</p>
-                      )}
+                      <Image
+                        src={e?.template_image}
+                        alt={e?.template_image?.src}
+                        width={1000}
+                        height={1000}
+                      />
+                      <p className="mt-2.5 text-lg">{e?.template_name}</p>
                     </div>
                   );
                 })}

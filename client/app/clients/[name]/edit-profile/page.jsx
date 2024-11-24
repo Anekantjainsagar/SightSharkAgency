@@ -151,7 +151,7 @@ const Overview = ({ params }) => {
                         <div className="flex flex-col">
                           <label
                             htmlFor="name"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Client Name
                             <Required />
@@ -164,13 +164,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Client Name"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="website"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Website <Required />
                           </label>
@@ -182,13 +182,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Website"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="location"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Location
                           </label>
@@ -200,20 +200,20 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Location"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="status"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Status
                           </label>
                           <select
                             name="status"
                             id="status"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                           >
@@ -234,7 +234,7 @@ const Overview = ({ params }) => {
                         <div className="flex flex-col">
                           <label
                             htmlFor="namekey"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Name
                           </label>
@@ -252,13 +252,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Name"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="designation"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Designation
                           </label>
@@ -276,15 +276,16 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Designation"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="email"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Email Address
+                            <Required />
                           </label>
                           <input
                             id="email"
@@ -300,13 +301,13 @@ const Overview = ({ params }) => {
                             }}
                             type="email"
                             placeholder="Enter Email Address"
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="phone"
-                            className="mb-1.5 min-[1600px]:text-base text-sm"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
                           >
                             Phone no.
                           </label>
@@ -324,7 +325,7 @@ const Overview = ({ params }) => {
                             }}
                             type="number"
                             placeholder="Enter Phone no."
-                            className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
                         </div>
                       </div>

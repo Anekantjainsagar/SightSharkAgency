@@ -1,7 +1,9 @@
-import React from 'react'
+import React from "react";
 
 const Required = () => {
-  return <span className="text-red-500 text-lg ml-1">*</span>;
-}
+  return (
+    <span className="text-red-500 text-lg absolute top-0 -right-4">*</span>
+  );
+};
 
-export default Required
+export default Required;

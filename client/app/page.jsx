@@ -113,7 +113,7 @@ const App = () => {
             Welcome Back
           </h1>
           <p className="mainText18 text-white/80 mt-2">
-            Login into your account
+            Login to your account
           </p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
@@ -200,7 +200,7 @@ const App = () => {
                 }}
                 className="text-[#F04438] mainText18"
               >
-                Recover Password
+                Forgot Password
               </button>
             </div>
             <button
