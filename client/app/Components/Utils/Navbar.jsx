@@ -7,7 +7,7 @@ const Navbar = () => {
   const { userData } = useContext(Context);
 
   return (
-    <div className="text-white py-4 flex items-center justify-between w-full px-6">
+    <div className="text-white py-6 flex items-center justify-between w-full px-6">
       <h3 className="bigFont font-semibold">Hello {userData?.first_name},</h3>
       <div className="relative flex items-center w-[340px] min-[1600px]:w-[500px]">
         <FaSearch className="absolute left-4 z-40 text-white" />{" "}

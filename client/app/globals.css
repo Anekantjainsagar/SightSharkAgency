@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.video-box-shadow {
+  box-shadow: 10px 10px 30px -10px #5715c7;
+}
+
 .mainLogoSize {
   @apply text-[20px] min-[1600px]:text-[24px];
 }
