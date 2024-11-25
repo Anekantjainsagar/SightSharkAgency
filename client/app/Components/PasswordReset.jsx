@@ -50,8 +50,8 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
           </h4>
           <p className="w-10/12 mx-auto text-center">
             {sent
-              ? "Password reset email sent."
-              : "Enter your Email an we'll help you reset your password."}
+              ? "Password Reset Email Sent. <br/> Please check your inbox for the password reset link"
+              : "Enter your Email and we'll help you reset your password."}
           </p>
           <div className="flex flex-col mt-4 w-full">
             <input
@@ -95,7 +95,7 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
               }
             }}
           >
-            Submit
+            {sent ? "Ok" : "Submit"}
           </button>{" "}
         </div>
       </Modal>

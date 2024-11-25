@@ -4,10 +4,11 @@ import Context from "./Context";
 import axios from "axios";
 import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 const State = (props) => {
+  const pathname = usePathname();
   const history = useRouter();
   const [userData, setUserData] = useState();
   const [users, setUsers] = useState([]);
@@ -36,7 +37,9 @@ const State = (props) => {
           .catch((err) => {
             if (err.status) {
               toast.error("Login Error Occured Please try again");
-              history.push("/");
+              if (pathname != "/reset-password") {
+                history.push("/");
+              }
             }
           });
       } catch (error) {
