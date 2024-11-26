@@ -16,6 +16,7 @@ const Settings = () => {
   const [showOriginalPassword, setShowOriginalPassword] = useState(false);
   const [twoFactorAuth, setTwoFactorAuth] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showNewPasswordC, setShowNewPasswordC] = useState(false);
   const [data, setData] = useState({
     oldPass: "",
     newPassword: "",
@@ -113,7 +114,6 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 min-[1600px]:text-2xl text-gl cursor-pointer"
                           onClick={(e) => {
-                            e.preventDefault();
                             setShowOriginalPassword(!showOriginalPassword);
                           }}
                         >
@@ -144,7 +144,6 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 min-[1600px]:text-2xl text-gl cursor-pointer"
                           onClick={(e) => {
-                            e.preventDefault();
                             setShowNewPassword(!showNewPassword);
                           }}
                         >
@@ -157,16 +156,16 @@ const Settings = () => {
                         htmlFor="retypeNewPassword"
                         className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
-                        Retype New Password
+                        Confirm New Password
                         <Required />
                       </label>
                       <div className="w-full relative mt-1">
                         <input
-                          type={showNewPassword ? "text" : "password"}
+                          type={showNewPasswordC ? "text" : "password"}
                           name="Password"
                           id="retypeNewPassword"
                           className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-sm"
-                          placeholder="Your New Password"
+                          placeholder="Your Confirm New Password"
                           value={data?.reNewPassword}
                           onChange={(e) =>
                             setData({ ...data, reNewPassword: e.target.value })
@@ -175,11 +174,10 @@ const Settings = () => {
                         <div
                           className="absolute top-1/2 -translate-y-1/2 text-white right-5 min-[1600px]:text-2xl text-gl cursor-pointer"
                           onClick={(e) => {
-                            e.preventDefault();
-                            setShowNewPassword(!showNewPassword);
+                            setShowNewPasswordC(!showNewPasswordC);
                           }}
                         >
-                          {showNewPassword ? <LuEye /> : <LuEyeOff />}
+                          {showNewPasswordC ? <LuEye /> : <LuEyeOff />}
                         </div>
                       </div>
                     </div>

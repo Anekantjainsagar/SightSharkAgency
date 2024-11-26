@@ -122,7 +122,6 @@ const Overview = () => {
                   "Status",
                   "Key Contact",
                   "Email",
-                  "Deployment Date",
                   "Created Date",
                 ].map((e, i) => {
                   return (

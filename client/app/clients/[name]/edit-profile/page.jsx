@@ -15,7 +15,7 @@ import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import Required from "@/app/Components/Utils/Required";
 import axios from "axios";
-let databar = ["Agency Details", "Key Contact Information"];
+let databar = ["Client Details", "Key Contact Information"];
 
 const Overview = ({ params }) => {
   const [status, setStatus] = useState("Active");

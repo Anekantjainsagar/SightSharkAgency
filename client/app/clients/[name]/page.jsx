@@ -73,7 +73,7 @@ const Overview = ({ params }) => {
                   </div>
                   <div className="gradient-line my-4"></div>
                   {clientCreds?.data?.length > 0 ? (
-                    <div className="bg-[#171C2A] grid grid-cols-4 gap-y-2 rounded-lg p-3 min-[1600px]:p-4">
+                    <div className="bg-[#171C2A] h-[13vh] grid grid-cols-4 gap-y-2 rounded-lg p-3 min-[1600px]:p-4">
                       {clientCreds?.data
                         ?.map((e) => {
                           return {
@@ -87,7 +87,7 @@ const Overview = ({ params }) => {
                           return (
                             <div
                               key={i}
-                              className="flex items-center px-2 py-1 rounded-full"
+                              className="flex items-center h-fit px-2 py-1 rounded-full"
                             >
                               <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
                                 <Image
@@ -109,17 +109,17 @@ const Overview = ({ params }) => {
                         })}
                     </div>
                   ) : (
-                    <div className="bg-[#171C2A] rounded-lg p-3 min-[1600px]:p-4 text-center">
+                    <div className="bg-[#171C2A] h-[13vh] rounded-lg p-3 min-[1600px]:p-4 text-center">
                       No Data Sources Available Please Add some of the Data
                       Sources
                     </div>
                   )}
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4">
-                  <h4 className="min-[1600px]:text-xl">Templates </h4>
+                  <h4 className="min-[1600px]:text-xl">Dashboards </h4>
                   <div className="gradient-line my-4"></div>
                   {data?.template_name?.length > 0 ? (
-                    <div className="grid grid-cols-5 gap-x-4 mt-2 relative">
+                    <div className="grid grid-cols-4 gap-x-4 mt-2 relative">
                       <TemplateBlock
                         data={{
                           template_name: data?.template_name,
@@ -135,7 +135,7 @@ const Overview = ({ params }) => {
                     </div>
                   )}
                 </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[32vh]">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[24vh]">
                   <div className="flex items-center justify-between w-full">
                     <h4 className="min-[1600px]:text-xl">Recent Activity </h4>
                     <p
@@ -155,7 +155,7 @@ const Overview = ({ params }) => {
                         14 August 2024
                       </span>
                       <div className="mt-4">
-                        {[1, 2, 3]?.map((e, i) => {
+                        {[1, 2]?.map((e, i) => {
                           return (
                             <div
                               key={i}

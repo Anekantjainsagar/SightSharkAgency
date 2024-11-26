@@ -11,7 +11,7 @@ const AgencyDetailsTopbar = ({ name }) => {
       {[
         { title: "About", route: `/clients/${name}` },
         {
-          title: "Edit Profile",
+          title: "Edit Client",
           route: `/clients/${name}/edit-profile`,
         },
       ].map((e, i) => {
@@ -22,7 +22,7 @@ const AgencyDetailsTopbar = ({ name }) => {
               pathname == e?.route
                 ? "bg-newBlue"
                 : "bg-transparent text-[#B2B4BA]"
-            } py-2 px-5 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-2xl mr-4`}
+            } py-2 px-6 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-2xl mr-4`}
             onClick={() => {
               history.push(e?.route);
             }}

@@ -77,11 +77,6 @@ const AgencyDetailsBlock = ({ data }) => {
         </p>
         <p className="break-words w-full text-center">{data?.email_address}</p>
         <p className="text-center">
-          {data?.deployment_date
-            ? new Date(data?.deployment_date).toString()?.slice(4, 21)
-            : ""}
-        </p>
-        <p className="text-center">
           {data?.created_at
             ? new Date(data?.created_at).toString()?.slice(4, 21)
             : ""}
