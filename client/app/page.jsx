@@ -65,7 +65,7 @@ const App = () => {
               history.push("/overview");
               toast.success("Login Successfully");
             } else {
-              toast.success("Login Successfully check otp for verification");
+              toast.success("OTP sent to your registered email address");
               setShowOtp(true);
             }
           })
@@ -112,9 +112,7 @@ const App = () => {
           <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
             Welcome Back
           </h1>
-          <p className="mainText18 text-white/80 mt-2">
-            Login to your account
-          </p>
+          <p className="mainText18 text-white/80 mt-2">Login to your account</p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label
@@ -228,16 +226,6 @@ const App = () => {
                   className="w-5 aspect-square mr-3"
                 />
                 <p>Sign in with Google</p>
-              </button>
-              <button className="w-full bg-[#898989]/15 rounded-[10px] flex items-center justify-center h-12">
-                <Image
-                  src="/login/facebook.png"
-                  width={1000}
-                  height={1000}
-                  alt="Facebook icon"
-                  className="w-5 aspect-square mr-3"
-                />
-                <p>Sign in with Facebook</p>
               </button>
             </div>
           </div>

@@ -47,14 +47,15 @@ const DataSources = () => {
                         height={1000}
                         className="aspect-squre object-contain w-2/12"
                       />{" "}
+                      <p className="text-base min-[1600px]:text-lg cursor-pointer mt-2">
+                        {formatName(e?.name)}
+                      </p>
                     </div>
                     <div className="mt-4 flex items-start justify-between px-2">
-                      <p className="text-base min-[1600px]:text-lg cursor-pointer">
-                        {formatName(e?.name)}
+                      <p className="text-xs min-[1600px]:text-sm cursor-pointer">
+                        Last Refresh Date & Time
                         <br />
-                        <span className="text-xs min-[1600px]:text-sm">
-                          {new Date(Date.now()).toString().slice(4, 21)}
-                        </span>
+                        {new Date(Date.now()).toString().slice(4, 21)}
                       </p>
                       <IoReload className="text-lg cursor-pointer" />
                     </div>

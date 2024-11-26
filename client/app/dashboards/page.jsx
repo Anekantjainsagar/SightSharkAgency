@@ -44,7 +44,6 @@ const Overview = () => {
                   "Report Name",
                   "Report Type",
                   "Template Name",
-                  "Actions",
                   "Created Date",
                 ].map((e, i) => {
                   return (
@@ -71,23 +70,18 @@ const Overview = () => {
                           {data?.client_name}
                         </h5>
                         <p className="text-center">Parent Report</p>
-                        <h5 className="text-center">{data?.template_name}</h5>
-                        {data?.template_link ? (
-                          <p
-                            className="underline transition-all text-center hover:text-blue-400"
-                            onClick={() => {
-                              if (data?.template_link) {
-                                window.open(data?.template_link, "__blank");
-                              } else {
-                                toast.error("No URL Found");
-                              }
-                            }}
-                          >
-                            View Template
-                          </p>
-                        ) : (
-                          <p></p>
-                        )}
+                        <h5
+                          className="text-center underline hover:text-blue-400 transition-all"
+                          onClick={() => {
+                            if (data?.template_link) {
+                              window.open(data?.template_link, "__blank");
+                            } else {
+                              toast.error("No URL Found");
+                            }
+                          }}
+                        >
+                          {data?.template_name}
+                        </h5>
                         <p className="text-center">
                           {data?.created_at
                             ? new Date(data?.created_at)

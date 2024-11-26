@@ -14,6 +14,7 @@ export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordC, setShowPasswordC] = useState(false);
   const [token, setToken] = useState("");
 
   useEffect(() => {
@@ -117,7 +118,7 @@ export default function ResetPassword() {
             </label>
             <div className="w-full relative mt-1.5">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPasswordC ? "text" : "password"}
                 id="cpassword"
                 value={cpassword}
                 onChange={(e) => {
@@ -130,10 +131,10 @@ export default function ResetPassword() {
                 className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
-                  setShowPassword(!showPassword);
+                  setShowPasswordC(!showPasswordC);
                 }}
               >
-                {showPassword ? <LuEye /> : <LuEyeOff />}
+                {showPasswordC ? <LuEye /> : <LuEyeOff />}
               </div>
             </div>
           </div>

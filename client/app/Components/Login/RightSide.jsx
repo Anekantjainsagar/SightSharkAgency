@@ -1,6 +1,18 @@
 import React, { memo } from "react";
 import IconCloud from "@/app/Components/Animations/Cloud";
 import Image from "next/image";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  A11y,
+  Autoplay,
+} from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 const RightSide = memo(() => {
   return (
@@ -39,10 +51,34 @@ const RightSide = memo(() => {
         height={1000}
         className="absolute top-0 left-0 object-cover w-full h-full"
       />
-      <h5 className="text-white p-[1.5vw] glass rounded-xl text-lg min-[1600px]:text-[24px]">
-        Today, we create innovative solutions to the challenges that consumers
-        face in both their everyday lives and events.
-      </h5>
+      <div className="p-[1.5vw] glass rounded-xl text-white text-lg min-[1600px]:text-[22px] w-full">
+        <Swiper
+          slidesPerView={1}
+          modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+          loop={true}
+          autoplay={{
+            delay: 5000,
+            disableOnInteraction: false,
+          }}
+        >
+          {[
+            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
+            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
+            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
+          ].map((e, i) => {
+            return (
+              <SwiperSlide key={i}>
+                <div className="w-full flex flex-col justify-end">
+                  <p className="text-white leading-[29px]">{e}</p>
+                  <span className="text-base mt-1 text-right">
+                    Anekant, Frontend Developer, Prowiz Analytics
+                  </span>
+                </div>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </div>
   );
 });

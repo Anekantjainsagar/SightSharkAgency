@@ -36,8 +36,8 @@ const State = (props) => {
           })
           .catch((err) => {
             if (err.status) {
-              toast.error("Login Error Occured Please try again");
               if (pathname != "/reset-password") {
+                toast.error("Login Error Occured Please try again");
                 history.push("/");
               }
             }
@@ -47,6 +47,13 @@ const State = (props) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (pathname == "/" && userData?.id) {
+      history.push("/overview");
+      toast.success("Logged in Successfully");
+    }
+  }, [userData]);
 
   const getUsers = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
