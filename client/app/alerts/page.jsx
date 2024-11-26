@@ -31,6 +31,7 @@ const Alerts = () => {
                       onClick={() => {
                         setPage(i + 1);
                       }}
+                      key={i}
                     >
                       {e}
                     </h3>
