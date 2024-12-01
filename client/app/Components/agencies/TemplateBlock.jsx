@@ -3,7 +3,7 @@ import Image from "next/image";
 const TemplateBlock = ({ data }) => {
   return (
     <div
-      className="border border-gray-400/20 rounded-xl p-1 relative"
+      className="border border-gray-400/20 rounded-xl p-1 relative hover:scale-105 transition-all"
       onClick={() => {
         window.open(data?.template_link, "__blank");
       }}

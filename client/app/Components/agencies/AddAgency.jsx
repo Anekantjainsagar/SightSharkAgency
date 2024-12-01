@@ -12,6 +12,7 @@ import axios from "axios";
 import { BACKEND_URI } from "@/app/utils/url";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { getCookie } from "cookies-next";
+import Info from "../Login/Info";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -292,7 +293,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="name"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Client Name
                       <Required />
@@ -311,7 +312,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="parent_name"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Parent Name
                       <Required />
@@ -330,7 +331,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="website"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Website
                       <Required />
@@ -350,7 +351,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="location"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Location
                     </label>
@@ -374,7 +375,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="namekey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Name
                     </label>
@@ -398,7 +399,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="designation"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Designation
                     </label>
@@ -423,7 +424,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="email"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Email Address <Required />
                     </label>
@@ -448,7 +449,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="phone"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Phone no.
                     </label>
@@ -608,9 +609,10 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="emailKey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
-                      Email
+                      Portal Owner Email
+                      <Required /> <Info text="Portal Owner Email" />
                     </label>
                     <input
                       id="emailKey"
@@ -632,9 +634,10 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="passwordKey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
-                      Password
+                      Password <Required />
+                      <Info text="Portal Owner Password" />
                     </label>
                     <div className="w-full relative">
                       <input
@@ -664,6 +667,42 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       </div>
                     </div>
                   </div>{" "}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="passwordKeyConfirm"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                    >
+                      Confirm Password <Required />
+                      <Info text="Portal Owner Confirm Password" />
+                    </label>
+                    <div className="w-full relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        id="passwordKeyConfirm"
+                        value={data?.credentials?.cpassword}
+                        onChange={(e) => {
+                          setData({
+                            ...data,
+                            credentials: {
+                              ...data?.credentials,
+                              cpassword: e.target.value,
+                            },
+                          });
+                        }}
+                        placeholder="Enter Confirm Password"
+                        className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                      />
+                      <div
+                        className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setShowConfirmPassword(!showConfirmPassword);
+                        }}
+                      >
+                        {showConfirmPassword ? <LuEye /> : <LuEyeOff />}
+                      </div>
+                    </div>
+                  </div>
                 </div>{" "}
               </div>
             )}
@@ -723,16 +762,18 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   const { mainDataSource, dataSourceStructure } = useContext(Context);
 
   useEffect(() => {
-    const newCredentials = dataSourceStructure
-      ?.filter((e) => allowedPlatforms?.includes(e?.platform))
-      ?.map((e) => {
-        let temp = mainDataSource?.find((item) => item?.name === e?.platform);
-        if (temp?.img_link) {
-          return { ...e, img_link: temp?.img_link };
-        }
-        return e;
-      });
-    setCredentialsState(newCredentials);
+    if (credentialsState?.length == 0) {
+      const newCredentials = dataSourceStructure
+        ?.filter((e) => allowedPlatforms?.includes(e?.platform))
+        ?.map((e) => {
+          let temp = mainDataSource?.find((item) => item?.name === e?.platform);
+          if (temp?.img_link) {
+            return { ...e, img_link: temp?.img_link };
+          }
+          return e;
+        });
+      setCredentialsState(newCredentials);
+    }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
@@ -789,7 +830,11 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                   placeholder={e?.creds_structure?.account_id
                     ?.replace("_", " ")
                     .toUpperCase()}
-                  // value={e?.creds_structure?.account_id || ""}
+                  value={
+                    e?.creds_structure?.account_id === "account_id"
+                      ? ""
+                      : e?.creds_structure?.account_id
+                  }
                   onChange={(event) =>
                     handleInputChange(
                       e.platform,
@@ -806,7 +851,11 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                       key={key}
                       type="text"
                       placeholder={formatName(key)}
-                      // value={e?.creds_structure?.credentials[key] || ""}
+                      value={
+                        e?.creds_structure?.credentials[key] === key
+                          ? ""
+                          : e?.creds_structure?.credentials[key]
+                      }
                       onChange={(event) =>
                         handleInputChange(
                           e.platform,

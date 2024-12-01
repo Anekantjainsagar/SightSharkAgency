@@ -180,7 +180,7 @@ const UpdateUser = ({ showSubscribe, setShowSubscribe, userData }) => {
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[6vw] aspect-squre min-[1600px]:w-[4vw] rounded-full"
+                  className="w-[6vw] aspect-squre min-[1600px]:w-[4vw] object-cover rounded-full"
                 />
               </div>
             </div>

@@ -48,6 +48,33 @@ const State = (props) => {
     }
   };
 
+  const getUserAgency = async () => {
+    try {
+      console.log(userData?.agency_id);
+      if (userData?.agency_id) {
+        let cookie = getCookie("token");
+        const response = await axios.get(
+          `${BACKEND_URI}/useragency-profile?agency_id=${userData?.agency_id}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          }
+        );
+        console.log(response.data);
+      } else {
+        console.error("Agency ID is not defined.");
+      }
+    } catch (error) {
+      console.error(
+        "Error fetching user agency:",
+        error.response || error.message
+      );
+    }
+  };
+
   useEffect(() => {
     if (pathname == "/" && userData?.id) {
       history.push("/overview");
@@ -242,6 +269,7 @@ const State = (props) => {
     getMainDataSources(userData?.agency_id);
     getMainTemplates(userData?.agency_id);
     getDataSourceStructure(userData?.agency_id);
+    getUserAgency();
   }, [userData]);
 
   return (

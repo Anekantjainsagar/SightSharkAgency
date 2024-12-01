@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const Info = () => {
+const Info = ({ text }) => {
   return (
-    <PopoverComponent>
+    <PopoverComponent content={text}>
       <svg
         width="15"
         height="16"
@@ -23,24 +23,44 @@ const Info = () => {
   );
 };
 
-const PopoverComponent = ({ children, placement = "top" }) => {
+const PopoverComponent = ({ children, placement = "top", content }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const popoverRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    event.stopPropagation();
+    if (popoverRef.current && !popoverRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   const handleClick = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left" ref={popoverRef}>
       <div onClick={handleClick} className="cursor-pointer">
         {children}
       </div>
       <div
-        className={`absolute w-[200px] text-center ${
+        className={`absolute w-[280px] text-center ${
           placement === "bottom" ? "top-full mt-2" : "bottom-full mb-2"
-        } w-[15vw] left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-300/5 rounded-lg shadow-lg p-2 z-10 text-[12px] transition-transform duration-300 ease-in-out ${
+        } left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-300/5 rounded-lg shadow-lg px-2 py-1.5 z-10 text-[12px] transition-transform duration-300 ease-in-out ${
           isOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"
         }`}
       >
-        Manages internal google cloud services
+        {content}
       </div>
     </div>
   );

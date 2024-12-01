@@ -19,7 +19,7 @@ let databar = ["Client Details", "Key Contact Information"];
 
 const Overview = ({ params }) => {
   const [status, setStatus] = useState("Active");
-  const [selected, setSelected] = useState("Agency Details");
+  const [selected, setSelected] = useState("Client Details");
   const [deleteAgency, setDeleteAgency] = useState(false);
   const [original_data, setOriginal_data] = useState();
   const [file, setFile] = useState("");

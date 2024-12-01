@@ -4,15 +4,8 @@ import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AddAgency from "@/app/Components/agencies/AddAgency";
 import Context from "../Context/Context";
-import SortByButton from "../Components/agencies/SortByButton";
+import FilterData from "@/app/Components/agencies/FilterData";
 import toast from "react-hot-toast";
-
-let sort_by_options = [
-  "created_at",
-  "client_name",
-  "status",
-  "deployment_date",
-];
 
 const Overview = () => {
   const { agencies, getAgencies } = useContext(Context);
@@ -36,7 +29,7 @@ const Overview = () => {
                   ({agencies?.total_count})
                 </span>
               </h3>
-              <SortByButton sort_by_options={sort_by_options} />
+              <FilterData />
             </div>
             <div className="mt-5 border border-gray-200/5 rounded-2xl">
               <div className="grid bg-[#030021]/40 py-4 px-7 dashboardPage items-center rounded-2xl">

@@ -87,7 +87,7 @@ const AddTemplates = ({ showSubscribe, setShowSubscribe }) => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="name"
-                    className="mb-1.5 text-sm min-[1600px]:text-base"
+                    className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                   >
                     Template Name
                     <Required />
@@ -106,7 +106,7 @@ const AddTemplates = ({ showSubscribe, setShowSubscribe }) => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="website"
-                    className="mb-1.5 text-sm min-[1600px]:text-base"
+                    className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                   >
                     Template Link
                     <Required />

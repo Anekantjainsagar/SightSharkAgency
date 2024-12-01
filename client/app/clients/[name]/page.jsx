@@ -109,7 +109,7 @@ const Overview = ({ params }) => {
                         })}
                     </div>
                   ) : (
-                    <div className="bg-[#171C2A] h-[13vh] rounded-lg p-3 min-[1600px]:p-4 text-center">
+                    <div className="bg-[#171C2A] h-[13vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
                       No Data Sources Available Please Add some of the Data
                       Sources
                     </div>

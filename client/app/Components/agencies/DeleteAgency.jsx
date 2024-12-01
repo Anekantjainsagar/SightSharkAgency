@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Context from "@/app/Context/Context";
 import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -22,6 +23,7 @@ const customStyles = {
 };
 
 const DeleteAgency = ({ showSubscribe, setShowSubscribe, name, id }) => {
+  const history = useRouter();
   const [value, setValue] = useState("");
   const { getAgencies } = useContext(Context);
   function closeModal() {
@@ -109,9 +111,9 @@ const DeleteAgency = ({ showSubscribe, setShowSubscribe, name, id }) => {
                       .then((res) => {
                         if (res.msg) {
                           setShowSubscribe(false);
+                          getAgencies();
                           toast.success("Client Deleted Successfully");
                           history.push("/clients");
-                          getAgencies();
                         }
                       })
                       .catch((err) => {

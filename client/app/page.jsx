@@ -117,7 +117,7 @@ const App = () => {
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label
                 htmlFor="email"
-                className="mb-1.5 text-sm min-[1600px]:text-base"
+                className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
               >
                 Email
               </label>

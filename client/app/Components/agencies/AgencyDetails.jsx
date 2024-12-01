@@ -1,8 +1,27 @@
+import Context from "@/app/Context/Context";
 import Image from "next/image";
+import { useContext, useState } from "react";
+import toast from "react-hot-toast";
+import { FaPlus } from "react-icons/fa";
+import AddDataSouces from "./AddDataSources";
+
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 const AgencyDetails = ({ data }) => {
+  const { clientCreds, mainDataSource } = useContext(Context);
+  const [addDataSouces, setAddDataSouces] = useState(false);
+
   return (
     <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
+      <AddDataSouces
+        showSubscribe={addDataSouces}
+        setShowSubscribe={setAddDataSouces}
+      />
       <Image
         width={1000}
         height={1000}
@@ -142,7 +161,11 @@ const AgencyDetails = ({ data }) => {
                   <span
                     className="hover:underline cursor-pointer transition-all"
                     onClick={() => {
-                      window.open(e?.value, "__blank");
+                      if (e?.value?.includes("http")) {
+                        window.open(e?.value, "__blank");
+                      } else {
+                        toast.error("Invalid url");
+                      }
                     }}
                   >
                     {e?.value?.slice(0, 25) + "..."}
@@ -197,6 +220,64 @@ const AgencyDetails = ({ data }) => {
             </div>
           );
         })}{" "}
+      </div>
+      <div className="border rounded-xl w-full border-gray-500/15 mt-4">
+        <div className="flex px-3 py-3 items-center justify-between w-full">
+          <h5 className="w-full pb-2 text-sm min-[1600px]:text-base border-b border-b-gray-500/15">
+            Data Sources
+          </h5>
+          <button
+            onClick={() => {
+              setAddDataSouces(!addDataSouces);
+            }}
+            className="bg-newBlue w-[300px] justify-center py-1.5 rounded-xl flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
+          >
+            <FaPlus className="text-sm" /> Add Source
+          </button>
+        </div>
+        <div className="m-3">
+          {clientCreds?.data?.length > 0 ? (
+            <div className="bg-[#171C2A] h-[26vh] grid grid-cols-2 gap-y-2 rounded-lg p-2 min-[1600px]:p-4">
+              {clientCreds?.data
+                ?.map((e) => {
+                  return {
+                    ...e,
+                    img_link: mainDataSource?.find(
+                      (event) => event?.name == e?.platform_name
+                    )?.img_link,
+                  };
+                })
+                ?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="flex items-center h-fit px-2 py-1 rounded-full"
+                    >
+                      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
+                        <Image
+                          src={e?.img_link}
+                          alt={e?.img_link?.src}
+                          width={1000}
+                          height={1000}
+                          className="object-contain"
+                        />
+                      </div>
+                      <label
+                        htmlFor={e?.platform_name}
+                        className="text-sm min-[1600px]:text-base"
+                      >
+                        {formatName(e?.platform_name)}
+                      </label>
+                    </div>
+                  );
+                })}
+            </div>
+          ) : (
+            <div className="bg-[#171C2A] h-[26vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
+              No Data Sources Available Please Add some of the Data Sources
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

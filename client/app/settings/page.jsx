@@ -96,7 +96,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="firstName"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       First Name
                     </label>
@@ -114,7 +114,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="lastName"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Last Name
                     </label>
@@ -132,7 +132,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="email"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Email
                     </label>
@@ -150,7 +150,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="phone"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Phone
                     </label>
@@ -168,7 +168,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="country"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Country
                     </label>
@@ -186,7 +186,7 @@ const Settings = () => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="postal"
-                      className="mb-1.5 text-sm min-[1600px]:text-base"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Postal Code
                     </label>

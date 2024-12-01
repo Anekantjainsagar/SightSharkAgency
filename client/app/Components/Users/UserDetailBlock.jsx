@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
 import Context from "@/app/Context/Context";
@@ -8,6 +8,11 @@ const UserDetailBlock = ({ data }) => {
   const { userData } = useContext(Context);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [userClickedData, setUserClickedData] = useState();
+
+  useEffect(() => {
+    setUserClickedData(data);
+  }, [data]);
 
   return (
     <>
@@ -19,7 +24,7 @@ const UserDetailBlock = ({ data }) => {
       <UpdateUser
         showSubscribe={showUpdatePopup}
         setShowSubscribe={setShowUpdatePopup}
-        userData={data}
+        userData={userClickedData}
       />
       <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
         <div className="flex items-start min-[1600px]:ml-0 ml-2">
@@ -28,7 +33,7 @@ const UserDetailBlock = ({ data }) => {
               src={"/Agency/Avatar.png"}
               width={1000}
               height={1000}
-              className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
+              className="w-8 min-[1600px]:w-10 object-cover aspect-square rounded-full"
               alt="Key contact"
             />
           ) : (
@@ -36,7 +41,7 @@ const UserDetailBlock = ({ data }) => {
               src={data?.profile_picture}
               width={1000}
               height={1000}
-              className="w-8 min-[1600px]:w-10 aspect-square rounded-full"
+              className="w-8 min-[1600px]:w-10 aspect-square object-cover rounded-full"
               alt="Key contact"
             />
           )}
@@ -76,6 +81,7 @@ const UserDetailBlock = ({ data }) => {
                 xmlns="http://www.w3.org/2000/svg"
                 onClick={(e) => {
                   e.stopPropagation();
+                  setUserClickedData(data);
                   setShowUpdatePopup(!showUpdatePopup);
                 }}
               >

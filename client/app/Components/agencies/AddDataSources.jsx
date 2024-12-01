@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
@@ -142,6 +142,8 @@ function formatName(input) {
 }
 
 const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
+  const [credentialsState, setCredentialsState] = useState([]);
+  const [allowedPlatforms, setAllowedPlatforms] = useState([]);
   const { mainDataSource } = useContext(Context);
   let maxPage = 2;
   const [page, setPage] = useState(1);
@@ -231,106 +233,22 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                   })
                   .map((e, i) => {
                     return (
-                      <div
+                      <DataSourceBox
                         key={i}
-                        className="flex items-center justify-between border border-gray-300/30 px-3 py-3 rounded-full"
-                      >
-                        <div className="flex items-center">
-                          <Image
-                            src={e?.img_link}
-                            alt={e?.img_link?.src}
-                            width={1000}
-                            height={1000}
-                            className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-squre object-contain"
-                          />
-                          <label
-                            htmlFor={e?.name}
-                            className="text-[13px] min-[1600px]:text-base cursor-pointer"
-                          >
-                            {formatName(e?.name)}
-                          </label>
-                        </div>
-                        <div className="inline-flex items-start mr-1">
-                          <label className="relative flex items-center cursor-pointer">
-                            <input
-                              type="checkbox"
-                              className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-                              id={e?.name}
-                              onChange={() => {
-                                // let id = e.target.id;
-                              }}
-                              // checked={data?.platforms?.includes(e?.name)}
-                            />
-                            <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="min-[1600px]:h-4 min-[1600px]:w-4 w-3 h-3"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                stroke="currentColor"
-                                strokeWidth="1"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                  clipRule="evenodd"
-                                ></path>
-                              </svg>
-                            </span>
-                          </label>
-                        </div>
-                      </div>
+                        e={e}
+                        setAllowedPlatforms={setAllowedPlatforms}
+                        allowedPlatforms={allowedPlatforms}
+                      />
                     );
                   })}
               </div>
             </div>
           ) : (
-            <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
-              <div className="grid grid-cols-1 gap-3 mb-6">
-                {connectorsData
-                  ?.slice(0, 10)
-                  ?.filter((e) => {
-                    if (search) {
-                      return e?.title
-                        ?.toLowerCase()
-                        ?.includes(search?.toLowerCase());
-                    }
-                    return e;
-                  })
-                  .map((e, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="border border-gray-300/30 px-3 py-3 rounded-lg"
-                      >
-                        <div className="flex items-center">
-                          <Image
-                            src={e?.img}
-                            alt={e?.img?.src}
-                            width={1000}
-                            height={1000}
-                            className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-squre object-contain"
-                          />
-                          <label
-                            htmlFor={e?.title}
-                            className="text-[13px] min-[1600px]:text-base cursor-pointer"
-                          >
-                            {e?.title}
-                          </label>
-                        </div>
-                        <div className="mt-3">
-                          <p>Enter Account Id</p>
-                          <input
-                            type="text"
-                            placeholder="Enter Account Id"
-                            className="bg-transparent border mt-2 border-gray-300/20 w-5/12 rounded-full px-5 py-2 outline-none"
-                          />
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
+            <Page4
+              credentialsState={credentialsState}
+              setCredentialsState={setCredentialsState}
+              allowedPlatforms={allowedPlatforms}
+            />
           )}
           <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
             <button
@@ -358,6 +276,199 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
           </div>
         </div>
       </Modal>
+    </div>
+  );
+};
+
+const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
+  const [checked, setChecked] = useState(false);
+  const { clientCreds } = useContext(Context);
+
+  useEffect(() => {
+    if (
+      clientCreds?.data?.find((el) => el?.platform_name === e?.name)?.client_id
+        ?.length > 0
+    ) {
+      setChecked(true);
+      setAllowedPlatforms([...allowedPlatforms, e?.name]);
+    }
+
+    if (allowedPlatforms?.includes(e?.name)) {
+      setChecked(true);
+    }
+  }, [e]);
+
+  return (
+    <div className="flex items-center justify-between border border-gray-300/30 px-3 py-3 rounded-full">
+      <div className="flex items-center">
+        <Image
+          src={e?.img_link}
+          alt={e?.img_link?.src}
+          width={1000}
+          height={1000}
+          className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-squre object-contain"
+        />
+        <label
+          htmlFor={e?.name}
+          className="text-[13px] min-[1600px]:text-base cursor-pointer"
+        >
+          {formatName(e?.name)}
+        </label>
+      </div>
+      <div className="inline-flex items-start mr-1">
+        <label className="relative flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="before:content[''] peer relative min-[1600px]:h-6 min-[1600px]:w-6 w-5 h-5 rounded-full cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
+            id={e?.name}
+            onChange={() => {
+              if (allowedPlatforms?.includes(e?.name)) {
+                setAllowedPlatforms(
+                  allowedPlatforms?.filter((el) => el != e?.name)
+                );
+              } else {
+                setAllowedPlatforms([...allowedPlatforms, e?.name]);
+              }
+              setChecked(!checked);
+            }}
+            checked={checked}
+          />
+          <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="min-[1600px]:h-4 min-[1600px]:w-4 w-3 h-3"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              stroke="currentColor"
+              strokeWidth="1"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+          </span>
+        </label>
+      </div>
+    </div>
+  );
+};
+
+const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
+  const { mainDataSource, dataSourceStructure } = useContext(Context);
+
+  useEffect(() => {
+    if (credentialsState?.length == 0) {
+      const newCredentials = dataSourceStructure
+        ?.filter((e) => allowedPlatforms?.includes(e?.platform))
+        ?.map((e) => {
+          let temp = mainDataSource?.find((item) => item?.name === e?.platform);
+          if (temp?.img_link) {
+            return { ...e, img_link: temp?.img_link };
+          }
+          return e;
+        });
+      setCredentialsState(newCredentials);
+    }
+  }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
+
+  const handleInputChange = (platform, field, value, isCredential = false) => {
+    setCredentialsState((prevState) =>
+      prevState.map((item) =>
+        item.platform === platform
+          ? {
+              ...item,
+              creds_structure: {
+                ...item.creds_structure,
+                ...(isCredential
+                  ? {
+                      credentials: {
+                        ...item.creds_structure.credentials,
+                        [field]: value,
+                      },
+                    }
+                  : { [field]: value }),
+              },
+            }
+          : item
+      )
+    );
+  };
+
+  return (
+    <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+      {credentialsState?.map(
+        (e, i) =>
+          e?.img_link && (
+            <div
+              key={i}
+              className="border border-gray-300/30 px-3 py-3 rounded-lg"
+            >
+              <div className="flex items-center">
+                <Image
+                  src={e?.img_link}
+                  alt={e?.platform}
+                  width={1000}
+                  height={1000}
+                  className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
+                />
+                <label
+                  htmlFor={e?.platform}
+                  className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                >
+                  {formatName(e?.platform)}
+                </label>
+              </div>
+              <div className="mt-3">
+                {/* Show inputs only for the current platform */}
+                <input
+                  type="text"
+                  placeholder={e?.creds_structure?.account_id
+                    ?.replace("_", " ")
+                    .toUpperCase()}
+                  value={
+                    e?.creds_structure?.account_id === "account_id"
+                      ? ""
+                      : e?.creds_structure?.account_id
+                  }
+                  onChange={(event) =>
+                    handleInputChange(
+                      e.platform,
+                      "account_id",
+                      event.target.value
+                    )
+                  }
+                  className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+                />
+
+                {Object.keys(e?.creds_structure?.credentials || {}).map(
+                  (key) => (
+                    <input
+                      key={key}
+                      type="text"
+                      placeholder={formatName(key)}
+                      value={
+                        e?.creds_structure?.credentials[key] === key
+                          ? ""
+                          : e?.creds_structure?.credentials[key]
+                      }
+                      onChange={(event) =>
+                        handleInputChange(
+                          e.platform,
+                          key,
+                          event.target.value,
+                          true
+                        )
+                      }
+                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+                    />
+                  )
+                )}
+              </div>
+            </div>
+          )
+      )}
     </div>
   );
 };

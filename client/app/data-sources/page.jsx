@@ -6,6 +6,7 @@ import AddAgency from "@/app/Components/agencies/AddAgency";
 import Context from "../Context/Context";
 import Image from "next/image";
 import { IoReload } from "react-icons/io5";
+import { TfiReload } from "react-icons/tfi";
 
 function formatName(input) {
   return input
@@ -29,17 +30,26 @@ const DataSources = () => {
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
           <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
-            <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
-              All Data Sources{" "}
-              <span className="text-lg min-[1600px]:text-xl text-white/80">
-                ({mainDataSource?.length})
-              </span>
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
+                All Data Sources{" "}
+                <span className="text-lg min-[1600px]:text-xl text-white/80">
+                  ({mainDataSource?.length})
+                </span>
+              </h3>
+              <button className="bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3">
+                <TfiReload />
+                Refresh All
+              </button>
+            </div>
             <div className="mt-5 grid grid-cols-6 gap-5 p-6 border border-gray-200/5 h-[75vh] rounded-2xl">
               {mainDataSource?.map((e, i) => {
                 return (
-                  <div key={i}>
-                    <div className="video-box-shadow py-10 rounded-2xl hover:rounded-xl hover:scale-105 transition-all cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
+                  <div
+                    key={i}
+                    className="border border-gray-400/20 rounded-2xl p-2 h-fit"
+                  >
+                    <div className="py-10 border border-gray-400/20 rounded-2xl hover:rounded-xl hover:scale-105 transition-all cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
                       <Image
                         src={e?.img_link}
                         alt={e?.img_link?.src}
@@ -51,9 +61,9 @@ const DataSources = () => {
                         {formatName(e?.name)}
                       </p>
                     </div>
-                    <div className="mt-4 flex items-start justify-between px-2">
-                      <p className="text-xs min-[1600px]:text-sm cursor-pointer">
-                        Last Refresh Date & Time
+                    <div className="mt-2 flex items-end justify-between px-2">
+                      <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
+                        Last Refresh Time
                         <br />
                         {new Date(Date.now()).toString().slice(4, 21)}
                       </p>
