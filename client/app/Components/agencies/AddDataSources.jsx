@@ -133,7 +133,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
               </div>
             </div>
           ) : (
-            <Page4
+            <Page4Clone
               credentialsState={credentialsState}
               setCredentialsState={setCredentialsState}
               allowedPlatforms={allowedPlatforms}
@@ -176,7 +176,8 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   useEffect(() => {
     if (
       clientCreds?.data?.find((el) => el?.platform_name === e?.name)?.client_id
-        ?.length > 0
+        ?.length > 0 &&
+      !allowedPlatforms?.includes(e?.name)
     ) {
       setChecked(true);
       setAllowedPlatforms([...allowedPlatforms, e?.name]);
@@ -185,7 +186,7 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
     if (allowedPlatforms?.includes(e?.name)) {
       setChecked(true);
     }
-  }, [e]);
+  }, [e?.name]);
 
   return (
     <div className="flex items-center justify-between border border-gray-300/30 px-3 py-3 rounded-full">
@@ -245,44 +246,43 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
 };
 
 const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
-  const { mainDataSource, dataSourceStructure } = useContext(Context);
+  const { mainDataSource, dataSourceStructure, clientCreds } =
+    useContext(Context);
 
   useEffect(() => {
-    if (credentialsState?.length == 0) {
-      const newCredentials = dataSourceStructure
-        ?.filter((e) => allowedPlatforms?.includes(e?.platform))
+    if (credentialsState.length == 0) {
+      const newCredentials = mainDataSource
+        ?.filter((e) => allowedPlatforms?.includes(e?.name))
         ?.map((e) => {
-          let temp = mainDataSource?.find((item) => item?.name === e?.platform);
-          if (temp?.img_link) {
-            return { ...e, img_link: temp?.img_link };
-          }
-          return e;
+          return clientCreds?.data?.find(
+            (item) => item?.platform_name === e?.name
+          );
         });
       setCredentialsState(newCredentials);
     }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
-    setCredentialsState((prevState) =>
-      prevState.map((item) =>
-        item.platform === platform
-          ? {
-              ...item,
-              creds_structure: {
-                ...item.creds_structure,
-                ...(isCredential
-                  ? {
-                      credentials: {
-                        ...item.creds_structure.credentials,
-                        [field]: value,
-                      },
-                    }
-                  : { [field]: value }),
-              },
-            }
-          : item
-      )
-    );
+    // setCredentialsState((prevState) =>
+    //   prevState.map((item) =>
+    //     item.platform === platform
+    //       ? {
+    //           ...item,
+    //           creds_structure: {
+    //             ...item.creds_structure,
+    //             ...(isCredential
+    //               ? {
+    //                   credentials: {
+    //                     ...item.creds_structure.credentials,
+    //                     [field]: value,
+    //                   },
+    //                 }
+    //               : { [field]: value }),
+    //           },
+    //         }
+    //       : item
+    //   )
+    // );
   };
 
   return (
@@ -358,6 +358,103 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
             </div>
           )
       )}
+    </div>
+  );
+};
+
+const Page4Clone = ({
+  credentialsState,
+  setCredentialsState,
+  allowedPlatforms,
+}) => {
+  const { mainDataSource, dataSourceStructure, clientCreds } =
+    useContext(Context);
+
+  useEffect(() => {
+    if (credentialsState.length == 0) {
+      const newCredentials = mainDataSource
+        ?.filter((e) => allowedPlatforms?.includes(e?.name))
+        ?.map((e) => {
+          return {
+            img_link: e?.img_link,
+            ...clientCreds?.data?.find(
+              (item) => item?.platform_name === e?.name
+            ),
+          };
+        });
+      setCredentialsState(newCredentials);
+    }
+  }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
+
+  const handleInputChange = (platform, field, value, isCredential = false) => {
+    // setCredentialsState((prevState) =>
+    //   prevState.map((item) =>
+    //     item.platform === platform
+    //       ? {
+    //           ...item,
+    //           creds_structure: {
+    //             ...item.creds_structure,
+    //             ...(isCredential
+    //               ? {
+    //                   credentials: {
+    //                     ...item.creds_structure.credentials,
+    //                     [field]: value,
+    //                   },
+    //                 }
+    //               : { [field]: value }),
+    //           },
+    //         }
+    //       : item
+    //   )
+    // );
+  };
+
+  return (
+    <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+      {credentialsState?.map((e, i) => (
+        <div key={i} className="border border-gray-300/30 px-3 py-3 rounded-lg">
+          <div className="flex items-center">
+            <Image
+              src={e?.img_link}
+              alt={e?.platform_name}
+              width={1000}
+              height={1000}
+              className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
+            />
+            <label
+              htmlFor={e?.platform_name}
+              className="text-[13px] min-[1600px]:text-base cursor-pointer"
+            >
+              {formatName(e?.platform_name)}
+            </label>
+          </div>
+          <div className="mt-3">
+            {/* Show inputs only for the current platform */}
+            <input
+              type="text"
+              placeholder={"Account ID"}
+              value={e?.account_id === "account_id" ? "" : e?.account_id}
+              onChange={(event) =>
+                handleInputChange(e.platform, "account_id", event.target.value)
+              }
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+            />
+
+            {Object.keys(e?.credentials || {}).map((key) => (
+              <input
+                key={key}
+                type="text"
+                placeholder={formatName(key)}
+                value={e?.credentials[key] === key ? "" : e?.credentials[key]}
+                onChange={(event) =>
+                  handleInputChange(e.platform, key, event.target.value, true)
+                }
+                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+              />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
