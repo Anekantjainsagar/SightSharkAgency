@@ -9,6 +9,7 @@ import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import Context from "@/app/Context/Context";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -244,24 +245,30 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   Access
                   <Required />
                 </label>
-                <select
-                  name="access"
-                  id="access"
-                  className="glass outline-none border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
-                  value={data?.access}
-                  onChange={(e) => {
-                    setData({ ...data, access: e.target.value });
-                  }}
-                >
-                  {availableRoles.map((e, i) => {
-                    return (
+
+                <div className="relative w-full">
+                  <select
+                    name="access"
+                    id="access"
+                    className="glass outline-none w-full border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-sm rounded-md appearance-none pr-10"
+                    value={data?.access}
+                    onChange={(e) => {
+                      setData({ ...data, access: e.target.value });
+                    }}
+                  >
+                    {availableRoles.map((e, i) => (
                       <option value={e} key={i} className="bg-main">
                         {e[0]?.toUpperCase() + e.slice(1)}
                       </option>
-                    );
-                  })}
-                </select>
-              </div>{" "}
+                    ))}
+                  </select>
+
+                  {/* Custom dropdown icon */}
+                  <span className="absolute z-50 right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                    <MdKeyboardArrowDown />
+                  </span>
+                </div>
+              </div>
               <div className="flex flex-col">
                 {" "}
                 <label

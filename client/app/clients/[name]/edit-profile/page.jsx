@@ -6,7 +6,7 @@ import Image from "next/image";
 import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
 import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import { BiPencil } from "react-icons/bi";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdKeyboardArrowDown } from "react-icons/md";
 import DeleteAgency from "@/app/Components/agencies/DeleteAgency";
 import Context from "@/app/Context/Context";
 import { useRouter } from "next/navigation";
@@ -210,21 +210,27 @@ const Overview = ({ params }) => {
                           >
                             Status
                           </label>
-                          <select
-                            name="status"
-                            id="status"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
-                            value={status}
-                            onChange={(e) => setStatus(e.target.value)}
-                          >
-                            {["active", "offline", "hold"].map((e, i) => {
-                              return (
+
+                          <div className="relative w-full">
+                            <select
+                              name="status"
+                              id="status"
+                              className="glass h-[45px] w-full outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm appearance-none pr-10"
+                              value={status}
+                              onChange={(e) => setStatus(e.target.value)}
+                            >
+                              {["active", "offline", "hold"].map((e, i) => (
                                 <option value={e} key={i} className="bg-main">
                                   {e[0]?.toUpperCase() + e.slice(1)}
                                 </option>
-                              );
-                            })}
-                          </select>
+                              ))}
+                            </select>
+
+                            {/* Custom dropdown icon */}
+                            <span className="absolute z-50 right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                              <MdKeyboardArrowDown />
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -345,7 +351,10 @@ const Overview = ({ params }) => {
                   <div>
                     <button
                       className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
-                      onClick={updateDataTemp}
+                      onClick={() => {
+                        updateDataTemp();
+                        toast.success("Changes Discarded");
+                      }}
                     >
                       Discard
                     </button>

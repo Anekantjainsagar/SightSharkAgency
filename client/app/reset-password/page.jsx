@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import RightSide from "@/app/Components/Login/RightSide";
@@ -8,14 +8,17 @@ import { BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Context from "../Context/Context";
 
 export default function ResetPassword() {
+  const { checkPasswordCriteria, password_params } = useContext(Context);
   const history = useRouter();
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordC, setShowPasswordC] = useState(false);
   const [token, setToken] = useState("");
+  const criteria = checkPasswordCriteria(password);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -26,32 +29,41 @@ export default function ResetPassword() {
   const onChangePassword = () => {
     if (token && password) {
       if (password == cpassword) {
-        try {
-          const formData = new URLSearchParams();
-          formData.append("token", token);
-          formData.append("new_password", password);
+        if (
+          criteria[password_params[0]] &&
+          criteria[password_params[1]] &&
+          criteria[password_params[2]] &&
+          criteria[password_params[3]]
+        ) {
+          try {
+            const formData = new URLSearchParams();
+            formData.append("token", token);
+            formData.append("new_password", password);
 
-          axios
-            .post(`${BACKEND_URI}/user/reset-password`, formData, {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                Authorization: `Bearer ${getCookie("token")}`,
-              },
-            })
-            .then((res) => {
-              if (res.status == 200) {
-                toast.success("Password reset successfully");
-                history.push("/");
-              }
-            })
-            .catch((err) => {
-              if (err.status === 400) {
-                toast.error("User not found");
-              }
-            });
-        } catch (error) {
-          console.log(error);
+            axios
+              .post(`${BACKEND_URI}/user/reset-password`, formData, {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/x-www-form-urlencoded",
+                  Authorization: `Bearer ${getCookie("token")}`,
+                },
+              })
+              .then((res) => {
+                if (res.status == 200) {
+                  toast.success("Password reset successfully");
+                  history.push("/");
+                }
+              })
+              .catch((err) => {
+                if (err.status === 400) {
+                  toast.error("User not found");
+                }
+              });
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          toast.error("Check all the Password Constaints");
         }
       } else {
         toast.error("Both password does not match please try again");
@@ -78,10 +90,10 @@ export default function ResetPassword() {
               SIGHTSHARK
             </h4>
           </div>
-          <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
-            Welcome Back
+          <h1 className="text-3xl mb-4 min-[1600px]:text-[35px] font-medium">
+            Create New Password
           </h1>
-          <p className="mainText18 text-white/80 mt-2">Enter new Password</p>
+          {/* <p className="mainText18 text-white/80 mt-2">Enter new Password</p> */}
           <div className="w-11/12 min-[1600px]:my-6">
             <label
               htmlFor="password"
@@ -89,7 +101,7 @@ export default function ResetPassword() {
             >
               New Password
             </label>
-            <div className="w-full relative mb-4 mt-1.5">
+            <div className="w-full relative mb-2 mt-1.5">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -108,7 +120,40 @@ export default function ResetPassword() {
                 }}
               >
                 {showPassword ? <LuEye /> : <LuEyeOff />}
-              </div>
+              </div>{" "}
+            </div>{" "}
+            <div className="text-sm mb-5">
+              <p
+                className={
+                  criteria.hasUppercase ? "text-green-500" : "text-red-500"
+                }
+              >
+                {criteria.hasUppercase ? "✔" : "✘"} At least one uppercase
+                letter
+              </p>
+              <p
+                className={
+                  criteria.hasLowercase ? "text-green-500" : "text-red-500"
+                }
+              >
+                {criteria.hasLowercase ? "✔" : "✘"} At least one lowercase
+                letter
+              </p>
+              <p
+                className={
+                  criteria.hasNumber ? "text-green-500" : "text-red-500"
+                }
+              >
+                {criteria.hasNumber ? "✔" : "✘"} At least one number
+              </p>
+              <p
+                className={
+                  criteria.hasSpecialChar ? "text-green-500" : "text-red-500"
+                }
+              >
+                {criteria.hasSpecialChar ? "✔" : "✘"} At least one special
+                character
+              </p>
             </div>
             <label
               htmlFor="cpassword"

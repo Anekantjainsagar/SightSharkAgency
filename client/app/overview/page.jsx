@@ -25,6 +25,19 @@ const Overview = () => {
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
           <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
+            <div className="mb-3">
+              <h5
+                className="font-semibold text-2xl cursor-pointer hover:underline w-fit hover:text-blue-200 transition-all"
+                onClick={() => {
+                  window.open(
+                    "https://sight-shark-admin.vercel.app/",
+                    "__blank"
+                  );
+                }}
+              >
+                testagency22
+              </h5>
+            </div>
             <div className="grid grid-cols-4 gap-x-6">
               {[
                 {
@@ -38,13 +51,13 @@ const Overview = () => {
                   img: "/Overview/Icons/active.png",
                 },
                 {
-                  name: "Dashboard Views",
-                  value: 5,
+                  name: "Warranty Period",
+                  value: "15 days left",
                   img: "/Overview/Icons/dashboard.png",
                 },
                 {
-                  name: "Satisfaction Score",
-                  value: 25,
+                  name: "Status",
+                  value: "Active",
                   img: "/Overview/Icons/satisfaction.png",
                 },
               ].map((e, i) => {
@@ -108,7 +121,7 @@ const Overview = () => {
                 Templates
               </h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[34.5vh]">
+              <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[30vh]">
                 {mainTemplates?.map((e, i) => {
                   return (
                     <div

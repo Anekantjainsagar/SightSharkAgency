@@ -8,6 +8,12 @@ import { FaPlus } from "react-icons/fa";
 import Context from "../Context/Context";
 import { CSVLink } from "react-csv";
 import SortByButton from "../Components/agencies/SortByButton";
+import {
+  MdOutlineChevronLeft,
+  MdOutlineChevronRight,
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
 
 let sort_by_options = [
   "created_at",
@@ -145,6 +151,30 @@ const Overview = () => {
                   })}
                 </div>
                 <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
+                  <MdOutlineKeyboardDoubleArrowLeft
+                    onClick={() => {
+                      if (agencies?.current_page != 1) {
+                        getAgencies(1);
+                      }
+                    }}
+                    className={`text-2xl ${
+                      agencies?.current_page != 1
+                        ? "text-gray-300"
+                        : "text-gray-600"
+                    } cursor-pointer`}
+                  />
+                  <MdOutlineChevronLeft
+                    onClick={() => {
+                      if (agencies?.current_page != 1) {
+                        getAgencies(agencies?.current_page - 1);
+                      }
+                    }}
+                    className={`text-2xl ${
+                      agencies?.current_page != 1
+                        ? "text-gray-300"
+                        : "text-gray-600"
+                    } cursor-pointer`}
+                  />
                   {[...Array(agencies?.total_pages).keys()]
                     .map((i) => i + 1)
                     ?.map((e, i) => {
@@ -164,6 +194,30 @@ const Overview = () => {
                         </div>
                       );
                     })}
+                  <MdOutlineChevronRight
+                    onClick={() => {
+                      if (agencies?.current_page != agencies?.total_pages) {
+                        getAgencies(agencies?.current_page + 1);
+                      }
+                    }}
+                    className={`text-2xl ${
+                      agencies?.current_page != agencies?.total_pages
+                        ? "text-gray-300"
+                        : "text-gray-600"
+                    } cursor-pointer`}
+                  />{" "}
+                  <MdOutlineKeyboardDoubleArrowRight
+                    onClick={() => {
+                      if (agencies?.current_page != agencies?.total_pages) {
+                        getAgencies(agencies?.total_pages);
+                      }
+                    }}
+                    className={`text-2xl ${
+                      agencies?.current_page != agencies?.total_pages
+                        ? "text-gray-300"
+                        : "text-gray-600"
+                    } cursor-pointer`}
+                  />
                 </div>
               </div>
             </div>

@@ -23,25 +23,34 @@ const customStyles = {
   },
 };
 
+let nav_data = ["Data Sources", "Data Sources Ids"];
 function formatName(input) {
   return input
-    .split("_")
+    ?.split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
 
 const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
+  let maxPage = 2;
   const [credentialsState, setCredentialsState] = useState([]);
   const [allowedPlatforms, setAllowedPlatforms] = useState([]);
-  const { mainDataSource } = useContext(Context);
-  let maxPage = 2;
-  const [page, setPage] = useState(1);
+  const { mainDataSource, clientCreds } = useContext(Context);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   function closeModal() {
     setShowSubscribe(false);
   }
-  let nav_data = ["Data Sources", "Data Sources Ids"];
+
+  useEffect(() => {
+    if (clientCreds?.data) {
+      setAllowedPlatforms((prevPlatforms) => {
+        const newPlatforms = clientCreds.data.map((e) => e?.platform_name);
+        return Array.from(new Set([...prevPlatforms, ...newPlatforms]));
+      });
+    }
+  }, [clientCreds]);
 
   return (
     <div className="z-50">
@@ -133,7 +142,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
               </div>
             </div>
           ) : (
-            <Page4Clone
+            <Page4
               credentialsState={credentialsState}
               setCredentialsState={setCredentialsState}
               allowedPlatforms={allowedPlatforms}
@@ -254,132 +263,11 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
       const newCredentials = mainDataSource
         ?.filter((e) => allowedPlatforms?.includes(e?.name))
         ?.map((e) => {
-          return clientCreds?.data?.find(
-            (item) => item?.platform_name === e?.name
-          );
-        });
-      setCredentialsState(newCredentials);
-    }
-  }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
-
-  const handleInputChange = (platform, field, value, isCredential = false) => {
-    // setCredentialsState((prevState) =>
-    //   prevState.map((item) =>
-    //     item.platform === platform
-    //       ? {
-    //           ...item,
-    //           creds_structure: {
-    //             ...item.creds_structure,
-    //             ...(isCredential
-    //               ? {
-    //                   credentials: {
-    //                     ...item.creds_structure.credentials,
-    //                     [field]: value,
-    //                   },
-    //                 }
-    //               : { [field]: value }),
-    //           },
-    //         }
-    //       : item
-    //   )
-    // );
-  };
-
-  return (
-    <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
-      {credentialsState?.map(
-        (e, i) =>
-          e?.img_link && (
-            <div
-              key={i}
-              className="border border-gray-300/30 px-3 py-3 rounded-lg"
-            >
-              <div className="flex items-center">
-                <Image
-                  src={e?.img_link}
-                  alt={e?.platform}
-                  width={1000}
-                  height={1000}
-                  className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
-                />
-                <label
-                  htmlFor={e?.platform}
-                  className="text-[13px] min-[1600px]:text-base cursor-pointer"
-                >
-                  {formatName(e?.platform)}
-                </label>
-              </div>
-              <div className="mt-3">
-                {/* Show inputs only for the current platform */}
-                <input
-                  type="text"
-                  placeholder={e?.creds_structure?.account_id
-                    ?.replace("_", " ")
-                    .toUpperCase()}
-                  value={
-                    e?.creds_structure?.account_id === "account_id"
-                      ? ""
-                      : e?.creds_structure?.account_id
-                  }
-                  onChange={(event) =>
-                    handleInputChange(
-                      e.platform,
-                      "account_id",
-                      event.target.value
-                    )
-                  }
-                  className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-                />
-
-                {Object.keys(e?.creds_structure?.credentials || {}).map(
-                  (key) => (
-                    <input
-                      key={key}
-                      type="text"
-                      placeholder={formatName(key)}
-                      value={
-                        e?.creds_structure?.credentials[key] === key
-                          ? ""
-                          : e?.creds_structure?.credentials[key]
-                      }
-                      onChange={(event) =>
-                        handleInputChange(
-                          e.platform,
-                          key,
-                          event.target.value,
-                          true
-                        )
-                      }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-                    />
-                  )
-                )}
-              </div>
-            </div>
-          )
-      )}
-    </div>
-  );
-};
-
-const Page4Clone = ({
-  credentialsState,
-  setCredentialsState,
-  allowedPlatforms,
-}) => {
-  const { mainDataSource, dataSourceStructure, clientCreds } =
-    useContext(Context);
-
-  useEffect(() => {
-    if (credentialsState.length == 0) {
-      const newCredentials = mainDataSource
-        ?.filter((e) => allowedPlatforms?.includes(e?.name))
-        ?.map((e) => {
           return {
-            img_link: e?.img_link,
             ...clientCreds?.data?.find(
               (item) => item?.platform_name === e?.name
             ),
+            img_link: e?.img_link,
           };
         });
       setCredentialsState(newCredentials);
@@ -429,17 +317,19 @@ const Page4Clone = ({
             </label>
           </div>
           <div className="mt-3">
-            {/* Show inputs only for the current platform */}
             <input
               type="text"
-              placeholder={"Account ID"}
+              placeholder={e?.account_id?.replace("_", " ").toUpperCase()}
               value={e?.account_id === "account_id" ? "" : e?.account_id}
               onChange={(event) =>
-                handleInputChange(e.platform, "account_id", event.target.value)
+                handleInputChange(
+                  e.platform_name,
+                  "account_id",
+                  event.target.value
+                )
               }
               className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
             />
-
             {Object.keys(e?.credentials || {}).map((key) => (
               <input
                 key={key}
@@ -447,7 +337,12 @@ const Page4Clone = ({
                 placeholder={formatName(key)}
                 value={e?.credentials[key] === key ? "" : e?.credentials[key]}
                 onChange={(event) =>
-                  handleInputChange(e.platform, key, event.target.value, true)
+                  handleInputChange(
+                    e.platform_name,
+                    key,
+                    event.target.value,
+                    true
+                  )
                 }
                 className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
               />

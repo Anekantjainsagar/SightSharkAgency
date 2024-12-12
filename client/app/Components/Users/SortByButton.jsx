@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import Context from "../../Context/Context";
+import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 
 const SortByButton = ({ sort_by_options }) => {
   const { getUsers } = useContext(Context);
   const [showSortBy, setShowSortBy] = useState(false);
   const sortRef = useRef(null);
+  const [recentClick, setRecentClick] = useState("created_at");
   const [lastClicked, setLastClicked] = useState({
     created_at: false,
     first_name: false,
@@ -35,10 +37,10 @@ const SortByButton = ({ sort_by_options }) => {
   return (
     <button
       ref={sortRef}
-      className="bg-white/10 backdrop-blur-sm bg-gray-700 px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+      className="glass relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
       onClick={() => setShowSortBy(!showSortBy)}
     >
-      <svg
+      {/* <svg
         width="20"
         height="20"
         viewBox="0 0 20 20"
@@ -52,7 +54,8 @@ const SortByButton = ({ sort_by_options }) => {
           strokeLinecap="round"
           strokeLinejoin="round"
         />
-      </svg>
+      </svg>{" "} */}
+      {!lastClicked[recentClick] ? <FaSortAmountDown /> : <FaSortAmountUp />}
       Sort By
       {showSortBy && (
         <div className="absolute right-0 top-[56px] rounded-xl w-[12vw] bg-main z-50 small-scroller h-[15vh] overflow-y-auto">
@@ -92,12 +95,12 @@ const SortByButton = ({ sort_by_options }) => {
                     access: !lastClicked?.access,
                   });
                 }
+                setRecentClick(e);
                 setShowSortBy(false);
               }}
               className="text-gray-200 py-2.5 flex justify-center hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
             >
               {e[0]?.toUpperCase() + e?.slice(1)?.replaceAll("_", " ")}
-              {/* {lastClicked[e] ? <FaSortAmountDown /> : <FaSortAmountUp />} */}
             </p>
           ))}
         </div>

@@ -195,7 +195,7 @@ const AgencyDetails = ({ data }) => {
           },
           {
             img: "/Agency/individual/icons/location.png",
-            title: "Email Address",
+            title: "Email",
             value: data?.key_contact_email_address,
           },
           {
@@ -222,58 +222,60 @@ const AgencyDetails = ({ data }) => {
         })}{" "}
       </div>
       <div className="border rounded-xl w-full border-gray-500/15 mt-4">
-        <div className="flex px-3 py-3 items-center justify-between w-full">
-          <h5 className="w-full pb-2 text-sm min-[1600px]:text-base border-b border-b-gray-500/15">
+        <div className="flex py-3 items-center justify-between w-full border-b border-b-gray-500/15">
+          <h5 className="w-full pb-2 pl-3 text-sm min-[1600px]:text-base">
             Data Sources
           </h5>
           <button
             onClick={() => {
               setAddDataSouces(!addDataSouces);
             }}
-            className="bg-newBlue w-[300px] justify-center py-1.5 rounded-xl flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
+            className="bg-newBlue p-2.5 mr-3 justify-center rounded-full flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
           >
-            <FaPlus className="text-sm" /> Add Source
+            <FaPlus className="text-sm" />
           </button>
         </div>
         <div className="m-3">
           {clientCreds?.data?.length > 0 ? (
-            <div className="bg-[#171C2A] h-[26vh] grid grid-cols-2 gap-y-2 rounded-lg p-2 min-[1600px]:p-4">
-              {clientCreds?.data
-                ?.map((e) => {
-                  return {
-                    ...e,
-                    img_link: mainDataSource?.find(
-                      (event) => event?.name == e?.platform_name
-                    )?.img_link,
-                  };
-                })
-                ?.map((e, i) => {
-                  return (
-                    <div
-                      key={i}
-                      className="flex items-center h-fit px-2 py-1 rounded-full"
-                    >
-                      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
-                        <Image
-                          src={e?.img_link}
-                          alt={e?.img_link?.src}
-                          width={1000}
-                          height={1000}
-                          className="object-contain"
-                        />
-                      </div>
-                      <label
-                        htmlFor={e?.platform_name}
-                        className="text-sm min-[1600px]:text-base"
+            <div className="h-[25vh] bg-[#171C2A] rounded-lg">
+              <div className="h-fit grid grid-cols-2 gap-y-5 p-2 min-[1600px]:p-4">
+                {clientCreds?.data
+                  ?.map((e) => {
+                    return {
+                      ...e,
+                      img_link: mainDataSource?.find(
+                        (event) => event?.name == e?.platform_name
+                      )?.img_link,
+                    };
+                  })
+                  ?.map((e, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="flex items-center h-fit px-2 rounded-full"
                       >
-                        {formatName(e?.platform_name)}
-                      </label>
-                    </div>
-                  );
-                })}
+                        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
+                          <Image
+                            src={e?.img_link}
+                            alt={e?.img_link?.src}
+                            width={1000}
+                            height={1000}
+                            className="object-contain"
+                          />
+                        </div>
+                        <label
+                          htmlFor={e?.platform_name}
+                          className="text-sm min-[1600px]:text-base"
+                        >
+                          {formatName(e?.platform_name)}
+                        </label>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           ) : (
-            <div className="bg-[#171C2A] h-[26vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
+            <div className="bg-[#171C2A] h-[25vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
               No Data Sources Available Please Add some of the Data Sources
             </div>
           )}

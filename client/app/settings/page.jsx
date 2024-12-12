@@ -212,7 +212,7 @@ const Settings = () => {
                       lastName: userData?.last_name,
                       ...userData,
                     });
-                    toast.success("Updates Discarded");
+                    toast.success("Changes Discarded");
                   }}
                 >
                   Discard

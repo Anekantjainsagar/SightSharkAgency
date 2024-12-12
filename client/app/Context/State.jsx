@@ -50,11 +50,11 @@ const State = (props) => {
 
   const getUserAgency = async () => {
     try {
-      console.log(userData?.agency_id);
       if (userData?.agency_id) {
+        console.log(userData?.agency_id);
         let cookie = getCookie("token");
         const response = await axios.get(
-          `${BACKEND_URI}/useragency-profile?agency_id=${userData?.agency_id}`,
+          `${BACKEND_URI}/user/agency-profile?agency_id=${userData?.agency_id}`,
           {
             headers: {
               Accept: "application/json",
@@ -240,7 +240,7 @@ const State = (props) => {
     if (cookie?.length > 5 && id) {
       try {
         axios
-          .get(`${BACKEND_URI}/client/get_client_credentials?client_id=${id}`, {
+          .get(`${BACKEND_URI}/client/get-client-credentials?client_id=${id}`, {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -272,6 +272,28 @@ const State = (props) => {
     getUserAgency();
   }, [userData]);
 
+  const checkPasswordCriteria = (password) => {
+    return {
+      hasUppercase: /[A-Z]/.test(password),
+      hasLowercase: /[a-z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    };
+  };
+
+  const password_params = [
+    "hasUppercase",
+    "hasLowercase",
+    "hasNumber",
+    "hasSpecialChar",
+  ];
+  const tooltips = {
+    hasUppercase: "Password must have at least one uppercase letter.",
+    hasLowercase: "Password must have at least one lowercase letter.",
+    hasNumber: "Password must have at least one number.",
+    hasSpecialChar: "Password must have at least one special character.",
+  };
+
   return (
     <Context.Provider
       value={{
@@ -291,6 +313,9 @@ const State = (props) => {
         getCredentialsForClient,
         clientCreds,
         setUserData,
+        checkPasswordCriteria,
+        password_params,
+        tooltips,
       }}
     >
       {props.children}

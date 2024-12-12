@@ -63,7 +63,7 @@ const DataSources = () => {
                     </div>
                     <div className="mt-2 flex items-end justify-between px-2">
                       <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
-                        Last Refresh Time
+                        Last Sync Time
                         <br />
                         {new Date(Date.now()).toString().slice(4, 21)}
                       </p>

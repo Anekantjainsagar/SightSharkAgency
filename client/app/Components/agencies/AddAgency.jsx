@@ -44,6 +44,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const [page, setPage] = useState(1);
   const [fileInput, setFileInput] = useState();
   const [credentialsState, setCredentialsState] = useState([]);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     profile: "",
@@ -111,7 +112,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         }, {});
 
         const response = await axios.post(
-          `${BACKEND_URI}/client/add_client_credentials?client_id=${client_id}&parent_name=${parent_name}`,
+          `${BACKEND_URI}/client/add-client-credentials?client_id=${client_id}&parent_name=${parent_name}`,
           { platforms },
           {
             headers: {
@@ -233,7 +234,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
-            <div className="grid grid-cols-6 text-sm min-[1600px]:text-base justify-between mt-2 px-[3vw] ml-5">
+            {/* <div className="grid grid-cols-6 text-sm min-[1600px]:text-base justify-between mt-2 px-[3vw] ml-5">
               {nav_data.map((e, i) => {
                 return (
                   <p
@@ -246,7 +247,9 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   </p>
                 );
               })}
-            </div>
+            </div> */}
+            <p className="text-center text-3xl my-5">{nav_data[page - 1]}</p>
+            <div className="h-[1px] w-full bg-gray-300/20"></div>
           </div>
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
             {page === 1 ? (
@@ -315,6 +318,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Parent Name
+                      <Info text="Parent Name" />
                       <Required />
                     </label>
                     <input
@@ -831,7 +835,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     ?.replace("_", " ")
                     .toUpperCase()}
                   value={
-                    e?.creds_structure?.account_id === "account_id"
+                    e?.creds_structure?.account_id?.includes("_id")
                       ? ""
                       : e?.creds_structure?.account_id
                   }
