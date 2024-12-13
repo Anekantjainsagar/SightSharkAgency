@@ -88,7 +88,7 @@ const Overview = () => {
             <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
               <h3 className="text-lg min-[1600px]:text-[20px]">Data Sources</h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[13vh] overflow-y-auto small-scroller bg-[#171C2A]/70 rounded-lg border border-gray-500/5">
+              <div className="h-[14vh] overflow-y-auto small-scroller bg-[#171C2A]/70 rounded-lg border border-gray-500/5">
                 <div className="h-fit overflow-y-auto small-scroller grid grid-cols-5 gap-y-3 min-[1600px]:gap-y-5 p-3 min-[1600px]:p-4 rounded-lg">
                   {mainDataSource?.map((e, i) => {
                     return (
@@ -121,7 +121,7 @@ const Overview = () => {
                 Templates
               </h3>{" "}
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[30vh]">
+              <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2 h-[27vh]">
                 {mainTemplates?.map((e, i) => {
                   return (
                     <div
@@ -129,15 +129,16 @@ const Overview = () => {
                       onClick={() => {
                         window.open(e?.template_link, "__blank");
                       }}
-                      className="border flex flex-col items-center justify-center border-gray-300/20 rounded-xl cursor-pointer p-3"
+                      className="border flex flex-col items-center justify-center border-gray-300/20 rounded-xl cursor-pointer py-3 px-3"
                     >
                       <Image
                         src={e?.template_image}
                         alt={e?.template_image?.src}
                         width={1000}
                         height={1000}
+                        className="h-[26vh] object-cover rounded-lg"
                       />
-                      <p className="mt-2.5 text-lg">{e?.template_name}</p>
+                      <p className="mt-2.5">{e?.template_name}</p>
                     </div>
                   );
                 })}

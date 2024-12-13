@@ -37,7 +37,6 @@ const State = (props) => {
           .catch((err) => {
             if (err.status) {
               if (pathname != "/reset-password") {
-                toast.error("Login Error Occured Please try again");
                 history.push("/");
               }
             }

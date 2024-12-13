@@ -13,8 +13,7 @@ import Context from "@/app/Context/Context";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies, getCredentialsForClient, clientCreds, mainDataSource } =
-    useContext(Context);
+  const { agencies, getCredentialsForClient } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);

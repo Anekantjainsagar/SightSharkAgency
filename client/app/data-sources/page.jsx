@@ -42,36 +42,38 @@ const DataSources = () => {
                 Refresh All
               </button>
             </div>
-            <div className="mt-5 grid grid-cols-6 gap-5 p-6 border border-gray-200/5 h-[75vh] rounded-2xl">
-              {mainDataSource?.map((e, i) => {
-                return (
-                  <div
-                    key={i}
-                    className="border border-gray-400/20 rounded-2xl p-2 h-fit"
-                  >
-                    <div className="py-10 border border-gray-400/20 rounded-2xl hover:rounded-xl hover:scale-105 transition-all cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
-                      <Image
-                        src={e?.img_link}
-                        alt={e?.img_link?.src}
-                        width={1000}
-                        height={1000}
-                        className="aspect-squre object-contain w-2/12"
-                      />{" "}
-                      <p className="text-base min-[1600px]:text-lg cursor-pointer mt-2">
-                        {formatName(e?.name)}
-                      </p>
+            <div className="mt-5 border border-gray-200/5 h-[75vh] rounded-2xl">
+              <div className="h-fit p-6 grid grid-cols-6 gap-5">
+                {mainDataSource?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="border border-gray-400/20 rounded-2xl p-2 h-fit"
+                    >
+                      <div className="py-10 border border-gray-400/20 rounded-2xl cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
+                        <Image
+                          src={e?.img_link}
+                          alt={e?.img_link?.src}
+                          width={1000}
+                          height={1000}
+                          className="aspect-squre object-contain w-2/12"
+                        />
+                        <p className="text-base min-[1600px]:text-lg cursor-pointer mt-2">
+                          {formatName(e?.name)}
+                        </p>
+                      </div>
+                      <div className="mt-2 flex items-end justify-between px-2">
+                        <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
+                          Last Sync Time
+                          <br />
+                          {new Date(Date.now()).toString().slice(4, 21)}
+                        </p>
+                        <IoReload className="text-lg cursor-pointer" />
+                      </div>
                     </div>
-                    <div className="mt-2 flex items-end justify-between px-2">
-                      <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
-                        Last Sync Time
-                        <br />
-                        {new Date(Date.now()).toString().slice(4, 21)}
-                      </p>
-                      <IoReload className="text-lg cursor-pointer" />
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

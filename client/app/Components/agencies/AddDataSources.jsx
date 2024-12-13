@@ -275,6 +275,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
+    console.log(isCredential);
     // setCredentialsState((prevState) =>
     //   prevState.map((item) =>
     //     item.platform === platform

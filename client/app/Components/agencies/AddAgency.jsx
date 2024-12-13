@@ -94,7 +94,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Client Details",
     "Key Contact Details",
     "Data Sources",
-    "Data Sources Ids",
+    "Data Sources IDs",
     "Dashboard Templates",
     "Credentials",
   ];

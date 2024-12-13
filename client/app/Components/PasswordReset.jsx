@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
 
@@ -34,10 +34,9 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
     if (timeLeft === null) return;
 
     if (timeLeft <= 0) {
-      setTimeLeft(null); // Stop the timer
-      if (onComplete) {
-        setSent(false);
-      }
+      setTimeLeft(null);
+      setSent(false);
+
       return;
     }
 
