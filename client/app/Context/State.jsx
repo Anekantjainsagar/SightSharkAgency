@@ -122,7 +122,7 @@ const State = (props) => {
           })
           .then((res) => {
             console.log(res.data);
-            // setPlatformsData(res.data.data);
+            setPlatformsData(res.data.data);
           })
           .catch((err) => {
             console.log(err);
@@ -365,6 +365,7 @@ const State = (props) => {
         mainTemplates,
         dataSourceStructure,
         selectedAgencies,
+        platformsData,
         setSelectedAgencies,
         getCredentialsForClient,
         clientCreds,

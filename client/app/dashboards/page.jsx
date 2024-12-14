@@ -8,7 +8,7 @@ import FilterData from "@/app/Components/agencies/FilterData";
 import toast from "react-hot-toast";
 
 const Overview = () => {
-  const { agencies, getAgencies } = useContext(Context);
+  const { agencies } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   return (
