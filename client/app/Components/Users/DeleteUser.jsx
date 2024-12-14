@@ -29,7 +29,7 @@ const DeleteUser = ({ showSubscribe, setShowSubscribe, data }) => {
   }
 
   const deleteUser = () => {
-    if (val == `${data?.first_name} ${data?.last_name}`) {
+    if (val.trim() == `${data?.first_name.trim()} ${data?.last_name.trim()}`) {
       try {
         fetch(`${BACKEND_URI}/user/delete/${data?.id}`, {
           method: "DELETE",

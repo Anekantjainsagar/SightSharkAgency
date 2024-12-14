@@ -19,7 +19,7 @@ let sort_by_options = [
   "created_at",
   "client_name",
   "status",
-  "deployment_date",
+  // "deployment_date",
 ];
 
 const Overview = () => {

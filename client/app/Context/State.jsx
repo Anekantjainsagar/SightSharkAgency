@@ -18,6 +18,7 @@ const State = (props) => {
   const [dataSourceStructure, setDataSourceStructure] = useState();
   const [selectedAgencies, setSelectedAgencies] = useState([]);
   const [clientCreds, setClientCreds] = useState();
+  const [platformsData, setPlatformsData] = useState();
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -80,6 +81,57 @@ const State = (props) => {
       toast.success("Logged in Successfully");
     }
   }, [userData]);
+
+  const getCriticalNotifications = () => {
+    let cookie = getCookie("token");
+
+    if (cookie?.length > 5) {
+      try {
+        axios
+          .get(`${BACKEND_URI}/critical-notification`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const getDataSourcesDataFromAPI = () => {
+    let cookie = getCookie("token");
+
+    if (cookie?.length > 5) {
+      try {
+        axios
+          .get(`${BACKEND_URI}/data-refresh/platform-by-agency`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            // setPlatformsData(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   const getUsers = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
@@ -269,6 +321,11 @@ const State = (props) => {
     getMainTemplates(userData?.agency_id);
     getDataSourceStructure(userData?.agency_id);
     getUserAgency();
+  }, [userData]);
+
+  useEffect(() => {
+    getDataSourcesDataFromAPI();
+    getCriticalNotifications();
   }, [userData]);
 
   const checkPasswordCriteria = (password) => {

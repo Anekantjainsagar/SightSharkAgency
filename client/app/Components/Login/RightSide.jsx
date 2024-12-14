@@ -62,17 +62,26 @@ const RightSide = memo(() => {
           }}
         >
           {[
-            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
-            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
-            "Prowiz.io is dedicated to crafting cutting-edge solutions that simplify and enhance the lives of consumers, whether it's for daily tasks or special events.",
+            {
+              name: "Dolphin Analytics",
+              desc: "SightShark is an exceptional asset for companies seeking to enhance data presentation using Google Data Studio or other dashboards, consistently providing exceptional dashboard updates and improved visuals.",
+            },
+            {
+              name: "Top Line Media",
+              desc: "SightShark successfully created a complex Looker studio report, integrating various platforms and software, and successfully completed the project, recommending their services for future projects.",
+            },
+            {
+              name: "Proximo Spirits",
+              desc: "SightShark delivered excellent Tableau dashboards and I enjoyed working with them. They were quick to respond to messages, met all deadlines, and did a great job of interpreting our requirements.",
+            },
           ].map((e, i) => {
             return (
               <SwiperSlide key={i}>
                 <div className="w-full flex flex-col justify-end">
-                  <p className="text-white leading-[29px]">&quot;{e}&quot;</p>
-                  <span className="text-base mt-1 text-right">
-                    Anekant, Frontend Developer, Prowiz Analytics
-                  </span>
+                  <p className="text-white leading-[29px]">
+                    &quot;{e?.desc}&quot;
+                  </p>
+                  <span className="text-base mt-1 text-right">{e?.name}</span>
                 </div>
               </SwiperSlide>
             );

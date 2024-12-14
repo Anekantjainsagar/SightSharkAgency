@@ -25,17 +25,32 @@ const Overview = () => {
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
           <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
-            <div className="mb-3">
-              <h5
-                className="font-semibold text-2xl cursor-pointer hover:underline w-fit hover:text-blue-200 transition-all"
-                onClick={() => {
-                  window.open(
-                    "https://sight-shark-admin.vercel.app/",
-                    "__blank"
-                  );
-                }}
-              >
-                testagency22
+            <div className="mb-3 text-lg">
+              <h5 className="cursor-pointer w-fit">
+                Agency Name:-{" "}
+                <span
+                  onClick={() => {
+                    window.open(
+                      "https://sight-shark-admin.vercel.app/",
+                      "__blank"
+                    );
+                  }}
+                  className="hover:underline hover:text-blue-300 transition-all"
+                >
+                  testagency22
+                </span>{" "}
+                <span className="mx-2">|</span> Client Portal:-{" "}
+                <span
+                  onClick={() => {
+                    window.open(
+                      "https://sight-shark-admin.vercel.app/",
+                      "__blank"
+                    );
+                  }}
+                  className="hover:underline hover:text-blue-300 transition-all"
+                >
+                  View Portal
+                </span>
               </h5>
             </div>
             <div className="grid grid-cols-4 gap-x-6">

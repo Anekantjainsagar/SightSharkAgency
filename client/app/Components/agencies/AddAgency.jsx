@@ -38,7 +38,8 @@ function formatName(input) {
 }
 
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
-  const { mainDataSource, mainTemplates, getAgencies } = useContext(Context);
+  const { mainDataSource, mainTemplates, getAgencies, checkPasswordCriteria } =
+    useContext(Context);
   let maxPage = 6;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -64,6 +65,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
+  const criteria = checkPasswordCriteria(data?.credentials?.password);
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
@@ -145,11 +147,11 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         parent_name: data?.parent_name,
         website: data?.website,
         location: data?.location,
+        email_address: data?.credentials?.email || "",
+        password: data?.credentials?.password || "",
         key_contact_name: data?.keyContact?.name,
         key_contact_designation: data?.keyContact?.designation,
         key_contact_email_address: data?.keyContact?.email,
-        email_address: data?.credentials?.email || "",
-        password: data?.credentials?.password || "",
         key_contact_phone: data?.keyContact?.phone,
         template_link: data?.templates?.template_link,
         template_name: data?.templates?.template_name,
@@ -207,7 +209,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
             onClick={closeModal}
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
-          <div className="mb-10">
+          <div className="mb-12">
+            <p className="text-center text-3xl mb-5">{nav_data[page - 1]}</p>
             <div className="flex items-center justify-between pl-[8vw]">
               {nav_data.map((e, i, arr) => {
                 return (
@@ -234,22 +237,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
-            {/* <div className="grid grid-cols-6 text-sm min-[1600px]:text-base justify-between mt-2 px-[3vw] ml-5">
-              {nav_data.map((e, i) => {
-                return (
-                  <p
-                    className={`text-center ${
-                      i + 1 == page ? "" : "opacity-0"
-                    }`}
-                    key={i}
-                  >
-                    {e}
-                  </p>
-                );
-              })}
-            </div> */}
-            <p className="text-center text-3xl my-5">{nav_data[page - 1]}</p>
-            <div className="h-[1px] w-full bg-gray-300/20"></div>
           </div>
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
             {page === 1 ? (
@@ -671,6 +658,47 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       </div>
                     </div>
                   </div>{" "}
+                  {data?.credentials?.password && (
+                    <div className="text-sm">
+                      <p
+                        className={
+                          criteria.hasUppercase
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
+                      >
+                        {criteria.hasUppercase ? "✔" : "✘"} At least one
+                        uppercase letter
+                      </p>
+                      <p
+                        className={
+                          criteria.hasLowercase
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
+                      >
+                        {criteria.hasLowercase ? "✔" : "✘"} At least one
+                        lowercase letter
+                      </p>
+                      <p
+                        className={
+                          criteria.hasNumber ? "text-green-500" : "text-red-500"
+                        }
+                      >
+                        {criteria.hasNumber ? "✔" : "✘"} At least one number
+                      </p>
+                      <p
+                        className={
+                          criteria.hasSpecialChar
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }
+                      >
+                        {criteria.hasSpecialChar ? "✔" : "✘"} At least one
+                        special character
+                      </p>
+                    </div>
+                  )}
                   <div className="flex flex-col">
                     <label
                       htmlFor="passwordKeyConfirm"
@@ -805,77 +833,60 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
 
   return (
     <div className="grid grid-cols-1 gap-3 mb-6">
-      {credentialsState?.map(
-        (e, i) =>
-          e?.img_link && (
-            <div
-              key={i}
-              className="border border-gray-300/30 px-3 py-3 rounded-lg"
+      {credentialsState?.map((e, i) => (
+        <div key={i} className="border border-gray-300/30 px-3 py-3 rounded-lg">
+          <div className="flex items-center">
+            <Image
+              src={e?.img_link}
+              alt={e?.platform}
+              width={1000}
+              height={1000}
+              className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
+            />
+            <label
+              htmlFor={e?.platform}
+              className="text-[13px] min-[1600px]:text-base cursor-pointer"
             >
-              <div className="flex items-center">
-                <Image
-                  src={e?.img_link}
-                  alt={e?.platform}
-                  width={1000}
-                  height={1000}
-                  className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
-                />
-                <label
-                  htmlFor={e?.platform}
-                  className="text-[13px] min-[1600px]:text-base cursor-pointer"
-                >
-                  {formatName(e?.platform)}
-                </label>
-              </div>
-              <div className="mt-3">
-                {/* Show inputs only for the current platform */}
-                <input
-                  type="text"
-                  placeholder={e?.creds_structure?.account_id
-                    ?.replace("_", " ")
-                    .toUpperCase()}
-                  value={
-                    e?.creds_structure?.account_id?.includes("_id")
-                      ? ""
-                      : e?.creds_structure?.account_id
-                  }
-                  onChange={(event) =>
-                    handleInputChange(
-                      e.platform,
-                      "account_id",
-                      event.target.value
-                    )
-                  }
-                  className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-                />
+              {formatName(e?.platform)}
+            </label>
+          </div>
+          <div className="mt-3">
+            {/* Show inputs only for the current platform */}
+            <input
+              type="text"
+              placeholder={e?.creds_structure?.account_id
+                ?.replace("_", " ")
+                .toUpperCase()}
+              value={
+                e?.creds_structure?.account_id?.includes("_id")
+                  ? ""
+                  : e?.creds_structure?.account_id
+              }
+              onChange={(event) =>
+                handleInputChange(e.platform, "account_id", event.target.value)
+              }
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+            />
 
-                {Object.keys(e?.creds_structure?.credentials || {}).map(
-                  (key) => (
-                    <input
-                      key={key}
-                      type="text"
-                      placeholder={formatName(key)}
-                      value={
-                        e?.creds_structure?.credentials[key] === key
-                          ? ""
-                          : e?.creds_structure?.credentials[key]
-                      }
-                      onChange={(event) =>
-                        handleInputChange(
-                          e.platform,
-                          key,
-                          event.target.value,
-                          true
-                        )
-                      }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-                    />
-                  )
-                )}
-              </div>
-            </div>
-          )
-      )}
+            {Object.keys(e?.creds_structure?.credentials || {}).map((key) => (
+              <input
+                key={key}
+                type="text"
+                placeholder={formatName(key)}
+                value={
+                  e?.creds_structure?.credentials[key] === key
+                    ? ""
+                    : e?.creds_structure?.credentials[key]
+                }
+                onChange={(event) =>
+                  handleInputChange(e.platform, key, event.target.value, true)
+                }
+                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+              />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

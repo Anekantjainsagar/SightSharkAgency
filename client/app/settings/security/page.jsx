@@ -25,7 +25,6 @@ const Settings = () => {
   });
 
   const criteria_old = checkPasswordCriteria(data?.newPassword);
-  const criteria = checkPasswordCriteria(data?.oldPass);
 
   useEffect(() => {
     if (userData?.two_factor_authentication) {
@@ -34,44 +33,49 @@ const Settings = () => {
   }, [userData]);
 
   const toggle2factorAuth = (checked) => {
-    let cookie = getCookie("token");
-    if (cookie && userData?.id) {
-      axios
-        .put(
-          `${BACKEND_URI}/user/two-factor-authentication?agency_id=${userData?.id.trim()}&two_factor_authentication=${
-            checked ? "enabled" : "disabled"
-          }`,
-          {}, // empty object for the data (payload) since it's a PUT without a body
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${cookie}`,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            // Update state after the successful response
-            setUserData({
-              ...userData,
-              two_factor_authentication: checked ? "enabled" : "disabled",
-            });
-            setTwoFactorAuth(checked); // update local state
-
-            // Show success message
-            if (checked) {
-              toast.success("Two Factor Authentication Enabled");
-            } else {
-              toast.success("Two Factor Authentication Disabled");
+    if (
+      (checked && userData?.two_factor_authentication == "disabled") ||
+      (!checked && userData?.two_factor_authentication == "enabled")
+    ) {
+      let cookie = getCookie("token");
+      if (cookie && userData?.id) {
+        axios
+          .put(
+            `${BACKEND_URI}/user/two-factor-authentication?agency_id=${userData?.id.trim()}&two_factor_authentication=${
+              checked ? "enabled" : "disabled"
+            }`,
+            {}, // empty object for the data (payload) since it's a PUT without a body
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
             }
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Error enabling/disabling Two Factor Authentication");
-        });
-    } else {
-      toast.error("Login Error");
+          )
+          .then((res) => {
+            if (res.status === 200) {
+              // Update state after the successful response
+              setUserData({
+                ...userData,
+                two_factor_authentication: checked ? "enabled" : "disabled",
+              });
+              setTwoFactorAuth(checked); // update local state
+
+              // Show success message
+              if (checked) {
+                toast.success("Two Factor Authentication Enabled");
+              } else {
+                toast.success("Two Factor Authentication Disabled");
+              }
+            }
+          })
+          .catch((err) => {
+            console.error(err);
+            toast.error("Error enabling/disabling Two Factor Authentication");
+          });
+      } else {
+        toast.error("Login Error");
+      }
     }
   };
 
@@ -124,47 +128,6 @@ const Settings = () => {
                         >
                           {showOriginalPassword ? <LuEye /> : <LuEyeOff />}
                         </div>
-                      </div>{" "}
-                      <div className="text-sm mt-2">
-                        <p
-                          className={
-                            criteria.hasUppercase
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria.hasUppercase ? "✔" : "✘"} At least one
-                          uppercase letter
-                        </p>
-                        <p
-                          className={
-                            criteria.hasLowercase
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria.hasLowercase ? "✔" : "✘"} At least one
-                          lowercase letter
-                        </p>
-                        <p
-                          className={
-                            criteria.hasNumber
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria.hasNumber ? "✔" : "✘"} At least one number
-                        </p>
-                        <p
-                          className={
-                            criteria.hasSpecialChar
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria.hasSpecialChar ? "✔" : "✘"} At least one
-                          special character
-                        </p>
                       </div>
                     </div>
                     <div className="flex flex-col">
@@ -196,48 +159,50 @@ const Settings = () => {
                           {showNewPassword ? <LuEye /> : <LuEyeOff />}
                         </div>
                       </div>{" "}
-                      <div className="text-sm mt-2">
-                        <p
-                          className={
-                            criteria_old.hasUppercase
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria_old.hasUppercase ? "✔" : "✘"} At least one
-                          uppercase letter
-                        </p>
-                        <p
-                          className={
-                            criteria_old.hasLowercase
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria_old.hasLowercase ? "✔" : "✘"} At least one
-                          lowercase letter
-                        </p>
-                        <p
-                          className={
-                            criteria_old.hasNumber
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria_old.hasNumber ? "✔" : "✘"} At least one
-                          number
-                        </p>
-                        <p
-                          className={
-                            criteria_old.hasSpecialChar
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }
-                        >
-                          {criteria.hasSpecialChar ? "✔" : "✘"} At least one
-                          special character
-                        </p>
-                      </div>
+                      {data?.newPassword && (
+                        <div className="text-sm mt-2">
+                          <p
+                            className={
+                              criteria_old.hasUppercase
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }
+                          >
+                            {criteria_old.hasUppercase ? "✔" : "✘"} At least one
+                            uppercase letter
+                          </p>
+                          <p
+                            className={
+                              criteria_old.hasLowercase
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }
+                          >
+                            {criteria_old.hasLowercase ? "✔" : "✘"} At least one
+                            lowercase letter
+                          </p>
+                          <p
+                            className={
+                              criteria_old.hasNumber
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }
+                          >
+                            {criteria_old.hasNumber ? "✔" : "✘"} At least one
+                            number
+                          </p>
+                          <p
+                            className={
+                              criteria_old.hasSpecialChar
+                                ? "text-green-500"
+                                : "text-red-500"
+                            }
+                          >
+                            {criteria_old.hasSpecialChar ? "✔" : "✘"} At least
+                            one special character
+                          </p>
+                        </div>
+                      )}
                     </div>{" "}
                     <div className="flex flex-col">
                       <label

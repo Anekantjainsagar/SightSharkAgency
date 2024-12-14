@@ -114,7 +114,7 @@ const PasswordReset = ({ showSubscribe, setShowSubscribe }) => {
                         if (res.status == 200) {
                           toast.success("Password reset email sent");
                           setSent(true);
-                          setTimeLeft(5 * 60);
+                          setTimeLeft(2 * 60);
                         }
                       })
                       .catch((err) => {

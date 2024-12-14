@@ -51,62 +51,37 @@ const Overview = () => {
                   );
                 })}
               </div>
-              <div className="h-[69.5vh] min-[1600px]:h-[70vh]">
-                <div className="overflow-y-auto small-scroller h-[86%]">
-                  {agencies?.data?.map((data, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="py-4 px-7 border-gray-200/5 border-y grid dashboardPage items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
+              <div className="h-[72vh] overflow-y-auto small-scroller min-[1600px]:h-[70vh]">
+                {agencies?.data?.map((data, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="py-4 px-7 border-gray-200/5 border-y grid dashboardPage items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
+                    >
+                      <h5 className="min-[1600px]:ml-0 ml-2">
+                        {data?.client_name}
+                      </h5>
+                      <p className="text-center">Parent Report</p>
+                      <h5
+                        className="text-center underline hover:text-blue-400 transition-all"
+                        onClick={() => {
+                          if (data?.template_link) {
+                            window.open(data?.template_link, "__blank");
+                          } else {
+                            toast.error("No URL Found");
+                          }
+                        }}
                       >
-                        <h5 className="min-[1600px]:ml-0 ml-2">
-                          {data?.client_name}
-                        </h5>
-                        <p className="text-center">Parent Report</p>
-                        <h5
-                          className="text-center underline hover:text-blue-400 transition-all"
-                          onClick={() => {
-                            if (data?.template_link) {
-                              window.open(data?.template_link, "__blank");
-                            } else {
-                              toast.error("No URL Found");
-                            }
-                          }}
-                        >
-                          {data?.template_name}
-                        </h5>
-                        <p className="text-center">
-                          {data?.created_at
-                            ? new Date(data?.created_at)
-                                .toString()
-                                ?.slice(4, 21)
-                            : ""}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
-                  {[...Array(agencies?.total_pages).keys()]
-                    .map((i) => i + 1)
-                    ?.map((e, i) => {
-                      return (
-                        <div
-                          className={`w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
-                            agencies?.current_page == e
-                              ? "bg-newBlue"
-                              : "text-[#85888E]"
-                          }`}
-                          key={i}
-                          onClick={() => {
-                            getAgencies(e);
-                          }}
-                        >
-                          {e}
-                        </div>
-                      );
-                    })}
-                </div>
+                        {data?.template_name}
+                      </h5>
+                      <p className="text-center">
+                        {data?.created_at
+                          ? new Date(data?.created_at).toString()?.slice(4, 21)
+                          : ""}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
