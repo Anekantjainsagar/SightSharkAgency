@@ -8,7 +8,6 @@ import { FaSearch } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
 import Context from "@/app/Context/Context";
 import { getCookie } from "cookies-next";
-import axios from "axios";
 import { BACKEND_URI } from "@/app/utils/url";
 
 const customStyles = {

@@ -10,7 +10,6 @@ import { getCookie } from "cookies-next";
 import { BACKEND_URI } from "@/app/utils/url";
 import toast from "react-hot-toast";
 import axios from "axios";
-import Info from "@/app/Components/Login/Info";
 
 const Settings = () => {
   const { userData, setUserData, checkPasswordCriteria } = useContext(Context);

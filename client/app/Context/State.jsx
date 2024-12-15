@@ -379,6 +379,8 @@ const State = (props) => {
   return (
     <Context.Provider
       value={{
+        criticalNotifications,
+        criticalNotificationsLength,
         userData,
         checkToken,
         setUsers,
