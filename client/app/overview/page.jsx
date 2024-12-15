@@ -13,7 +13,7 @@ function formatName(input) {
 }
 
 const Overview = () => {
-  const { mainDataSource, mainTemplates } = useContext(Context);
+  const { mainDataSource, mainTemplates, actualUser } = useContext(Context);
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -37,15 +37,17 @@ const Overview = () => {
                   }}
                   className="hover:underline hover:text-blue-300 transition-all"
                 >
-                  testagency22
+                  {actualUser?.agency_name}
                 </span>{" "}
                 <span className="mx-2">|</span> Client Portal:-{" "}
                 <span
                   onClick={() => {
-                    window.open(
-                      "https://sight-shark-admin.vercel.app/",
-                      "__blank"
-                    );
+                    const validUrl =
+                      actualUser?.client_portal.startsWith("http://") ||
+                      actualUser?.client_portal.startsWith("https://")
+                        ? actualUser?.client_portal
+                        : `https://${actualUser?.client_portal}`;
+                    window.open(validUrl, "_blank", "noopener,noreferrer");
                   }}
                   className="hover:underline hover:text-blue-300 transition-all"
                 >
@@ -72,7 +74,9 @@ const Overview = () => {
                 },
                 {
                   name: "Status",
-                  value: "Active",
+                  value:
+                    actualUser?.status[0]?.toUpperCase() +
+                    actualUser?.status?.slice(1),
                   img: "/Overview/Icons/satisfaction.png",
                 },
               ].map((e, i) => {

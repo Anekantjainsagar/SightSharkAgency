@@ -19,6 +19,7 @@ const AgencyDetails = ({ data }) => {
   return (
     <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
       <AddDataSouces
+        data={data}
         showSubscribe={addDataSouces}
         setShowSubscribe={setAddDataSouces}
       />
@@ -161,11 +162,12 @@ const AgencyDetails = ({ data }) => {
                   <span
                     className="hover:underline cursor-pointer transition-all"
                     onClick={() => {
-                      if (e?.value?.includes("http")) {
-                        window.open(e?.value, "__blank");
-                      } else {
-                        toast.error("Invalid url");
-                      }
+                      const validUrl =
+                        e?.value.startsWith("http://") ||
+                        e?.value.startsWith("https://")
+                          ? e?.value
+                          : `https://${e?.value}`;
+                      window.open(validUrl, "_blank", "noopener,noreferrer");
                     }}
                   >
                     {e?.value?.slice(0, 25) + "..."}

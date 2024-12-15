@@ -61,7 +61,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
       phone: "",
     },
     platforms: [],
-    templates: {},
+    templates: [],
     credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
@@ -166,7 +166,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
 
       try {
         const response = await axios.post(
-          `${BACKEND_URI}/client/create?${queryParams}`,
+          `${BACKEND_URI}/client/create/?${queryParams}`,
           formData,
           {
             headers: {
@@ -572,11 +572,10 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       <div
                         key={i}
                         onClick={() => {
-                          setData({ ...data, templates: e });
+                          setData({ ...data, templates: [e?.id] });
                         }}
                         className={`border ${
-                          e?.template_name == data?.templates?.template_name &&
-                          "border-white"
+                          e?.id == data?.templates[0] && "border-white"
                         } flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer h-[18vh]`}
                       >
                         {e?.template_image ? (
@@ -603,7 +602,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Portal Owner Email
-                      <Required /> <Info text="Portal Owner Email" />
+                      <Required />
                     </label>
                     <input
                       id="emailKey"
@@ -628,7 +627,6 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Password <Required />
-                      <Info text="Portal Owner Password" />
                     </label>
                     <div className="w-full relative">
                       <input
@@ -705,7 +703,6 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
                       Confirm Password <Required />
-                      <Info text="Portal Owner Confirm Password" />
                     </label>
                     <div className="w-full relative">
                       <input

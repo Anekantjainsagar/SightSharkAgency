@@ -11,6 +11,7 @@ const State = (props) => {
   const pathname = usePathname();
   const history = useRouter();
   const [userData, setUserData] = useState();
+  const [actualUser, setActualUser] = useState();
   const [users, setUsers] = useState([]);
   const [agencies, setAgencies] = useState([]);
   const [mainDataSource, setMainDataSource] = useState();
@@ -19,6 +20,9 @@ const State = (props) => {
   const [selectedAgencies, setSelectedAgencies] = useState([]);
   const [clientCreds, setClientCreds] = useState();
   const [platformsData, setPlatformsData] = useState();
+  const [criticalNotifications, setCriticalNotifications] = useState([]);
+  const [criticalNotificationsLength, setCriticalNotificationsLength] =
+    useState(0);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -54,7 +58,7 @@ const State = (props) => {
         console.log(userData?.agency_id);
         let cookie = getCookie("token");
         const response = await axios.get(
-          `${BACKEND_URI}/user/agency-profile?agency_id=${userData?.agency_id}`,
+          `${BACKEND_URI}/user/admin-agency-profile`,
           {
             headers: {
               Accept: "application/json",
@@ -63,7 +67,7 @@ const State = (props) => {
             },
           }
         );
-        console.log(response.data);
+        setActualUser(response.data.data);
       } else {
         console.error("Agency ID is not defined.");
       }
@@ -83,20 +87,42 @@ const State = (props) => {
   }, [userData]);
 
   const getCriticalNotifications = () => {
-    let cookie = getCookie("token");
+    const cookie = getCookie("token");
 
     if (cookie?.length > 5) {
       try {
         axios
-          .get(`${BACKEND_URI}/critical-notification`, {
+          .get(
+            `${BACKEND_URI}/critical_notification/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
+            {
+              headers: {
+                Authorization: `Bearer ${cookie}`,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((res) => {
+            setCriticalNotifications(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+
+      try {
+        axios
+          .get(`${BACKEND_URI}/critical_notification/unseen/count/`, {
             headers: {
+              Authorization: `Bearer ${cookie}`,
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${cookie}`,
             },
           })
           .then((res) => {
-            console.log(res.data);
+            setCriticalNotificationsLength(res.data);
           })
           .catch((err) => {
             console.log(err);
@@ -373,6 +399,7 @@ const State = (props) => {
         checkPasswordCriteria,
         password_params,
         tooltips,
+        actualUser,
       }}
     >
       {props.children}

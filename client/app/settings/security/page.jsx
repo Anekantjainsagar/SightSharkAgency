@@ -106,7 +106,6 @@ const Settings = () => {
                         className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         Current Password <Required />{" "}
-                        <Info text="Current Password" />
                       </label>
                       <div className="w-full relative mt-1">
                         <input
@@ -136,7 +135,7 @@ const Settings = () => {
                         className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         New Password
-                        <Required /> <Info text="New Password" />
+                        <Required /> 
                       </label>
                       <div className="w-full relative mt-1">
                         <input
@@ -211,7 +210,6 @@ const Settings = () => {
                       >
                         Confirm New Password
                         <Required />
-                        <Info text="Confirmed New Password" />
                       </label>
                       <div className="w-full relative mt-1">
                         <input

@@ -7,6 +7,10 @@ import Context from "../Context/Context";
 import Image from "next/image";
 import { IoReload } from "react-icons/io5";
 import { TfiReload } from "react-icons/tfi";
+import toast from "react-hot-toast";
+import { BACKEND_URI } from "../utils/url";
+import { getCookie } from "cookies-next";
+import axios from "axios";
 
 function formatName(input) {
   return input
@@ -16,7 +20,7 @@ function formatName(input) {
 }
 
 const DataSources = () => {
-  const { mainDataSource } = useContext(Context);
+  const { platformsData } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   return (
@@ -34,7 +38,7 @@ const DataSources = () => {
               <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
                 All Data Sources{" "}
                 <span className="text-lg min-[1600px]:text-xl text-white/80">
-                  ({mainDataSource?.length})
+                  ({platformsData?.platforms?.length})
                 </span>
               </h3>
               <button className="bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3">
@@ -44,7 +48,7 @@ const DataSources = () => {
             </div>
             <div className="mt-5 border border-gray-200/5 h-[75vh] rounded-2xl">
               <div className="h-fit p-6 grid grid-cols-6 gap-5">
-                {mainDataSource?.map((e, i) => {
+                {platformsData?.platforms?.map((e, i) => {
                   return <Block e={e} key={i} />;
                 })}
               </div>
@@ -57,34 +61,59 @@ const DataSources = () => {
 };
 
 const Block = ({ e }) => {
+  const { userData } = useContext(Context);
   const [isRotating, setIsRotating] = useState(false);
 
-  const handleReloadClick = () => {
+  const handleReloadClick = async () => {
     setIsRotating(true);
+    try {
+      const token = getCookie("token");
+
+      const response = await axios.get(`${BACKEND_URI}/data-refresh/refersh/`, {
+        params: {
+          agency_id: userData?.agency_id,
+          script_name: e?.platform,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const responseData = response.data;
+      if (responseData?.message?.includes("Failed")) {
+        toast.error(responseData.message);
+      } else {
+        toast.success(responseData.message);
+      }
+    } catch (err) {
+      console.error("Fetch Error:", err.message);
+      toast.error("Internal Server Error");
+    }
+
     setTimeout(() => {
       setIsRotating(false);
     }, 1000);
   };
-
   return (
     <div className="border border-gray-400/20 rounded-2xl p-2">
       <div className="py-10 border border-gray-400/20 rounded-2xl cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
         <Image
-          src={e?.img_link}
-          alt={e?.img_link?.src}
+          src={e?.logo}
+          alt={e?.logo?.src}
           width={1000}
           height={1000}
           className="aspect-square object-contain w-2/12"
         />
         <p className="text-sm text-center min-[1600px]:text-base cursor-pointer mt-2">
-          {formatName(e?.name)}
+          {formatName(e?.platform)}
         </p>
       </div>
       <div className="mt-2 flex items-end justify-between px-2">
         <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
           Last Refresh Time
           <br />
-          {new Date(Date.now()).toString().slice(4, 21)}
+          {new Date(e?.last_run).toString().slice(4, 21)}
         </p>
         <IoReload
           className={`text-lg cursor-pointer transition-transform ${

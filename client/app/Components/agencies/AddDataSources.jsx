@@ -3,10 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { FaSearch } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
 import Context from "@/app/Context/Context";
+import { getCookie } from "cookies-next";
+import axios from "axios";
+import { BACKEND_URI } from "@/app/utils/url";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -31,11 +34,12 @@ function formatName(input) {
     .join(" ");
 }
 
-const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
+const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
   let maxPage = 2;
   const [credentialsState, setCredentialsState] = useState([]);
   const [allowedPlatforms, setAllowedPlatforms] = useState([]);
-  const { mainDataSource, clientCreds } = useContext(Context);
+  const { mainDataSource, clientCreds, getCredentialsForClient } =
+    useContext(Context);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
@@ -163,6 +167,51 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
             <button
               onClick={() => {
                 if (page == maxPage) {
+                  const difference = clientCreds?.data
+                    ?.map((cred) => cred.platform_name)
+                    ?.filter((name) => !allowedPlatforms?.includes(name));
+
+                  if (difference?.length > 0 && data?.client_id) {
+                    let cookie = getCookie("token");
+                    console.log(difference);
+                    Promise.all(
+                      difference.map((item) => {
+                        const url = `${BACKEND_URI}/client/delete-client-credentials/?client_id=${data?.client_id?.trim()}&platform_name=${item.trim()}`;
+                        console.log("Making DELETE request to:", url);
+
+                        return fetch(url, {
+                          method: "DELETE",
+                          headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${cookie}`,
+                          },
+                        }).then((response) => {
+                          if (!response.ok) {
+                            return response.json().then((error) => {
+                              throw { status: response.status, ...error };
+                            });
+                          }
+                          return response.json();
+                        });
+                      })
+                    )
+                      .then(() => {
+                        toast.success("Tables removed successfully!");
+                        setShowSubscribe(false);
+                        getCredentialsForClient(data?.client_id);
+                      })
+                      .catch((error) => {
+                        if (error.status === 401) {
+                          toast.error(
+                            "Authentication failed. Please log in again."
+                          );
+                        } else {
+                          console.error("Error:", error);
+                          toast.error(error.message || "Error adding tables");
+                        }
+                      });
+                  }
                 } else {
                   setPage(page + 1);
                 }
@@ -301,7 +350,10 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   return (
     <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
       {credentialsState?.map((e, i) => (
-        <div key={i} className="border border-gray-300/30 px-3 py-3 rounded-lg">
+        <div
+          key={i}
+          className="border border-gray-300/30 px-3 py-3 rounded-lg mb-4"
+        >
           <div className="flex items-center">
             <Image
               src={e?.img_link}
