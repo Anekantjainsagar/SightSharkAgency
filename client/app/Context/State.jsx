@@ -23,6 +23,9 @@ const State = (props) => {
   const [criticalNotifications, setCriticalNotifications] = useState([]);
   const [criticalNotificationsLength, setCriticalNotificationsLength] =
     useState(0);
+  const [alerts, setAlerts] = useState([]);
+  const [alertsLength, setAlertsLength] = useState(0);
+  const [rawReportsClient, setRawReportsClient] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -93,7 +96,7 @@ const State = (props) => {
       try {
         axios
           .get(
-            `${BACKEND_URI}/critical_notification/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
+            `${BACKEND_URI}/critical-notification/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
             {
               headers: {
                 Authorization: `Bearer ${cookie}`,
@@ -114,7 +117,7 @@ const State = (props) => {
 
       try {
         axios
-          .get(`${BACKEND_URI}/critical_notification/unseen/count/`, {
+          .get(`${BACKEND_URI}/critical-notification/unseen/count/`, {
             headers: {
               Authorization: `Bearer ${cookie}`,
               Accept: "application/json",
@@ -123,6 +126,53 @@ const State = (props) => {
           })
           .then((res) => {
             setCriticalNotificationsLength(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const getAlerts = () => {
+    const cookie = getCookie("token");
+
+    if (cookie?.length > 5) {
+      try {
+        axios
+          .get(
+            `${BACKEND_URI}/alerts/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
+            {
+              headers: {
+                Authorization: `Bearer ${cookie}`,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          .then((res) => {
+            setAlerts(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+
+      try {
+        axios
+          .get(`${BACKEND_URI}/alerts/unseen/count/`, {
+            headers: {
+              Authorization: `Bearer ${cookie}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            setAlertsLength(res.data);
           })
           .catch((err) => {
             console.log(err);
@@ -287,6 +337,8 @@ const State = (props) => {
 
   const getDataSourceStructure = (id) => {
     let cookie = getCookie("token");
+    setDataSourceStructure([]);
+
     if (cookie?.length > 5 && id) {
       try {
         axios
@@ -314,6 +366,8 @@ const State = (props) => {
 
   const getCredentialsForClient = (id) => {
     let cookie = getCookie("token");
+    setClientCreds([]);
+
     if (cookie?.length > 5 && id) {
       try {
         axios
@@ -326,6 +380,32 @@ const State = (props) => {
           })
           .then(async (response) => {
             setClientCreds(response.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const getRawReports = (id) => {
+    let cookie = getCookie("token");
+    setRawReportsClient([]);
+
+    if (cookie?.length > 5 && id) {
+      try {
+        axios
+          .get(`${BACKEND_URI}/raw-reports/reports?client_id=${id}`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          })
+          .then(async (res) => {
+            setRawReportsClient(res.data.data);
           })
           .catch((err) => {
             console.log(err);
@@ -352,6 +432,7 @@ const State = (props) => {
   useEffect(() => {
     getDataSourcesDataFromAPI();
     getCriticalNotifications();
+    getAlerts();
   }, [userData]);
 
   const checkPasswordCriteria = (password) => {
@@ -381,6 +462,8 @@ const State = (props) => {
       value={{
         criticalNotifications,
         criticalNotificationsLength,
+        alerts,
+        alertsLength,
         userData,
         checkToken,
         setUsers,
@@ -402,6 +485,8 @@ const State = (props) => {
         password_params,
         tooltips,
         actualUser,
+        rawReportsClient,
+        getRawReports,
       }}
     >
       {props.children}

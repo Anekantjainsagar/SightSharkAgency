@@ -10,10 +10,12 @@ import AddDataSouces from "../../Components/agencies/AddDataSources";
 import { useRouter } from "next/navigation";
 import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
+import { FaPlus } from "react-icons/fa";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies, getCredentialsForClient } = useContext(Context);
+  const { agencies, getCredentialsForClient, rawReportsClient, getRawReports } =
+    useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
@@ -25,6 +27,7 @@ const Overview = ({ params }) => {
     );
     setData(temp);
     getCredentialsForClient(temp?.client_id);
+    getRawReports(temp?.client_id);
   }, [name, agencies]);
 
   return (
@@ -49,8 +52,51 @@ const Overview = ({ params }) => {
             <div className="w-[69%]">
               <AgencyDetailsTopbar name={name} />
               <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[53.5vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
-                  <h4 className="min-[1600px]:text-xl">Dashboards </h4>
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[16.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                  <h4 className="min-[1600px]:text-xl">
+                    Unsaved Reports (
+                    {rawReportsClient ? rawReportsClient?.length : 0})
+                  </h4>
+                  <div className="gradient-line my-4"></div>
+                  {rawReportsClient?.length > 0 ? (
+                    <ul className="grid list-disc grid-cols-3 gap-4 mt-2 px-5 relative">
+                      {rawReportsClient?.map((e, i) => {
+                        return (
+                          <li key={i}>
+                            {e?.report_name} (
+                            <span
+                              className="cursor-pointer hover:text-blue-500 transition-all hover:underline"
+                              onClick={() => {
+                                window.open(
+                                  e?.report_url,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              }}
+                            >
+                              Report URL
+                            </span>
+                            )
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : (
+                    <div className="mt-2 text-center">
+                      No Pre-Saved Reports Available
+                    </div>
+                  )}
+                </div>
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[33.5vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="min-[1600px]:text-xl">Dashboards </h4>
+                    <button
+                      onClick={() => {}}
+                      className="bg-newBlue p-2.5 mr-3 justify-center rounded-full flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
+                    >
+                      <FaPlus className="text-sm" />
+                    </button>
+                  </div>
                   <div className="gradient-line my-4"></div>
                   {data?.template_name?.length > 0 ? (
                     <div className="grid grid-cols-3 gap-x-4 mt-2 relative">
@@ -69,7 +115,7 @@ const Overview = ({ params }) => {
                     </div>
                   )}
                 </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[24vh]">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[26vh]">
                   <div className="flex items-center justify-between w-full">
                     <h4 className="min-[1600px]:text-xl">Recent Activity </h4>
                     <p
@@ -82,18 +128,18 @@ const Overview = ({ params }) => {
                       <HiOutlineArrowNarrowRight className="text-base ml-2" />
                     </p>
                   </div>
-                  <div className="gradient-line my-4"></div>
+                  <div className="gradient-line my-3.5"></div>
                   <div>
                     <div className="">
                       <span className="bg-[#5F5F5F]/10 px-4 py-1 w-fit rounded border border-gray-500/5 text-sm min-[1600px]:text-base">
                         14 August 2024
                       </span>
                       <div className="mt-4">
-                        {[1, 2]?.map((e, i) => {
+                        {[1, 2, 3]?.map((e, i) => {
                           return (
                             <div
                               key={i}
-                              className={`flex items-center justify-between mb-4`}
+                              className={`flex items-center justify-between mb-3.5 mr-2`}
                             >
                               <div className="flex items-center gap-x-3 ml-12">
                                 <Circle0 />

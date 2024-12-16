@@ -9,6 +9,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import Context from "@/app/Context/Context";
 import { getCookie } from "cookies-next";
 import { BACKEND_URI } from "@/app/utils/url";
+import axios from "axios";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -26,6 +27,7 @@ const customStyles = {
 };
 
 let nav_data = ["Data Sources", "Data Sources Ids"];
+
 function formatName(input) {
   return input
     ?.split("_")
@@ -175,24 +177,31 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
                     console.log(difference);
                     Promise.all(
                       difference.map((item) => {
-                        const url = `${BACKEND_URI}/client/delete-client-credentials/?client_id=${data?.client_id?.trim()}&platform_name=${item.trim()}`;
-                        console.log("Making DELETE request to:", url);
+                        const url = `${BACKEND_URI}/client/delete-client-credentials?client_id=${encodeURIComponent(
+                          data?.client_id?.trim()
+                        )}&platform_name=${encodeURIComponent(item.trim())}`;
 
-                        return fetch(url, {
-                          method: "DELETE",
-                          headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${cookie}`,
-                          },
-                        }).then((response) => {
-                          if (!response.ok) {
-                            return response.json().then((error) => {
-                              throw { status: response.status, ...error };
-                            });
-                          }
-                          return response.json();
-                        });
+                        return axios
+                          .delete(url, {
+                            headers: {
+                              Accept: "application/json",
+                              "Content-Type": "application/json",
+                              Authorization: `Bearer ${cookie}`,
+                            },
+                          })
+                          .then((response) => {
+                            return response.data;
+                          })
+                          .catch((error) => {
+                            if (error.response) {
+                              throw {
+                                status: error.response.status,
+                                ...error.response.data,
+                              };
+                            } else {
+                              throw { message: error.message };
+                            }
+                          });
                       })
                     )
                       .then(() => {

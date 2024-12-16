@@ -78,6 +78,47 @@ const Settings = () => {
     }
   };
 
+  const updatePassword = () => {
+    if (data?.oldPass && data?.newPassword && data?.reNewPassword) {
+      if (data?.newPassword === data?.reNewPassword) {
+        if (data?.oldPass !== data?.newPassword) {
+          try {
+            axios
+              .put(
+                `${BACKEND_URI}/user/update-password`,
+                {
+                  old_password: data?.oldPass,
+                  new_password: data?.newPassword,
+                },
+                {
+                  headers: {
+                    Authorization: `Bearer ${getCookie("token")}`,
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                }
+              )
+              .then((res) => {
+                if (res.status == 200) {
+                  toast.success("Password Changed Successfully");
+                  setData({ oldPass: "", newPassword: "", reNewPassword: "" });
+                }
+              })
+              .catch((err) => {
+                toast.error("Internal Server Error");
+                console.log(err);
+              });
+          } catch (err) {
+            console.error(err);
+          }
+        } else {
+          toast.error("New & Old Password Should not Match!!");
+        }
+      } else {
+        toast.error("Both New Password Should Match!!");
+      }
+    }
+  };
+
   return (
     <div className="flex items-start h-[100vh]">
       <Leftbar />
@@ -134,7 +175,7 @@ const Settings = () => {
                         className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                       >
                         New Password
-                        <Required /> 
+                        <Required />
                       </label>
                       <div className="w-full relative mt-1">
                         <input
@@ -282,6 +323,7 @@ const Settings = () => {
                   className={`bg-newBlue font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
                   onClick={() => {
                     toggle2factorAuth(twoFactorAuth);
+                    updatePassword();
                   }}
                 >
                   Save

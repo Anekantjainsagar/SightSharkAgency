@@ -1,15 +1,18 @@
 "use client";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CiGrid41, CiSettings, CiWallet } from "react-icons/ci";
 import { IoIosHelpCircleOutline } from "react-icons/io";
 import { IoNewspaperOutline } from "react-icons/io5";
 import Cookies from "js-cookie";
 import HelpPage from "@/app/Components/Utils/HelpPage";
+import Context from "@/app/Context/Context";
 
 const Leftbar = () => {
+  const { criticalNotificationsLength } = useContext(Context);
   const [show, setShow] = useState(false);
+
   let mainRoutes = [
     {
       title: "Overview",
@@ -254,7 +257,7 @@ const Leftbar = () => {
   ];
   let settingRoutes = [
     {
-      title: "Alerts (25)",
+      title: `Alerts (${criticalNotificationsLength})`,
       route: "/alerts",
       icon: <IoIosHelpCircleOutline className="text-2xl" />,
       temp_icon: [

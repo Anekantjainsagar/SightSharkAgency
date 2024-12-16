@@ -1,11 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AddAgency from "@/app/Components/agencies/AddAgency";
 import Notify from "@/app/Components/Overview/Notify";
+import Context from "../Context/Context";
 
 const Alerts = () => {
+  const { criticalNotifications, alerts } = useContext(Context);
   const [page, setPage] = useState(1);
   const [addAgency, setAddAgency] = useState(false);
 
@@ -40,50 +42,37 @@ const Alerts = () => {
               </div>
               <div className="gradient-line my-4"></div>
               {page == 1 ? (
-                <div className="h-[72vh] pr-5 overflow-y-auto small-scroller">
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
+                <div
+                  className={`h-[72vh] pr-5 overflow-y-auto ${
+                    criticalNotifications?.length == 0 &&
+                    "flex items-center justify-center"
+                  } small-scroller`}
+                >
+                  {criticalNotifications?.map((e, i) => {
+                    return (
+                      <Notify data={e} key={i} status={e?.type != "error"} />
+                    );
+                  })}
+                  {criticalNotifications?.length == 0 && (
+                    <p className="text-gray-400 text-xl">
+                      No Critical Notifications Found
+                    </p>
+                  )}
                 </div>
               ) : (
-                <div className="h-[72vh] pr-5 overflow-y-auto small-scroller">
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
-                  <Notify status={true} />
-                  <Notify status={false} />
+                <div
+                  className={`h-[72vh] pr-5 overflow-y-auto ${
+                    alerts?.length == 0 && "flex items-center justify-center"
+                  } small-scroller`}
+                >
+                  {alerts?.map((e, i) => {
+                    return (
+                      <Notify data={e} key={i} status={e?.type != "error"} />
+                    );
+                  })}
+                  {alerts?.length == 0 && (
+                    <p className="text-gray-400 text-xl">No Alerts Found</p>
+                  )}
                 </div>
               )}
             </div>

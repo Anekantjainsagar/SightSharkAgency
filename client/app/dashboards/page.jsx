@@ -58,7 +58,16 @@ const Overview = () => {
                       key={i}
                       className="py-4 px-7 border-gray-200/5 border-y grid dashboardPage items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
                     >
-                      <h5 className="min-[1600px]:ml-0 ml-2">
+                      <h5
+                        className="underline hover:text-blue-400 transition-all"
+                        onClick={() => {
+                          if (data?.template_link) {
+                            window.open(data?.template_link, "__blank");
+                          } else {
+                            toast.error("No URL Found");
+                          }
+                        }}
+                      >
                         {data?.client_name}
                       </h5>
                       <p className="text-center">Parent Report</p>

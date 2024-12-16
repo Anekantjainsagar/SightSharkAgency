@@ -10,7 +10,6 @@ import { TfiReload } from "react-icons/tfi";
 import toast from "react-hot-toast";
 import { BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
-import axios from "axios";
 
 function formatName(input) {
   return input
@@ -66,21 +65,30 @@ const Block = ({ e }) => {
 
   const handleReloadClick = async () => {
     setIsRotating(true);
-    try {
-      const token = getCookie("token");
 
-      const response = await axios.get(`${BACKEND_URI}/data-refresh/refersh/`, {
-        params: {
-          agency_id: userData?.agency_id,
-          script_name: e?.platform,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+    const token = getCookie("token");
+    const url = `${BACKEND_URI}/data-refresh/refersh?agency_id=${encodeURIComponent(
+      userData?.agency_id
+    )}&script_name=${encodeURIComponent(e?.platform)}`;
+    const headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${token.trim()}`,
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: "GET",
+        headers,
       });
 
-      const responseData = response.data;
+      if (!response.ok) {
+        console.error("Fetch Error:", response.statusText);
+        toast.error("Internal Server Error");
+        return;
+      }
+
+      const responseData = await response.json();
       if (responseData?.message?.includes("Failed")) {
         toast.error(responseData.message);
       } else {
@@ -95,6 +103,7 @@ const Block = ({ e }) => {
       setIsRotating(false);
     }, 1000);
   };
+
   return (
     <div className="border border-gray-400/20 rounded-2xl p-2">
       <div className="py-10 border border-gray-400/20 rounded-2xl cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-1 h-fit">
