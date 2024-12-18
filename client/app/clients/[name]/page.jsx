@@ -171,12 +171,12 @@ const Overview = ({ params }) => {
   );
 };
 
-const Circle0 = () => {
-  return (
-    <div className="bg-[#FFE8CC] p-2 w-7 rounded-full aspect-square">
-      <div className="bg-[#FDC53E] w-full h-full rounded-full"></div>
-    </div>
-  );
-};
+// const Circle0 = () => {
+//   return (
+//     <div className="bg-[#FFE8CC] p-2 w-7 rounded-full aspect-square">
+//       <div className="bg-[#FDC53E] w-full h-full rounded-full"></div>
+//     </div>
+//   );
+// };
 
 export default Overview;
