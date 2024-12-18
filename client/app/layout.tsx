@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import State from "@/app/Context/State";
+import { Toaster } from "react-hot-toast";
 
 const inter = Poppins({
   subsets: ["latin"],
@@ -21,7 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <State>{children}</State>
+        <State>
+          <Toaster />
+          {children}
+        </State>
       </body>
     </html>
   );

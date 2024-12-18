@@ -1,7 +1,7 @@
 "use client";
 import React, { useContext, useState } from "react";
 import Modal from "react-modal";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { getCookie } from "cookies-next";
 import { BACKEND_URI } from "@/app/utils/url";
 import Context from "@/app/Context/Context";
@@ -68,7 +68,6 @@ const DeleteUser = ({ showSubscribe, setShowSubscribe, data }) => {
 
   return (
     <div className="z-50">
-      <Toaster />
       <Modal
         isOpen={showSubscribe}
         onRequestCl2ose={closeModal}

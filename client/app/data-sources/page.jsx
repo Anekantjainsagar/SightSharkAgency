@@ -19,8 +19,40 @@ function formatName(input) {
 }
 
 const DataSources = () => {
-  const { platformsData } = useContext(Context);
+  const { platformsData, getDataSourcesDataFromAPI } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
+
+  const refreshByAgencyId = async (platformList) => {
+    let platforms = platformList?.map((e) => e?.platform);
+
+    try {
+      const token = getCookie("token");
+
+      const response = await fetch(`${BACKEND_URI}/data-refresh/refersh-all`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(platforms),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      if (responseData?.msg?.includes("Failed")) {
+        toast.error(responseData.msg);
+      } else {
+        toast.success(responseData.msg);
+      }
+      getDataSourcesDataFromAPI();
+    } catch (err) {
+      console.error("Fetch Error:", err.message);
+      toast.error("Internal Server Error");
+    }
+  };
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -40,7 +72,12 @@ const DataSources = () => {
                   ({platformsData?.platforms?.length})
                 </span>
               </h3>
-              <button className="bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3">
+              <button
+                onClick={() => {
+                  refreshByAgencyId(platformsData?.platforms);
+                }}
+                className="bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
+              >
                 <TfiReload />
                 Refresh All
               </button>
@@ -60,7 +97,7 @@ const DataSources = () => {
 };
 
 const Block = ({ e }) => {
-  const { userData } = useContext(Context);
+  const { userData, getDataSourcesDataFromAPI } = useContext(Context);
   const [isRotating, setIsRotating] = useState(false);
 
   const handleReloadClick = async () => {
@@ -94,6 +131,7 @@ const Block = ({ e }) => {
       } else {
         toast.success(responseData.message);
       }
+      getDataSourcesDataFromAPI();
     } catch (err) {
       console.error("Fetch Error:", err.message);
       toast.error("Internal Server Error");

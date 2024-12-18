@@ -211,7 +211,7 @@ const State = (props) => {
 
   const getUsers = (page = 1, order_by = "created_at", type = true) => {
     let cookie = getCookie("token");
-    let limit = users?.limit ? users?.limit : 6;
+    let limit = users?.limit ? users?.limit : 7;
 
     if (cookie?.length > 5) {
       try {
@@ -487,6 +487,7 @@ const State = (props) => {
         actualUser,
         rawReportsClient,
         getRawReports,
+        getDataSourcesDataFromAPI,
       }}
     >
       {props.children}

@@ -10,7 +10,7 @@ import HelpPage from "@/app/Components/Utils/HelpPage";
 import Context from "@/app/Context/Context";
 
 const Leftbar = () => {
-  const { criticalNotificationsLength } = useContext(Context);
+  const { criticalNotificationsLength, alertsLength } = useContext(Context);
   const [show, setShow] = useState(false);
 
   let mainRoutes = [
@@ -257,7 +257,7 @@ const Leftbar = () => {
   ];
   let settingRoutes = [
     {
-      title: `Alerts (${criticalNotificationsLength})`,
+      title: `Alerts (${criticalNotificationsLength + alertsLength})`,
       route: "/alerts",
       icon: <IoIosHelpCircleOutline className="text-2xl" />,
       temp_icon: [

@@ -2,8 +2,6 @@
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import { Toaster } from "react-hot-toast";
-// import { useRouter } from "next/navigation";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -27,7 +25,6 @@ const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
 
   return (
     <div className="z-50">
-      <Toaster />
       <Modal
         isOpen={showSubscribe}
         onRequestCl2ose={closeModal}

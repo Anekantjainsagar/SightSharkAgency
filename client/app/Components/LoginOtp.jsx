@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import Modal from "react-modal";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import OtpInput from "react-otp-input";
 import Context from "../Context/Context";
@@ -71,7 +71,6 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
 
   return (
     <div className="z-50">
-      <Toaster />
       <Modal
         isOpen={showSubscribe}
         onRequestCl2ose={closeModal}

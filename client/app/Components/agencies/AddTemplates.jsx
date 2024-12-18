@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
-import { Toaster } from "react-hot-toast";
 import Required from "../Utils/Required";
 
 const customStyles = {
@@ -40,7 +39,6 @@ const AddTemplates = ({ showSubscribe, setShowSubscribe }) => {
 
   return (
     <div className="z-50">
-      <Toaster />
       <Modal
         isOpen={showSubscribe}
         onRequestCl2ose={closeModal}

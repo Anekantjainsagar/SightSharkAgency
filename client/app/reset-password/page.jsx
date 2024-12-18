@@ -1,6 +1,6 @@
 "use client";
 import { useContext, useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import RightSide from "@/app/Components/Login/RightSide";
 import Image from "next/image";
@@ -75,7 +75,6 @@ export default function ResetPassword() {
 
   return (
     <div className="bg-[#091022] w-full flex items-start justify-between h-[100vh]">
-      <Toaster />{" "}
       <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
         <div className="text-white flex flex-col items-center w-7/12 px-5">
           <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-8 min-[1600px]:mb-20">
@@ -121,7 +120,7 @@ export default function ResetPassword() {
               >
                 {showPassword ? <LuEye /> : <LuEyeOff />}
               </div>{" "}
-            </div>{" "} 
+            </div>{" "}
             {password && (
               <div className="text-sm mb-4">
                 <p
