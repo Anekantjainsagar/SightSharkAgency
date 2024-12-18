@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
-import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
 import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import AddTemplates from "../../Components/agencies/AddTemplates";
@@ -14,8 +13,13 @@ import { FaPlus } from "react-icons/fa";
 
 const Overview = ({ params }) => {
   const history = useRouter();
-  const { agencies, getCredentialsForClient, rawReportsClient, getRawReports } =
-    useContext(Context);
+  const {
+    agencies,
+    getCredentialsForClient,
+    rawReportsClient,
+    getRawReports,
+    setLinkToEmbed,
+  } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
   const [addTemplates, setAddTemplates] = useState(false);
@@ -67,11 +71,8 @@ const Overview = ({ params }) => {
                             <span
                               className="cursor-pointer hover:text-blue-500 transition-all hover:underline"
                               onClick={() => {
-                                window.open(
-                                  e?.report_url,
-                                  "_blank",
-                                  "noopener,noreferrer"
-                                );
+                                setLinkToEmbed(e?.report_url);
+                                history.push("/view-report");
                               }}
                             >
                               Report URL
@@ -87,7 +88,7 @@ const Overview = ({ params }) => {
                     </div>
                   )}
                 </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[33.5vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[61vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <div className="flex items-center justify-between">
                     <h4 className="min-[1600px]:text-xl">Dashboards </h4>
                     <button
@@ -115,7 +116,7 @@ const Overview = ({ params }) => {
                     </div>
                   )}
                 </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[26vh]">
+                {/* <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[26vh]">
                   <div className="flex items-center justify-between w-full">
                     <h4 className="min-[1600px]:text-xl">Recent Activity </h4>
                     <p
@@ -160,7 +161,7 @@ const Overview = ({ params }) => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

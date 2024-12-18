@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Context from "./Context";
 import axios from "axios";
-import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
-import { getCookie } from "cookies-next";
-import { usePathname, useRouter } from "next/navigation";
+import Context from "./Context";
 import toast from "react-hot-toast";
+import { getCookie } from "cookies-next";
+import React, { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 
 const State = (props) => {
   const pathname = usePathname();
@@ -26,6 +26,7 @@ const State = (props) => {
   const [alerts, setAlerts] = useState([]);
   const [alertsLength, setAlertsLength] = useState(0);
   const [rawReportsClient, setRawReportsClient] = useState([]);
+  const [linkToEmbed, setLinkToEmbed] = useState("");
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -488,6 +489,8 @@ const State = (props) => {
         rawReportsClient,
         getRawReports,
         getDataSourcesDataFromAPI,
+        linkToEmbed,
+        setLinkToEmbed,
       }}
     >
       {props.children}

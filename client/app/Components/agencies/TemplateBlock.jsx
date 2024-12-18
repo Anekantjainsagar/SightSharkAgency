@@ -1,11 +1,18 @@
+import Context from "@/app/Context/Context";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useContext } from "react";
 
 const TemplateBlock = ({ data }) => {
+  const history = useRouter();
+  const { setLinkToEmbed } = useContext(Context);
+
   return (
     <div
       className="border border-gray-400/20 rounded-xl p-1 relative hover:scale-105 transition-all"
       onClick={() => {
-        window.open(data?.template_link, "__blank");
+        setLinkToEmbed(data?.template_link);
+        history.push("/view-report");
       }}
     >
       {data?.templat_image && (

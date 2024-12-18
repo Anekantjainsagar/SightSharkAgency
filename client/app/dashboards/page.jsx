@@ -5,10 +5,11 @@ import Navbar from "@/app/Components/Utils/Navbar";
 import AddAgency from "@/app/Components/agencies/AddAgency";
 import Context from "../Context/Context";
 import FilterData from "@/app/Components/agencies/FilterData";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const Overview = () => {
-  const { agencies } = useContext(Context);
+  const history = useRouter();
+  const { agencies, setLinkToEmbed } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   return (
@@ -61,11 +62,8 @@ const Overview = () => {
                       <h5
                         className="underline hover:text-blue-400 transition-all"
                         onClick={() => {
-                          if (data?.template_link) {
-                            window.open(data?.template_link, "__blank");
-                          } else {
-                            toast.error("No URL Found");
-                          }
+                          setLinkToEmbed(data?.template_link);
+                          history.push("/view-report");
                         }}
                       >
                         {data?.client_name}
@@ -74,11 +72,8 @@ const Overview = () => {
                       <h5
                         className="text-center underline hover:text-blue-400 transition-all"
                         onClick={() => {
-                          if (data?.template_link) {
-                            window.open(data?.template_link, "__blank");
-                          } else {
-                            toast.error("No URL Found");
-                          }
+                          setLinkToEmbed(data?.template_link);
+                          history.push("/view-report");
                         }}
                       >
                         {data?.template_name}

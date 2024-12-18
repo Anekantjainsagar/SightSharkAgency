@@ -4,6 +4,7 @@ import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
 import Context from "../Context/Context";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 
 function formatName(input) {
   return input
@@ -13,7 +14,9 @@ function formatName(input) {
 }
 
 const Overview = () => {
-  const { mainDataSource, mainTemplates, actualUser } = useContext(Context);
+  const history = useRouter();
+  const { mainDataSource, mainTemplates, actualUser, setLinkToEmbed } =
+    useContext(Context);
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -28,17 +31,7 @@ const Overview = () => {
             <div className="mb-3 text-lg">
               <h5 className="cursor-pointer w-fit">
                 Agency Name:-{" "}
-                <span
-                  onClick={() => {
-                    window.open(
-                      "https://sight-shark-admin.vercel.app/",
-                      "__blank"
-                    );
-                  }}
-                  className="hover:underline hover:text-blue-300 transition-all"
-                >
-                  {actualUser?.agency_name}
-                </span>{" "}
+                <span className="font-semibold">{actualUser?.agency_name}</span>{" "}
                 <span className="mx-2">|</span> Client Portal:-{" "}
                 <span
                   onClick={() => {
@@ -146,7 +139,8 @@ const Overview = () => {
                     <div
                       key={i}
                       onClick={() => {
-                        window.open(e?.template_link, "__blank");
+                        setLinkToEmbed(e?.template_link);
+                        history.push("/view-report");
                       }}
                       className="border flex flex-col items-center justify-center border-gray-300/20 rounded-xl cursor-pointer py-3 px-3"
                     >
