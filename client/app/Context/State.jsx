@@ -27,6 +27,7 @@ const State = (props) => {
   const [alertsLength, setAlertsLength] = useState(0);
   const [rawReportsClient, setRawReportsClient] = useState([]);
   const [linkToEmbed, setLinkToEmbed] = useState("");
+  const [timezones, setTimezones] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -44,11 +45,7 @@ const State = (props) => {
             setUserData(res.data);
           })
           .catch((err) => {
-            if (err.status) {
-              if (pathname != "/reset-password") {
-                history.push("/");
-              }
-            }
+            console.log(err);
           });
       } catch (error) {
         console.log(error);
@@ -59,7 +56,6 @@ const State = (props) => {
   const getUserAgency = async () => {
     try {
       if (userData?.agency_id) {
-        console.log(userData?.agency_id);
         let cookie = getCookie("token");
         const response = await axios.get(
           `${BACKEND_URI}/user/admin-agency-profile`,
@@ -72,9 +68,26 @@ const State = (props) => {
           }
         );
         setActualUser(response.data.data);
-      } else {
-        console.error("Agency ID is not defined.");
       }
+    } catch (error) {
+      console.error(
+        "Error fetching user agency:",
+        error.response || error.message
+      );
+    }
+  };
+
+  const getTimezones = async () => {
+    try {
+      let cookie = getCookie("token");
+      const response = await axios.get(`${BACKEND_URI}/client/timezones`, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${cookie}`,
+        },
+      });
+      setTimezones(response.data);
     } catch (error) {
       console.error(
         "Error fetching user agency:",
@@ -423,6 +436,7 @@ const State = (props) => {
 
   useEffect(() => {
     getAgencies();
+    getTimezones();
     getUsers();
     getMainDataSources(userData?.agency_id);
     getMainTemplates(userData?.agency_id);
@@ -491,6 +505,7 @@ const State = (props) => {
         getDataSourcesDataFromAPI,
         linkToEmbed,
         setLinkToEmbed,
+        timezones,
       }}
     >
       {props.children}

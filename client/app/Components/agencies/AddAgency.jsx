@@ -13,6 +13,7 @@ import { BACKEND_URI } from "@/app/utils/url";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { getCookie } from "cookies-next";
 import Info from "../Login/Info";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -38,8 +39,13 @@ function formatName(input) {
 }
 
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
-  const { mainDataSource, mainTemplates, getAgencies, checkPasswordCriteria } =
-    useContext(Context);
+  const {
+    mainDataSource,
+    mainTemplates,
+    getAgencies,
+    checkPasswordCriteria,
+    timezones,
+  } = useContext(Context);
   let maxPage = 6;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -114,7 +120,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         }, {});
 
         const response = await axios.post(
-          `${BACKEND_URI}/client/add-client-credentials?client_id=${client_id}&parent_name=${parent_name}`,
+          `${BACKEND_URI}/client/update-client-credentials?client_id=${client_id}&parent_name=${parent_name}`,
           { platforms },
           {
             headers: {
@@ -164,7 +170,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
 
         try {
           const response = await axios.post(
-            `${BACKEND_URI}/client/create/?${queryParams}`,
+            `${BACKEND_URI}/client/create?${queryParams}`,
             formData,
             {
               headers: {
@@ -335,8 +341,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Website"
-                      className="bg-[#898989]/15 outline-none 
-h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
@@ -354,9 +359,39 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       }}
                       type="text"
                       placeholder="Enter Location"
-                      className="bg-[#898989]/15 outline-none 
-h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
+                  </div>{" "}
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="warranty"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                    >
+                      Warranty Period
+                      <Required />
+                    </label>
+
+                    <div className="relative w-full">
+                      <select
+                        value={data?.warrenty}
+                        onChange={(e) => {
+                          setData({ ...data, warrenty: e.target.value });
+                        }}
+                        className="bg-[#898989]/15 w-full outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
+                      >
+                        {timezones?.map((e, i) => {
+                          return (
+                            <option value={e} key={i} className="bg-main">
+                              {e}
+                            </option>
+                          );
+                        })}
+                      </select>
+                      {/* Custom dropdown icon */}
+                      <span className="absolute right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                        <MdKeyboardArrowDown />
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
