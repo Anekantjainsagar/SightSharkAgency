@@ -46,7 +46,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     checkPasswordCriteria,
     timezones,
   } = useContext(Context);
-  let maxPage = 6;
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [fileInput, setFileInput] = useState();
@@ -59,6 +58,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     parent_name: "",
     website: "",
     location: "",
+    timezone: "",
     keyContact: {
       name: "",
       profile: "",
@@ -160,10 +160,13 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           key_contact_designation: data?.keyContact?.designation,
           key_contact_email_address: data?.keyContact?.email,
           key_contact_phone: data?.keyContact?.phone,
+          time_zone: data?.timezone,
         }).toString();
 
         const formData = new FormData();
-        formData.append("platform_name", data?.platforms);
+        formData.append("platform_name", data?.platforms || []);
+        formData.append("template_ids", data?.templates || []);
+
         formData.append("profile_picture", fileInput || "");
         formData.append("profile_picture_filename", fileInput?.name || "");
         formData.append("profile_picture_content_type", fileInput?.type || "");
@@ -200,6 +203,10 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
       toast.error("Please fill all the required details");
     }
   };
+
+  useEffect(() => {
+    setData({ ...data, timezone: timezones[0]?.region_name });
+  }, [timezones]);
 
   return (
     <div className="z-50">
@@ -346,43 +353,30 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   </div>
                   <div className="flex flex-col">
                     <label
-                      htmlFor="location"
+                      htmlFor="Timezone"
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
-                      Location
-                    </label>
-                    <input
-                      id="location"
-                      value={data?.location}
-                      onChange={(e) => {
-                        setData({ ...data, location: e.target.value });
-                      }}
-                      type="text"
-                      placeholder="Enter Location"
-                      className="bg-[#898989]/15 outline-none h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
-                    />
-                  </div>{" "}
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="warranty"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
-                    >
-                      Warranty Period
+                      Timezone
                       <Required />
                     </label>
 
                     <div className="relative w-full">
                       <select
-                        value={data?.warrenty}
+                        value={data?.timezone}
                         onChange={(e) => {
-                          setData({ ...data, warrenty: e.target.value });
+                          setData({ ...data, timezone: e.target.value });
                         }}
+                        id="Timezone"
                         className="bg-[#898989]/15 w-full outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
                       >
                         {timezones?.map((e, i) => {
                           return (
-                            <option value={e} key={i} className="bg-main">
-                              {e}
+                            <option
+                              value={e?.region_name}
+                              key={i}
+                              className="bg-main"
+                            >
+                              {e?.region_name}
                             </option>
                           );
                         })}
@@ -599,7 +593,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   allowedPlatforms={data?.platforms}
                 />
               </div>
-            ) : page === 5 ? (
+            ) : page === 6 ? (
               <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
                 <div className="grid grid-cols-4 gap-x-4 mt-2">
                   {mainTemplates?.map((e, i) => {
@@ -785,14 +779,15 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
             </button>
             <button
               onClick={() => {
-                if (page == maxPage) {
+                if (page == nav_data?.length) {
                   handleSave();
                 } else {
                   if (
                     page == 1 &&
                     data?.name &&
                     data?.website &&
-                    data?.parent_name
+                    data?.parent_name &&
+                    data?.timezone
                   ) {
                     setPage(page + 1);
                   } else {
@@ -813,7 +808,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
               }}
               className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
             >
-              {page == maxPage ? "Submit" : "Next"}
+              {page == nav_data?.length ? "Submit" : "Next"}
             </button>
           </div>
         </div>
@@ -832,7 +827,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
         ?.map((e) => {
           let temp = mainDataSource?.find((item) => item?.name === e?.platform);
           if (temp?.img_link) {
-            return { ...e, img_link: temp?.img_link };
+            return { ...e, img_link: temp?.img_link, report_start_date: "" };
           }
           return e;
         });
@@ -866,7 +861,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   return (
     <div className="grid grid-cols-1 gap-3 mb-6">
       {credentialsState?.map((e, i) => (
-        <div key={i} className="border border-gray-300/30 px-3 py-3 rounded-lg">
+        <div key={i} className="border border-gray-300/30 px-3 pt-3 rounded-lg">
           <div className="flex items-center">
             <Image
               src={e?.img_link}
@@ -883,6 +878,19 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
             </label>
           </div>
           <div className="mt-3">
+            <input
+              type="date"
+              value={e?.report_start_date?.replace("_", " ").toUpperCase()}
+              onChange={(event) =>
+                handleInputChange(
+                  e.platform,
+                  "report_start_date",
+                  event.target.value
+                )
+              }
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+            />
+
             {/* Show inputs only for the current platform */}
             <input
               type="text"
@@ -890,16 +898,35 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                 ?.replace("_", " ")
                 .toUpperCase()}
               value={
-                e?.creds_structure?.account_id?.includes("_id")
+                e?.creds_structure?.account_id?.includes("_id") ||
+                e?.creds_structure?.account_id == "acccount_id"
                   ? ""
                   : e?.creds_structure?.account_id
               }
               onChange={(event) =>
                 handleInputChange(e.platform, "account_id", event.target.value)
               }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
             />
-
+            <input
+              type="text"
+              placeholder={e?.creds_structure?.account_filter
+                ?.replace("_", " ")
+                .toUpperCase()}
+              value={
+                e?.creds_structure?.account_filter == "account_filter"
+                  ? ""
+                  : e?.creds_structure?.account_filter
+              }
+              onChange={(event) =>
+                handleInputChange(
+                  e.platform,
+                  "account_filter",
+                  event.target.value
+                )
+              }
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+            />
             {Object.keys(e?.creds_structure?.credentials || {}).map((key) => (
               <input
                 key={key}
@@ -913,7 +940,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                 onChange={(event) =>
                   handleInputChange(e.platform, key, event.target.value, true)
                 }
-                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
+                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
               />
             ))}
           </div>
