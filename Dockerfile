@@ -22,8 +22,3 @@ EXPOSE 3000
 
 CMD ["npm", "run", "start"]
 
-# Build command
-# docker build --build-arg NEXT_PUBLIC_BACKEND_URI=https://admin-portal-backend-118842008879.asia-south1.run.app/ --build-arg NEXT_PUBLIC_ADMIN_BACKEND_URI=https://admin-portal-backend-118842008879.asia-south1.run.app/ -t agency-portal-frontendx .
-
-# Run command
-# docker run -p 3000:3000 agency-portal-frontend
