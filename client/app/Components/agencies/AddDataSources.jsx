@@ -315,19 +315,20 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
     useContext(Context);
 
   useEffect(() => {
-    if (credentialsState.length == 0) {
-      const newCredentials = mainDataSource
-        ?.filter((e) => allowedPlatforms?.includes(e?.name))
-        ?.map((e) => {
-          return {
-            ...clientCreds?.data?.find(
-              (item) => item?.platform_name === e?.name
-            ),
-            img_link: e?.img_link,
-          };
-        });
-      setCredentialsState(newCredentials);
-    }
+    // if (credentialsState.length == 0) {
+    const newCredentials = mainDataSource
+      ?.filter((e) => allowedPlatforms?.includes(e?.name))
+      ?.map((e) => {
+        return {
+          ...clientCreds?.data?.find((item) => item?.platform_name === e?.name),
+          img_link: e?.img_link,
+          ...dataSourceStructure?.find((item) => item?.platform == e?.name)
+            ?.creds_structure,
+          report_start_date: "",
+        };
+      });
+    setCredentialsState(newCredentials);
+    // }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
@@ -377,10 +378,27 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
             </label>
           </div>
           <div className="mt-3">
+            {" "}
+            <input
+              type="date"
+              value={e?.report_start_date?.replace("_", " ").toUpperCase()}
+              onChange={(event) =>
+                handleInputChange(
+                  e.platform,
+                  "report_start_date",
+                  event.target.value
+                )
+              }
+              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+            />
             <input
               type="text"
               placeholder={e?.account_id?.replace("_", " ").toUpperCase()}
-              value={e?.account_id === "account_id" ? "" : e?.account_id}
+              value={
+                e?.account_id?.includes("_id") || e?.account_id == "acccount_id"
+                  ? ""
+                  : e?.account_id
+              }
               onChange={(event) =>
                 handleInputChange(
                   e.platform_name,

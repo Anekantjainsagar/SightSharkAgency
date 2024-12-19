@@ -87,7 +87,7 @@ const State = (props) => {
           Authorization: `Bearer ${cookie}`,
         },
       });
-      setTimezones(response.data);
+      setTimezones(response.data.data);
     } catch (error) {
       console.error(
         "Error fetching user agency:",
