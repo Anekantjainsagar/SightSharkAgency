@@ -36,7 +36,14 @@ function formatName(input) {
   return input
     .toLowerCase()
     .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => {
+      // Check if the word contains "id" or "url"
+      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
+        return word.toUpperCase();
+      }
+      // Otherwise, capitalize the first letter of the word
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
     .join(" ");
 }
 
@@ -44,7 +51,12 @@ function formatNameWithoutUppercase(input) {
   return input
     .toLowerCase()
     .split("_")
-    .map((word) => word.charAt(0) + word.slice(1))
+    .map((word) => {
+      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
+        return word.toUpperCase();
+      }
+      return word.charAt(0) + word.slice(1);
+    })
     .join(" ");
 }
 
@@ -955,7 +967,9 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     htmlFor={e?.platform}
                     className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
                   >
-                    {e?.creds_structure?.account_id?.replace(/_/g, " ") + " :"}
+                    {formatName(
+                      e?.creds_structure?.account_id?.replace("_", " ")
+                    ) + " :"}
                   </label>
                   <input
                     type="text"
