@@ -164,3 +164,8 @@ input[type="number"] {
   background-color: #ff8800;
   border-color: #ffa500;
 }
+
+
+.szh-accordion__item-btn {
+  width: 100% ;
+}

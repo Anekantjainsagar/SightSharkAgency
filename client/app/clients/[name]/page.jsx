@@ -91,12 +91,12 @@ const Overview = ({ params }) => {
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[61vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <div className="flex items-center justify-between">
                     <h4 className="min-[1600px]:text-xl">Dashboards </h4>
-                    <button
+                    {/* <button
                       onClick={() => {}}
                       className="bg-newBlue p-2.5 mr-3 justify-center rounded-full flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
                     >
                       <FaPlus className="text-sm" />
-                    </button>
+                    </button> */}
                   </div>
                   <div className="gradient-line my-4"></div>
                   {data?.template_name?.length > 0 ? (

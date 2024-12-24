@@ -18,6 +18,17 @@ const Overview = () => {
   const { mainDataSource, mainTemplates, actualUser, setLinkToEmbed } =
     useContext(Context);
 
+    function calculateRemainingDays(startDate, monthsToAdd) {
+      const start = new Date(startDate);
+      const today = new Date();
+      const end = new Date(start);
+      end.setMonth(start.getMonth() + monthsToAdd);
+      const timeDiff = end - today;
+      const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      return daysRemaining > 0 ? daysRemaining : 0;
+  }
+  
+
   return (
     <div className="flex items-start h-[100vh]">
       <Leftbar />
@@ -52,26 +63,25 @@ const Overview = () => {
               {[
                 {
                   name: "Total Clients",
-                  value: 20,
+                  value: actualUser?.license_limit,
                   img: "/Overview/Icons/total.png",
                 },
                 {
                   name: "Active Clients",
-                  value: 10,
+                  value: actualUser?.active_clients,
                   img: "/Overview/Icons/active.png",
                 },
                 {
-                  name: "Warranty Period",
-                  value: "15 days left",
-                  img: "/Overview/Icons/dashboard.png",
-                },
-                {
-                  name: "Status",
-                  value:
-                    actualUser?.status[0]?.toUpperCase() +
-                    actualUser?.status?.slice(1),
+                  name: "License Limit",
+                  value: `${actualUser?.current_number_of_clients === undefined ? actualUser?.current_number_of_clients : 0}/${actualUser?.license_limit === undefined ? actualUser?.license_limit : 0}`,
                   img: "/Overview/Icons/satisfaction.png",
                 },
+                {
+                  name: "Warranty Period",
+                  value: `${calculateRemainingDays(actualUser?.deployment_date,actualUser?.warrenty_period)} days left`,
+                  img: "/Overview/Icons/dashboard.png",
+                }
+                
               ].map((e, i) => {
                 return (
                   <div

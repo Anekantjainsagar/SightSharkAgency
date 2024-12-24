@@ -14,6 +14,8 @@ import { LuEye, LuEyeOff } from "react-icons/lu";
 import { getCookie } from "cookies-next";
 import Info from "../Login/Info";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { Accordion, AccordionItem } from "@szhsin/react-accordion";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -38,6 +40,14 @@ function formatName(input) {
     .join(" ");
 }
 
+function formatNameWithoutUppercase(input) {
+  return input
+    .toLowerCase()
+    .split("_")
+    .map((word) => word.charAt(0) + word.slice(1))
+    .join(" ");
+}
+
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const {
     mainDataSource,
@@ -56,6 +66,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     profile: "",
     name: "",
     parent_name: "",
+    report_start_date: "",
     website: "",
     location: "",
     timezone: "",
@@ -103,8 +114,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Key Contact Details",
     "Data Sources",
     "Data Sources IDs",
-    "Dashboard Templates",
     "Credentials",
+    "Dashboard Templates",
   ];
 
   const addClientCredentials = async (client_id, parent_name) => {
@@ -113,7 +124,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         const platforms = credentialsState.reduce((acc, e) => {
           acc[e?.platform] = {
             ...e.creds_structure,
-            report_start_date: "2024-01-11",
+            // report_start_date: "2024-01-11",
             account_filter: "blank",
           };
           return acc;
@@ -387,6 +398,26 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       </span>
                     </div>
                   </div>
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="emailKey"
+                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                    >
+                      Report Start Date
+                      <Required />
+                    </label>
+                    <input
+                      type="date"
+                      value={data?.report_start_date}
+                      onChange={(event) =>
+                        setData({
+                          ...data,
+                          report_start_date: event.target.value,
+                        })
+                      }
+                      className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                    />
+                  </div>
                 </div>
               </div>
             ) : page == 2 ? (
@@ -625,6 +656,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
             ) : (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
                 <div className="grid grid-cols-1 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
+                  
                   <div className="flex flex-col">
                     <label
                       htmlFor="emailKey"
@@ -772,6 +804,9 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
               } h-10 min-[1600px]:h-12 rounded-lg`}
               disabled={page == 1}
               onClick={() => {
+                if (page == 4) {
+                  setCredentialsState([]);
+                }
                 setPage(page - 1);
               }}
             >
@@ -784,6 +819,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                 } else {
                   if (
                     page == 1 &&
+                    data?.profile &&
                     data?.name &&
                     data?.website &&
                     data?.parent_name &&
@@ -819,7 +855,6 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
 
 const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   const { mainDataSource, dataSourceStructure } = useContext(Context);
-
   useEffect(() => {
     if (credentialsState?.length == 0) {
       const newCredentials = dataSourceStructure
@@ -859,93 +894,147 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-3 mb-6">
-      {credentialsState?.map((e, i) => (
-        <div key={i} className="border border-gray-300/30 px-3 pt-3 rounded-lg">
-          <div className="flex items-center">
-            <Image
-              src={e?.img_link}
-              alt={e?.platform}
-              width={1000}
-              height={1000}
-              className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
-            />
-            <label
-              htmlFor={e?.platform}
-              className="text-[13px] min-[1600px]:text-base cursor-pointer"
+    <div className="flex flex-col w-full mb-6">
+      <Accordion>
+        {credentialsState?.map((e, i) => (
+          <AccordionItem
+            key={i}
+            header={({ state }) => (
+              <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
+                <div
+                  className={`flex items-center ${
+                    state.isEnter ? "invisible" : "visible"
+                  }`}
+                >
+                  <Image
+                    src={e?.img_link}
+                    alt={e?.platform}
+                    width={1000}
+                    height={1000}
+                    className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
+                  />
+                  <label
+                    htmlFor={e?.platform}
+                    className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                  >
+                    {formatName(e?.platform)}
+                  </label>
+                </div>
+                <div className="">
+                  {state.isEnter ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+              </div>
+            )}
+          >
+            <div
+              key={i}
+              className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
-              {formatName(e?.platform)}
-            </label>
-          </div>
-          <div className="mt-3">
-            <input
-              type="date"
-              value={e?.report_start_date?.replace("_", " ").toUpperCase()}
-              onChange={(event) =>
-                handleInputChange(
-                  e.platform,
-                  "report_start_date",
-                  event.target.value
-                )
-              }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-            />
+              <div
+                className={`flex items-center flex-col gap-4 justify-center basis-[30%]`}
+              >
+                <Image
+                  src={e?.img_link}
+                  alt={e?.platform}
+                  width={1000}
+                  height={1000}
+                  className="min-[1600px]:w-12 min-[1600px]:h-16 w-12 h-16 mr-2 aspect-square object-contain"
+                />
+                <label
+                  htmlFor={e?.platform}
+                  className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
+                >
+                  {formatName(e?.platform)}
+                </label>
+              </div>
+              <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div>
+              <div className="mt-3 flex-1 px-6">
+                {/* Show inputs only for the current platform */}
+                <div className="flex flex-row gap-2 justify-between capitalize items-center">
+                  <label
+                    htmlFor={e?.platform}
+                    className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                  >
+                    {e?.creds_structure?.account_id?.replace(/_/g, " ") + " :"}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={formatName(
+                      e?.creds_structure?.account_id?.replace("_", " ")
+                    )}
+                    value={""}
+                    onChange={(event) =>
+                      handleInputChange(
+                        e.platform,
+                        "account_id",
+                        event.target.value
+                      )
+                    }
+                    className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                  />
+                </div>
 
-            {/* Show inputs only for the current platform */}
-            <input
-              type="text"
-              placeholder={e?.creds_structure?.account_id
-                ?.replace("_", " ")
-                .toUpperCase()}
-              value={
-                e?.creds_structure?.account_id?.includes("_id") ||
-                e?.creds_structure?.account_id == "acccount_id"
-                  ? ""
-                  : e?.creds_structure?.account_id
-              }
-              onChange={(event) =>
-                handleInputChange(e.platform, "account_id", event.target.value)
-              }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-            />
-            <input
-              type="text"
-              placeholder={e?.creds_structure?.account_filter
-                ?.replace("_", " ")
-                .toUpperCase()}
-              value={
-                e?.creds_structure?.account_filter == "account_filter"
-                  ? ""
-                  : e?.creds_structure?.account_filter
-              }
-              onChange={(event) =>
-                handleInputChange(
-                  e.platform,
-                  "account_filter",
-                  event.target.value
-                )
-              }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-            />
-            {Object.keys(e?.creds_structure?.credentials || {}).map((key) => (
-              <input
-                key={key}
-                type="text"
-                placeholder={formatName(key)}
-                value={
-                  e?.creds_structure?.credentials[key] === key
-                    ? ""
-                    : e?.creds_structure?.credentials[key]
-                }
-                onChange={(event) =>
-                  handleInputChange(e.platform, key, event.target.value, true)
-                }
-                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-              />
-            ))}
-          </div>
-        </div>
-      ))}
+                {e?.creds_structure?.account_filter && (
+                  <div className="flex flex-row justify-between items-center">
+                    <label
+                      htmlFor={e?.platform}
+                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                    >
+                      {e?.creds_structure?.account_filter?.replace(/_/g, " ") +
+                        " :"}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={formatName(
+                        e?.creds_structure?.account_filter?.replace("_", " ")
+                      )}
+                      value={""}
+                      onChange={(event) =>
+                        handleInputChange(
+                          e.platform,
+                          "account_filter",
+                          event.target.value
+                        )
+                      }
+                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                    />
+                  </div>
+                )}
+                {Object.keys(e?.creds_structure?.credentials || {}).map(
+                  (key) => (
+                    <div
+                      key={key}
+                      className="flex flex-row justify-between items-center"
+                    >
+                      <label
+                        htmlFor={e?.platform}
+                        className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                      >
+                        {formatName(key)}
+                      </label>
+                      <input
+                        key={key}
+                        type="text"
+                        placeholder={formatName(key)}
+                        value={""}
+                        onChange={(event) =>
+                          handleInputChange(
+                            e.platform,
+                            key,
+                            event.target.value,
+                            true
+                          )
+                        }
+                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                      />
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 };

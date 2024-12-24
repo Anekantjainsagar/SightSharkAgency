@@ -99,7 +99,7 @@ const State = (props) => {
   useEffect(() => {
     if (pathname == "/" && userData?.id) {
       history.push("/overview");
-      toast.success("Logged in Successfully");
+      // toast.success("Logged in Successfully");
     }
   }, [userData]);
 
