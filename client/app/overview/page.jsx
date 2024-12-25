@@ -63,7 +63,7 @@ const Overview = () => {
               {[
                 {
                   name: "Total Clients",
-                  value: actualUser?.license_limit,
+                  value: actualUser?.current_number_of_clients,
                   img: "/Overview/Icons/total.png",
                 },
                 {
@@ -73,7 +73,7 @@ const Overview = () => {
                 },
                 {
                   name: "License Limit",
-                  value: `${actualUser?.current_number_of_clients === undefined ? actualUser?.current_number_of_clients : 0}/${actualUser?.license_limit === undefined ? actualUser?.license_limit : 0}`,
+                  value: `${actualUser?.current_number_of_clients}/${actualUser?.license_limit}`,
                   img: "/Overview/Icons/satisfaction.png",
                 },
                 {

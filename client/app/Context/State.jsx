@@ -13,6 +13,7 @@ const State = (props) => {
   const [userData, setUserData] = useState();
   const [actualUser, setActualUser] = useState();
   const [users, setUsers] = useState([]);
+  const [searchTextClients,setSearchTextClients] = useState("");
   const [agencies, setAgencies] = useState([]);
   const [mainDataSource, setMainDataSource] = useState();
   const [mainTemplates, setMainTemplates] = useState();
@@ -270,7 +271,7 @@ const State = (props) => {
               (page - 1) * limit
             }&limit=${limit}&sort_by=${order_by}&order=${
               type ? "asc" : "desc"
-            }`,
+            }&client_name=${searchTextClients}`,
             {
               headers: {
                 Accept: "application/json",
@@ -436,6 +437,10 @@ const State = (props) => {
 
   useEffect(() => {
     getAgencies();
+  }, [searchTextClients]);
+
+  useEffect(() => {
+    getAgencies();
     getTimezones();
     getUsers();
     getMainDataSources(userData?.agency_id);
@@ -486,6 +491,8 @@ const State = (props) => {
         users,
         agencies,
         getAgencies,
+        setSearchTextClients,
+        searchTextClients,
         setAgencies,
         mainDataSource,
         mainTemplates,

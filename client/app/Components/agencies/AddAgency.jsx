@@ -634,6 +634,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   credentialsState={credentialsState}
                   setCredentialsState={setCredentialsState}
                   allowedPlatforms={data?.platforms}
+                  data={data}
                 />
               </div>
             ) : page === 6 ? (
@@ -865,13 +866,18 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
   );
 };
 
-const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
+const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }) => {
+
   const { mainDataSource, dataSourceStructure } = useContext(Context);
+
   useEffect(() => {
     if (credentialsState?.length == 0) {
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
+          if (e?.creds_structure) {
+            e.creds_structure["report_start_date"] = data?.report_start_date;
+          }
           let temp = mainDataSource?.find((item) => item?.name === e?.platform);
           if (temp?.img_link) {
             return { ...e, img_link: temp?.img_link, report_start_date: "" };
@@ -880,6 +886,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
         });
       setCredentialsState(newCredentials);
     }
+    
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {

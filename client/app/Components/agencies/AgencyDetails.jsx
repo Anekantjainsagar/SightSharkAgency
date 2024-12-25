@@ -14,6 +14,7 @@ function formatName(input) {
 const AgencyDetails = ({ data }) => {
   const { clientCreds, mainDataSource } = useContext(Context);
   const [addDataSouces, setAddDataSouces] = useState(false);
+  console.log(clientCreds)
 
   return (
     <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
@@ -268,7 +269,7 @@ const AgencyDetails = ({ data }) => {
                           htmlFor={e?.platform_name}
                           className="text-sm min-[1600px]:text-base"
                         >
-                          {formatName(e?.platform_name)}
+                          {formatName(e?.platform)}
                         </label>
                       </div>
                     );
