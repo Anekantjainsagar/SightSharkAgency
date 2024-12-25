@@ -126,8 +126,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Key Contact Details",
     "Data Sources",
     "Data Sources IDs",
-    "Credentials",
     "Dashboard Templates",
+    "Credentials",
   ];
 
   const addClientCredentials = async (client_id, parent_name) => {
@@ -637,7 +637,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   data={data}
                 />
               </div>
-            ) : page === 6 ? (
+            ) : page === 5 ? (
               <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
                 <div className="grid grid-cols-4 gap-x-4 mt-2">
                   {mainTemplates?.map((e, i) => {
