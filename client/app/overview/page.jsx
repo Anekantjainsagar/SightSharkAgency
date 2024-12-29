@@ -73,7 +73,7 @@ const Overview = () => {
                 },
                 {
                   name: "License Limit",
-                  value: `${actualUser?.current_number_of_clients}/${actualUser?.license_limit}`,
+                  value: `${actualUser?.current_number_of_clients ? actualUser?.current_number_of_clients : ""}/${actualUser?.license_limit ? actualUser?.license_limit: ""}`,
                   img: "/Overview/Icons/satisfaction.png",
                 },
                 {

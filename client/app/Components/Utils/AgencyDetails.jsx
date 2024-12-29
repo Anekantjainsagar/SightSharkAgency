@@ -4,7 +4,8 @@ import DeleteAgency from "../agencies/DeleteAgency";
 import Context from "@/app/Context/Context";
 
 const AgencyDetailsBlock = ({ data }) => {
-  const { selectedAgencies, setSelectedAgencies } = useContext(Context);
+  console.log(data)
+  const { selectedAgencies, setSelectedAgencies, setClientId } = useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);
   let name = data?.client_name?.replaceAll(" ", "-");
@@ -19,7 +20,8 @@ const AgencyDetailsBlock = ({ data }) => {
       />
       <div
         onClick={() => {
-          history.push(`/clients/${name}`);
+          history.push(`/clients/${data?.client_name?.replaceAll(" ", "-")}`);
+          setClientId(data?.client_id)
         }}
         className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
       >

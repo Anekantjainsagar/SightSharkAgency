@@ -10,6 +10,8 @@ import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 const State = (props) => {
   const pathname = usePathname();
   const history = useRouter();
+  const [clientId,setClientId] = useState("");
+  const [selectedClientDetails,setSelectedClientDetails] = useState();
   const [userData, setUserData] = useState();
   const [actualUser, setActualUser] = useState();
   const [users, setUsers] = useState([]);
@@ -29,7 +31,7 @@ const State = (props) => {
   const [rawReportsClient, setRawReportsClient] = useState([]);
   const [linkToEmbed, setLinkToEmbed] = useState("");
   const [timezones, setTimezones] = useState([]);
-
+  console.log('selected Client',selectedClientDetails);
   const checkToken = () => {
     let cookie = getCookie("token");
     if (cookie?.length > 5) {
@@ -353,12 +355,15 @@ const State = (props) => {
   const getDataSourceStructure = (id) => {
     let cookie = getCookie("token");
     setDataSourceStructure([]);
-
-    if (cookie?.length > 5 && id) {
+    console.log(id)
+    if (cookie?.length > 5) {
       try {
         axios
-          .get(
-            `${ADMIN_BACKEND_URI}/platform-creds-info/creds_structure?agency_id=${id}`,
+          .post(
+            `${BACKEND_URI}/client/get-client-credentials`,
+            {
+              "client_id": ""
+            },
             {
               headers: {
                 Accept: "application/json",
@@ -386,15 +391,21 @@ const State = (props) => {
     if (cookie?.length > 5 && id) {
       try {
         axios
-          .get(`${BACKEND_URI}/client/get-client-credentials?client_id=${id}`, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${cookie}`,
+          .post(
+            `${BACKEND_URI}/client/get-client-credentials`,
+            {
+              "client_id": id
             },
-          })
-          .then(async (response) => {
-            setClientCreds(response.data);
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          )
+          .then(async (res) => {
+            setDataSourceStructure(res.data.data);
           })
           .catch((err) => {
             console.log(err);
@@ -443,9 +454,9 @@ const State = (props) => {
     getAgencies();
     getTimezones();
     getUsers();
-    getMainDataSources(userData?.agency_id);
+    getMainDataSources(userData?.agency_id)
     getMainTemplates(userData?.agency_id);
-    getDataSourceStructure(userData?.agency_id);
+    getDataSourceStructure(clientId);
     getUserAgency();
   }, [userData]);
 
@@ -485,6 +496,10 @@ const State = (props) => {
         alerts,
         alertsLength,
         userData,
+        clientId,
+        setClientId,
+        selectedClientDetails,
+        setSelectedClientDetails,
         checkToken,
         setUsers,
         getUsers,
@@ -510,6 +525,7 @@ const State = (props) => {
         rawReportsClient,
         getRawReports,
         getDataSourcesDataFromAPI,
+        getDataSourceStructure,
         linkToEmbed,
         setLinkToEmbed,
         timezones,

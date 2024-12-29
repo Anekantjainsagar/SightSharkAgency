@@ -4,12 +4,14 @@ import Modal from "react-modal";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
-import { FaSearch } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp, FaSearch } from "react-icons/fa";
 import { IoMdCheckmark } from "react-icons/io";
 import Context from "@/app/Context/Context";
 import { getCookie } from "cookies-next";
 import { BACKEND_URI } from "@/app/utils/url";
 import axios from "axios";
+import { Accordion, AccordionItem } from "@szhsin/react-accordion";
+import { Switch } from "antd";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -39,19 +41,25 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
   let maxPage = 2;
   const [credentialsState, setCredentialsState] = useState([]);
   const [allowedPlatforms, setAllowedPlatforms] = useState([]);
-  const { mainDataSource, clientCreds, getCredentialsForClient } =
+  const { mainDataSource,agencies,clientId,selectedClientDetails, clientCreds, getCredentialsForClient,dataSourceStructure } =
     useContext(Context);
+  
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   function closeModal() {
     setShowSubscribe(false);
   }
+  console.log(allowedPlatforms);
 
   useEffect(() => {
-    if (clientCreds?.data) {
+    let temp = agencies?.data?.find(
+      (e) => e?.client_id == clientId
+    );
+    console.log(temp)
+    if (selectedClientDetails?.platform_name) {
       setAllowedPlatforms((prevPlatforms) => {
-        const newPlatforms = clientCreds.data.map((e) => e?.platform_name);
+        const newPlatforms = temp?.platform_name.map((e) => e);
         return Array.from(new Set([...prevPlatforms, ...newPlatforms]));
       });
     }
@@ -146,19 +154,22 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
               </div>
             </div>
           ) : (
-            <Page4
-              credentialsState={credentialsState}
-              setCredentialsState={setCredentialsState}
-              allowedPlatforms={allowedPlatforms}
-            />
+            <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+              <Page4
+                credentialsState={credentialsState}
+                setCredentialsState={setCredentialsState}
+                allowedPlatforms={allowedPlatforms}
+              />
+            </div>
           )}
           <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
             <button
               className={`text-white text-base min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
-                page == 1 ? "bg-[#898989]/15" : "bg-newBlue cursor-pointer"
+                page == 1 ? "bg-[#898989]/15 invisible" : "bg-newBlue cursor-pointer visible"
               } h-10 min-[1600px]:h-12 rounded-lg`}
               disabled={page == 1}
               onClick={() => {
+                // setAllowedPlatforms([])
                 setPage(page - 1);
               }}
             >
@@ -311,123 +322,263 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
 };
 
 const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
-  const { mainDataSource, dataSourceStructure, clientCreds } =
-    useContext(Context);
+  const [isEditable, setIsEditable] = useState({
+    index: 1000,
+    isEditable: false,
+  });
+  const [isChecked, setIsChecked] = useState(false);
+  const { mainDataSource, getClient } = useContext(Context);
+
+  const handleEditClick = (index) => {
+    setIsEditable({ index: index, isEditable: true });
+  };
+  console.log(dataSourceStructure)
 
   useEffect(() => {
-    // if (credentialsState.length == 0) {
-    const newCredentials = mainDataSource
-      ?.filter((e) => allowedPlatforms?.includes(e?.name))
-      ?.map((e) => {
-        return {
-          ...clientCreds?.data?.find((item) => item?.platform_name === e?.name),
-          img_link: e?.img_link,
-          ...dataSourceStructure?.find((item) => item?.platform == e?.name)
-            ?.creds_structure,
-          report_start_date: "",
-        };
-      });
-    setCredentialsState(newCredentials);
-    // }
+    if (credentialsState?.length == 0) {
+      console.log(dataSourceStructure);
+      const newCredentials = dataSourceStructure
+        ?.filter((e) => allowedPlatforms?.includes(e?.platform))
+        ?.map((e) => {
+          // if(e?.creds_structure.type === "custom"){
+          //   setIsChecked(true);
+          // }
+
+          let temp = mainDataSource?.find((item) => item?.name === e?.platform);
+          if (temp?.img_link) {
+            return { ...e, img_link: temp?.img_link, report_start_date: "" };
+          }
+          return e;
+        });
+      setCredentialsState(newCredentials);
+    }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
-    console.log(isCredential);
-    // setCredentialsState((prevState) =>
-    //   prevState.map((item) =>
-    //     item.platform === platform
-    //       ? {
-    //           ...item,
-    //           creds_structure: {
-    //             ...item.creds_structure,
-    //             ...(isCredential
-    //               ? {
-    //                   credentials: {
-    //                     ...item.creds_structure.credentials,
-    //                     [field]: value,
-    //                   },
-    //                 }
-    //               : { [field]: value }),
-    //           },
-    //         }
-    //       : item
-    //   )
-    // );
+    setCredentialsState((prevState) =>
+      prevState.map((item) =>
+        item.platform === platform
+          ? {
+              ...item,
+              creds_structure: {
+                ...item.creds_structure,
+                ...(isCredential
+                  ? {
+                      credentials: {
+                        ...item.creds_structure.credentials,
+                        [field]: value,
+                      },
+                    }
+                  : { [field]: value }),
+              },
+            }
+          : item
+      )
+    );
   };
 
   return (
-    <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
-      {credentialsState?.map((e, i) => (
-        <div
-          key={i}
-          className="border border-gray-300/30 px-3 py-3 rounded-lg mb-4"
-        >
-          <div className="flex items-center">
-            <Image
-              src={e?.img_link}
-              alt={e?.platform_name}
-              width={1000}
-              height={1000}
-              className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
-            />
-            <label
-              htmlFor={e?.platform_name}
-              className="text-[13px] min-[1600px]:text-base cursor-pointer"
+    <div className="flex flex-col w-full mb-6">
+      <Accordion>
+        {credentialsState?.map((e, i) => (
+          <AccordionItem
+            initialEntered={i === 0}
+            key={i}
+            header={({ state }) => (
+              <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
+                <div
+                  className={`flex items-center ${
+                    state.isEnter ? "visible" : "visible"
+                  }`}
+                >
+                  <Image
+                    src={e?.img_link}
+                    alt={e?.platform}
+                    width={1000}
+                    height={1000}
+                    className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
+                      state.isEnter ? "invisible" : "visible"
+                    }`}
+                  />
+                  <label
+                    htmlFor={e?.platform}
+                    className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                  >
+                    {formatName(e?.platform)}
+                  </label>
+                </div>
+                <div className="">
+                  {state.isEnter ? <FaChevronUp /> : <FaChevronDown />}
+                </div>
+              </div>
+            )}
+          >
+            <div
+              key={i}
+              className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
-              {formatName(e?.platform_name)}
-            </label>
-          </div>
-          <div className="mt-3">
-            {" "}
-            <input
-              type="date"
-              value={e?.report_start_date?.replace("_", " ").toUpperCase()}
-              onChange={(event) =>
-                handleInputChange(
-                  e.platform,
-                  "report_start_date",
-                  event.target.value
-                )
-              }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-            />
-            <input
-              type="text"
-              placeholder={e?.account_id?.replace("_", " ").toUpperCase()}
-              value={
-                e?.account_id?.includes("_id") || e?.account_id == "acccount_id"
-                  ? ""
-                  : e?.account_id
-              }
-              onChange={(event) =>
-                handleInputChange(
-                  e.platform_name,
-                  "account_id",
-                  event.target.value
-                )
-              }
-              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-            />
-            {Object.keys(e?.credentials || {}).map((key) => (
-              <input
-                key={key}
-                type="text"
-                placeholder={formatName(key)}
-                value={e?.credentials[key] === key ? "" : e?.credentials[key]}
-                onChange={(event) =>
-                  handleInputChange(
-                    e.platform_name,
-                    key,
-                    event.target.value,
-                    true
-                  )
+              <div
+                className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
+              >
+                <Image
+                  src={e?.img_link}
+                  alt={e?.platform}
+                  width={1000}
+                  height={1000}
+                  className="min-[1600px]:w-12 min-[1600px]:h-16 w-12 h-16 mr-2 aspect-square object-contain"
+                />
+                <label
+                  htmlFor={e?.platform}
+                  className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
+                >
+                  {formatName(e?.platform)}
+                </label>
+              </div>
+              <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
+              <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
+                {/* Show inputs only for the current platform */}
+                <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                  <p className="font-[500] text-[1.25rem]">Credentials</p>
+                  {
+                    <div className="flex flex-row justify-center items-center">
+                      <p>Customize Data Source</p>
+                      <Switch
+                        checked={
+                          e?.creds_structure?.type === "custom"
+                            ? true
+                            : isEditable.index === i
+                        }
+                        onChange={(checked) => {
+                          handleInputChange(
+                            e.platform,
+                            "type",
+                            checked ? "custom" : "default"
+                          );
+                          setIsChecked(checked);
+                          setIsEditable((prevState) => ({
+                            index: checked ? i : null,
+                            isEditable: checked,
+                          }));
+                        }}
+                        style={{
+                          backgroundColor: (
+                            e?.creds_structure?.type === "custom"
+                              ? true
+                              : isEditable.index === i
+                          )
+                            ? "#339a35"
+                            : "#e9e9ea",
+                          transform: "scale(1.0)",
+                          marginRight: "20px",
+                          marginLeft: "20px",
+                          fontFamily: "Outfit, sans-serif",
+                          borderColor: "black",
+                        }}
+                      />
+                    </div>
+                  }
+                </div>
+                {
+                  <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
+                    <label
+                      htmlFor={e?.platform}
+                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                    >
+                      {formatName("account_ID") + " :"}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={formatName("account_id")}
+                      value={
+                        e?.creds_structure?.account_id?.length > 0
+                          ? e?.creds_structure?.account_id
+                          : null
+                      }
+                      onChange={(event) =>
+                        handleInputChange(
+                          e.platform,
+                          "account_id",
+                          event.target.value
+                        )
+                      }
+                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                    />
+                  </div>
                 }
-                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4"
-              />
-            ))}
-          </div>
-        </div>
-      ))}
+
+                {e?.creds_structure?.account_filter && (
+                  <div className="flex flex-row justify-between items-center">
+                    <label
+                      htmlFor={e?.platform}
+                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                    >
+                      {formatName("account_filter")}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={formatName("account_filter")}
+                      value={
+                        e?.creds_structure?.account_filter?.length > 0
+                          ? e?.creds_structure?.account_filter
+                          : null
+                      }
+                      onChange={(event) =>
+                        handleInputChange(
+                          e.platform,
+                          "account_filter",
+                          event.target.value
+                        )
+                      }
+                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                    />
+                  </div>
+                )}
+                {(e?.creds_structure?.type === "custom"
+                  ? true
+                  : isEditable.index === i) &&
+                  Object.keys(e?.creds_structure?.credentials || {}).map(
+                    (key) => (
+                      <div
+                        key={key}
+                        className="flex flex-row justify-between items-center"
+                      >
+                        <label
+                          htmlFor={e?.platform}
+                          className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                        >
+                          {formatName(key)}
+                        </label>
+                        <input
+                          key={key}
+                          readOnly={
+                            isEditable.index !== i &&
+                            e?.creds_structure?.credentials[key]?.length === 0
+                          }
+                          type="text"
+                          placeholder={formatName(key)}
+                          value={
+                            e?.creds_structure?.credentials[key]?.length > 0
+                              ? e?.creds_structure?.credentials[key]
+                              : ""
+                          }
+                          onChange={(event) =>
+                            handleInputChange(
+                              e.platform,
+                              key,
+                              event.target.value,
+                              true
+                            )
+                          }
+                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                        />
+                      </div>
+                    )
+                  )}
+              </div>
+            </div>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 };

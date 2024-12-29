@@ -18,7 +18,9 @@ const Overview = ({ params }) => {
     getCredentialsForClient,
     rawReportsClient,
     getRawReports,
+    clientId,
     setLinkToEmbed,
+    setSelectedClientDetails
   } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
@@ -26,9 +28,12 @@ const Overview = ({ params }) => {
   const { name } = params;
 
   useEffect(() => {
+    // console.log(agencies)
     let temp = agencies?.data?.find(
-      (e) => e?.client_name?.replaceAll(" ", "-") == name
+      (e) => e?.client_id == clientId
     );
+    setSelectedClientDetails(temp)
+    console.log('the client ',temp)
     setData(temp);
     getCredentialsForClient(temp?.client_id);
     getRawReports(temp?.client_id);

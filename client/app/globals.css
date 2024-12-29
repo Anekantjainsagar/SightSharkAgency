@@ -6,6 +6,12 @@
   box-shadow: 10px 10px 30px -10px #5715c7;
 }
 
+
+.custom-toast-container{
+  width: 400px !important;
+  max-width: 400px !important;
+}
+
 .mainLogoSize {
   @apply text-[20px] min-[1600px]:text-[24px];
 }
@@ -44,6 +50,8 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+
 
 .glass {
   position: relative; /* or absolute, fixed, sticky */

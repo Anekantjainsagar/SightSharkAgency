@@ -21,7 +21,7 @@ const Overview = ({ params }) => {
   const [status, setStatus] = useState("Active");
   const [selected, setSelected] = useState("Client Details");
   const [deleteAgency, setDeleteAgency] = useState(false);
-  const [original_data, setOriginal_data] = useState();
+  
   const [file, setFile] = useState("");
   const [fileInput, setFileInput] = useState();
   const [data, setData] = useState({
@@ -41,8 +41,9 @@ const Overview = ({ params }) => {
     credentials: { email: "", password: "" },
   });
   const fileInputRef = React.useRef(null);
-  const { agencies, getAgencies } = useContext(Context);
+  const { agencies, getAgencies,selectedClientDetails } = useContext(Context);
   const { name } = params;
+  const [original_data, setOriginal_data] = useState(selectedClientDetails);
   const history = useRouter();
 
   useEffect(() => {
@@ -50,27 +51,25 @@ const Overview = ({ params }) => {
   }, [name, agencies]);
 
   const updateDataTemp = () => {
-    let temp = agencies?.data?.find(
-      (e) => e?.client_name?.replaceAll(" ", "-") == name
-    );
-    setOriginal_data(temp);
+    
+    setOriginal_data(selectedClientDetails);
     setData({
-      name: temp?.client_name,
-      website: temp?.website,
-      location: temp?.location,
-      agency_id: temp?.agency_id,
+      name: selectedClientDetails?.client_name,
+      website: selectedClientDetails?.website,
+      location: selectedClientDetails?.location,
+      agency_id: selectedClientDetails?.agency_id,
       keyContact: {
-        name: temp?.key_contact_name,
-        designation: temp?.key_contact_designation,
-        phone: temp?.key_contact_phone,
-        email: temp?.key_contact_email_address,
+        name: selectedClientDetails?.key_contact_name,
+        designation: selectedClientDetails?.key_contact_designation,
+        phone: selectedClientDetails?.key_contact_phone,
+        email: selectedClientDetails?.key_contact_email_address,
       },
       credentials: {
-        email: temp?.email_address,
+        email: selectedClientDetails?.email_address,
       },
     });
-    setStatus(temp?.status);
-    setFile(temp?.profile_picture);
+    setStatus(selectedClientDetails?.status);
+    setFile(selectedClientDetails?.profile_picture);
   };
 
   const handleFileChangeProfile = (event) => {

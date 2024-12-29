@@ -16,6 +16,7 @@ import Info from "../Login/Info";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { Switch } from "antd";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -67,6 +68,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     getAgencies,
     checkPasswordCriteria,
     timezones,
+    dataSourceStructure
   } = useContext(Context);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -95,6 +97,38 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   });
   const fileInputRef = React.useRef(null);
   const criteria = checkPasswordCriteria(data?.credentials?.password);
+
+  const isAllDataSourceConfigured = () => {
+    let flag = true;
+    let unConfiguredPlatform = "";
+    for (const platform of data?.platforms || []) {
+      for (const item of dataSourceStructure || []) {
+        if (item?.platform === platform) {
+          if (item?.creds_structure?.credentials) {
+            const areCredentialsEmpty = (creds) =>
+              Object.values(creds).every((value) => value === null);
+            if(item?.platform === "shopify"){
+              continue;
+            }
+            if (areCredentialsEmpty(item?.creds_structure?.credentials)) {
+              flag = false;
+              unConfiguredPlatform = item?.platform
+              break;
+            }
+          }
+        }
+      }
+      if (!flag) break;
+    }
+    if(!flag){
+      toast.error(`${unConfiguredPlatform.replaceAll("_"," ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
+        .join(" ")} data source is not configured`);
+    }
+    else{
+      setPage(page + 1);
+    } 
+    
+  }
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
@@ -130,6 +164,57 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     "Credentials",
   ];
 
+  const validateDataSources = () => {
+    const errorsMap = {};
+
+// Collect errors for each platform
+credentialsState.forEach((credential) => {
+  const { platform, creds_structure } = credential;
+
+  if (!creds_structure) {
+    errorsMap[platform] = ["Missing credentials structure"];
+    return;
+  }
+
+  // Check for required fields
+  const requiredFields = ["account_id", ...Object.keys(creds_structure.credentials || {})];
+  requiredFields.forEach((field) => {
+    const fieldValue = creds_structure[field] || creds_structure.credentials?.[field];
+    if (!fieldValue || fieldValue.length === 0) {
+      if (!errorsMap[platform]) {
+        errorsMap[platform] = [];
+      }
+      errorsMap[platform].push(formatName(field));
+    }
+  });
+});
+
+
+
+// Prepare grouped error messages
+const groupedErrors = Object.entries(errorsMap).map(
+  ([platform, fields]) => `${platform.replace("_"," ")}: ${fields.join(", ")} is missing`
+);
+
+if (groupedErrors.length > 0) {
+  toast.error(
+    <div className="w-[auto]">
+      <p>Please fill all fields for data source:</p>
+      <ul>
+        {groupedErrors.map((error, index) => (
+          <li className="capitalize" key={index}>{error}</li>
+        ))}
+      </ul>
+    </div>,
+    { duration: 5000 ,className: "custom-toast-container"}
+  );
+  return false; // Validation failed
+}
+
+return true; // Validation passed
+  };
+  
+
   const addClientCredentials = async (client_id, parent_name) => {
     if ((client_id, parent_name)) {
       try {
@@ -154,7 +239,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         );
 
         if (response.data) {
-          toast.success(response.data.msg);
+          toast.success("Client Created Successfully");
         }
       } catch (error) {
         console.error("Error creating user:", error);
@@ -228,6 +313,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   };
 
   useEffect(() => {
+    // setPage(1);
     setData({ ...data, timezone: timezones[0]?.region_name });
   }, [timezones]);
 
@@ -669,7 +755,6 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
             ) : (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
                 <div className="grid grid-cols-1 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
-                  
                   <div className="flex flex-col">
                     <label
                       htmlFor="emailKey"
@@ -839,12 +924,18 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                     data?.timezone
                   ) {
                     setPage(page + 1);
+                  }
+                  else if(page == 3){
+                    isAllDataSourceConfigured();
+                  }
+                  else if(page == 4){
+                    if(validateDataSources()){
+                      setPage(page + 1)
+                    }
                   } else {
                     if (page == 2 && data?.keyContact?.email) {
                       setPage(page + 1);
                     } else if (
-                      page == 3 ||
-                      page == 4 ||
                       page == 5 ||
                       page == 6
                     ) {
@@ -866,15 +957,32 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
   );
 };
 
-const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }) => {
-
+const Page4 = ({
+  credentialsState,
+  setCredentialsState,
+  allowedPlatforms,
+  data,
+}) => {
+  const [isEditable, setIsEditable] = useState({
+    index: 1000,
+    isEditable: false,
+  });
+  const [isChecked, setIsChecked] = useState(false);
   const { mainDataSource, dataSourceStructure } = useContext(Context);
+
+  const handleEditClick = (index) => {
+    setIsEditable({ index: index, isEditable: true });
+  };
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
+      console.log(dataSourceStructure);
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
+          // if(e?.creds_structure.type === "custom"){
+          //   setIsChecked(true);
+          // }
           if (e?.creds_structure) {
             e.creds_structure["report_start_date"] = data?.report_start_date;
           }
@@ -886,7 +994,6 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
         });
       setCredentialsState(newCredentials);
     }
-    
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
 
   const handleInputChange = (platform, field, value, isCredential = false) => {
@@ -917,12 +1024,13 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
       <Accordion>
         {credentialsState?.map((e, i) => (
           <AccordionItem
+            initialEntered={i === 0}
             key={i}
             header={({ state }) => (
               <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
                 <div
                   className={`flex items-center ${
-                    state.isEnter ? "invisible" : "visible"
+                    state.isEnter ? "visible" : "visible"
                   }`}
                 >
                   <Image
@@ -930,7 +1038,9 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
                     alt={e?.platform}
                     width={1000}
                     height={1000}
-                    className="min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain"
+                    className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
+                      state.isEnter ? "invisible" : "visible"
+                    }`}
                   />
                   <label
                     htmlFor={e?.platform}
@@ -950,7 +1060,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
               className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
-                className={`flex items-center flex-col gap-4 justify-center basis-[30%]`}
+                className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
               >
                 <Image
                   src={e?.img_link}
@@ -966,34 +1076,66 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
                   {formatName(e?.platform)}
                 </label>
               </div>
-              <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div>
-              <div className="mt-3 flex-1 px-6">
+              <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
+              <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
-                <div className="flex flex-row gap-2 justify-between capitalize items-center">
-                  <label
-                    htmlFor={e?.platform}
-                    className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
-                  >
-                    {formatName(
-                      e?.creds_structure?.account_id?.replace("_", " ")
-                    ) + " :"}
-                  </label>
-                  <input
-                    type="text"
-                    placeholder={formatName(
-                      e?.creds_structure?.account_id?.replace("_", " ")
-                    )}
-                    value={""}
-                    onChange={(event) =>
-                      handleInputChange(
-                        e.platform,
-                        "account_id",
-                        event.target.value
-                      )
-                    }
-                    className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-                  />
-                </div>
+                {false && <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                  <p className="font-[500] text-[1.25rem]">Credentials</p>
+                  {<div className="flex flex-row justify-center items-center">
+                    <p>Customize Data Source</p>
+                    <Switch
+                      checked={e?.creds_structure?.type === 'custom'? true : isEditable.index === i}
+                      onChange={(checked) => {
+                        handleInputChange(
+                          e.platform,
+                          "type",
+                          checked ? 'custom':'default'
+                        )
+                        setIsChecked(checked);
+                        setIsEditable((prevState) => ({
+                          index: checked ? i : null,
+                          isEditable: checked,
+                        }));
+                      }}
+                      style={{
+                        backgroundColor:
+                        (e?.creds_structure?.type === 'custom'? true : isEditable.index === i) ? "#339a35" : "#e9e9ea",
+                        transform: "scale(1.0)",
+                        marginRight: "20px",
+                        marginLeft: "20px",
+                        fontFamily: "Outfit, sans-serif",
+                        borderColor: "black",
+                      }}
+                    />
+                  </div>}
+                </div>}
+                {
+                  <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
+                    <label
+                      htmlFor={e?.platform}
+                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                    >
+                      {formatName("account_ID")}
+                    </label>
+                    <input
+                      type="text"
+                      placeholder={formatName("account_id")}
+                      value={
+                        e?.creds_structure?.account_id?.length > 0
+                          ? e?.creds_structure?.account_id
+                          : null
+                      }
+                      onChange={(event) =>
+                        handleInputChange(
+                          e.platform,
+                          "account_id",
+                          event.target.value
+                        )
+                      }
+                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                    />
+                  </div>
+                }
 
                 {e?.creds_structure?.account_filter && (
                   <div className="flex flex-row justify-between items-center">
@@ -1001,15 +1143,16 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
                       htmlFor={e?.platform}
                       className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
                     >
-                      {e?.creds_structure?.account_filter?.replace(/_/g, " ") +
-                        " :"}
+                      {formatName("account_filter")}
                     </label>
                     <input
                       type="text"
-                      placeholder={formatName(
-                        e?.creds_structure?.account_filter?.replace("_", " ")
-                      )}
-                      value={""}
+                      placeholder={formatName("account_filter")}
+                      value={
+                        e?.creds_structure?.account_filter?.length > 0
+                          ? e?.creds_structure?.account_filter
+                          : null
+                      }
                       onChange={(event) =>
                         handleInputChange(
                           e.platform,
@@ -1035,9 +1178,17 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms, data }
                       </label>
                       <input
                         key={key}
+                        readOnly={
+                          isEditable.index !== i &&
+                          e?.creds_structure?.credentials[key]?.length === 0
+                        }
                         type="text"
                         placeholder={formatName(key)}
-                        value={""}
+                        value={
+                          e?.creds_structure?.credentials[key]?.length > 0
+                            ? e?.creds_structure?.credentials[key]
+                            : ""
+                        }
                         onChange={(event) =>
                           handleInputChange(
                             e.platform,

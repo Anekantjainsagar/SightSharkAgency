@@ -83,31 +83,13 @@ const AgencyDetails = ({ data }) => {
           },
           {
             img: (
-              <svg
-                width="20"
-                height="21"
-                viewBox="0 0 20 21"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M10 10.7502C11.3807 10.7502 12.5 9.63096 12.5 8.25024C12.5 6.86953 11.3807 5.75024 10 5.75024C8.6193 5.75024 7.50001 6.86953 7.50001 8.25024C7.50001 9.63096 8.6193 10.7502 10 10.7502Z"
-                  stroke="#B2B4BA"
-                  strokeWidth="1.66667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M10 18.6669C11.6667 15.3336 16.6667 13.1821 16.6667 8.66691C16.6667 4.98501 13.6819 2.00024 10 2.00024C6.31811 2.00024 3.33334 4.98501 3.33334 8.66691C3.33334 13.1821 8.33334 15.3336 10 18.6669Z"
-                  stroke="#B2B4BA"
-                  strokeWidth="1.66667"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.33056 7.61447H17.4493M6.87442 2.0001V3.8317M6.87442 3.8317L17.4991 3.8315M6.87442 3.8317C5.11401 3.8317 3.68708 5.28333 3.68716 7.07419L3.68766 17.8826C3.68774 19.6734 5.11476 21.125 6.87506 21.125H17.4998C19.2602 21.125 20.6872 19.6732 20.6872 17.8823L20.6867 7.07389C20.6866 5.28314 19.2594 3.8315 17.4991 3.8315M17.4991 2V3.8315M10.0626 17.342V10.8569L7.93768 12.4782M15.9062 17.342V10.8569L13.7813 12.4782" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
             ),
-            title: "Location",
-            value: data?.location,
+            title: "Report Start Date",
+            value: data?.report_start_date,
           },
           {
             img: (
