@@ -53,17 +53,81 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
   console.log(allowedPlatforms);
 
   useEffect(() => {
-    let temp = agencies?.data?.find(
-      (e) => e?.client_id == clientId
-    );
-    console.log(temp)
+    
+    console.log(selectedClientDetails)
     if (selectedClientDetails?.platform_name) {
-      setAllowedPlatforms((prevPlatforms) => {
-        const newPlatforms = temp?.platform_name.map((e) => e);
-        return Array.from(new Set([...prevPlatforms, ...newPlatforms]));
+      setAllowedPlatforms(() => {
+        const newPlatforms = selectedClientDetails?.platforms_images?.map((e) => e?.platform);
+        console.log(newPlatforms)
+        return Array.from(new Set([...newPlatforms]));
       });
     }
-  }, [clientCreds]);
+  }, [selectedClientDetails]);
+
+  const addClientCredentials = async () => {
+    if ((selectedClientDetails?.client_id, selectedClientDetails?.parent_name)) {
+      try {
+        const platforms = credentialsState.reduce((acc, e) => {
+          acc[e?.platform] = {
+            ...e.creds_structure,
+            // report_start_date: "2024-01-11",
+            account_filter: "blank",
+          };
+          return acc;
+        }, {});
+
+        const response = await axios.post(
+          `${BACKEND_URI}/client/update-client-credentials?client_id=${selectedClientDetails?.client_id}&parent_name=${selectedClientDetails?.parent_name}`,
+          { platforms },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${getCookie("token")}`,
+            },
+          }
+        );
+
+        if (response.data) {
+          toast.success("Updated Data Sources Successfully");
+        }
+      } catch (error) {
+        console.error("Error creating user:", error);
+        toast.error("An error occurred while creating the user");
+      }
+    }
+  };
+
+  const isAllDataSourceConfigured = () => {
+    let flag = true;
+    let unConfiguredPlatform = "";
+    for (const platform of allowedPlatforms || []) {
+      for (const item of dataSourceStructure || []) {
+        if (item?.platform === platform) {
+          if (item?.creds_structure?.credentials) {
+            const areCredentialsEmpty = (creds) =>
+              Object.values(creds).every((value) => value === null);
+            if(item?.platform === "shopify"){
+              continue;
+            }
+            if (areCredentialsEmpty(item?.creds_structure?.credentials)) {
+              flag = false;
+              unConfiguredPlatform = item?.platform
+              break;
+            }
+          }
+        }
+      }
+      if (!flag) break;
+    }
+    if(!flag){
+      toast.error(`${unConfiguredPlatform.replaceAll("_"," ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
+        .join(" ")} data source is not configured`);
+    }
+    else{
+      setPage(page + 1);
+    } 
+    
+  }
 
   return (
     <div className="z-50">
@@ -178,60 +242,10 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
             <button
               onClick={() => {
                 if (page == maxPage) {
-                  const difference = clientCreds?.data
-                    ?.map((cred) => cred.platform_name)
-                    ?.filter((name) => !allowedPlatforms?.includes(name));
-
-                  if (difference?.length > 0 && data?.client_id) {
-                    let cookie = getCookie("token");
-                    console.log(difference);
-                    Promise.all(
-                      difference.map((item) => {
-                        const url = `${BACKEND_URI}/client/delete-client-credentials?client_id=${encodeURIComponent(
-                          data?.client_id?.trim()
-                        )}&platform_name=${encodeURIComponent(item.trim())}`;
-
-                        return axios
-                          .delete(url, {
-                            headers: {
-                              Accept: "application/json",
-                              "Content-Type": "application/json",
-                              Authorization: `Bearer ${cookie}`,
-                            },
-                          })
-                          .then((response) => {
-                            return response.data;
-                          })
-                          .catch((error) => {
-                            if (error.response) {
-                              throw {
-                                status: error.response.status,
-                                ...error.response.data,
-                              };
-                            } else {
-                              throw { message: error.message };
-                            }
-                          });
-                      })
-                    )
-                      .then(() => {
-                        toast.success("Tables removed successfully!");
-                        setShowSubscribe(false);
-                        getCredentialsForClient(data?.client_id);
-                      })
-                      .catch((error) => {
-                        if (error.status === 401) {
-                          toast.error(
-                            "Authentication failed. Please log in again."
-                          );
-                        } else {
-                          console.error("Error:", error);
-                          toast.error(error.message || "Error adding tables");
-                        }
-                      });
-                  }
+                  addClientCredentials()
                 } else {
-                  setPage(page + 1);
+                  isAllDataSourceConfigured();
+                  // setPage(page + 1);
                 }
               }}
               className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
@@ -247,11 +261,11 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
 
 const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   const [checked, setChecked] = useState(false);
-  const { clientCreds } = useContext(Context);
-
+  const { clientCreds,selectedClientDetails } = useContext(Context);
+  console.log(allowedPlatforms)
   useEffect(() => {
     if (
-      clientCreds?.data?.find((el) => el?.platform_name === e?.name)?.client_id
+      selectedClientDetails?.platform_images?.find((el) => el?.platform === e?.name)?.client_id
         ?.length > 0 &&
       !allowedPlatforms?.includes(e?.name)
     ) {
@@ -321,18 +335,21 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   );
 };
 
-const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
+const Page4 = ({
+  credentialsState,
+  setCredentialsState,
+  allowedPlatforms,
+}) => {
   const [isEditable, setIsEditable] = useState({
     index: 1000,
     isEditable: false,
   });
   const [isChecked, setIsChecked] = useState(false);
-  const { mainDataSource, getClient } = useContext(Context);
+  const { mainDataSource, dataSourceStructure } = useContext(Context);
 
   const handleEditClick = (index) => {
     setIsEditable({ index: index, isEditable: true });
   };
-  console.log(dataSourceStructure)
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
@@ -343,7 +360,9 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
           // if(e?.creds_structure.type === "custom"){
           //   setIsChecked(true);
           // }
-
+          if (e?.creds_structure) {
+            e.creds_structure["report_start_date"] = "";
+          }
           let temp = mainDataSource?.find((item) => item?.name === e?.platform);
           if (temp?.img_link) {
             return { ...e, img_link: temp?.img_link, report_start_date: "" };
@@ -437,54 +456,43 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
               <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
               <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
-                <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                {false && <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
                   <p className="font-[500] text-[1.25rem]">Credentials</p>
-                  {
-                    <div className="flex flex-row justify-center items-center">
-                      <p>Customize Data Source</p>
-                      <Switch
-                        checked={
-                          e?.creds_structure?.type === "custom"
-                            ? true
-                            : isEditable.index === i
-                        }
-                        onChange={(checked) => {
-                          handleInputChange(
-                            e.platform,
-                            "type",
-                            checked ? "custom" : "default"
-                          );
-                          setIsChecked(checked);
-                          setIsEditable((prevState) => ({
-                            index: checked ? i : null,
-                            isEditable: checked,
-                          }));
-                        }}
-                        style={{
-                          backgroundColor: (
-                            e?.creds_structure?.type === "custom"
-                              ? true
-                              : isEditable.index === i
-                          )
-                            ? "#339a35"
-                            : "#e9e9ea",
-                          transform: "scale(1.0)",
-                          marginRight: "20px",
-                          marginLeft: "20px",
-                          fontFamily: "Outfit, sans-serif",
-                          borderColor: "black",
-                        }}
-                      />
-                    </div>
-                  }
-                </div>
+                  {<div className="flex flex-row justify-center items-center">
+                    <p>Customize Data Source</p>
+                    <Switch
+                      checked={e?.creds_structure?.type === 'custom'? true : isEditable.index === i}
+                      onChange={(checked) => {
+                        handleInputChange(
+                          e.platform,
+                          "type",
+                          checked ? 'custom':'default'
+                        )
+                        setIsChecked(checked);
+                        setIsEditable((prevState) => ({
+                          index: checked ? i : null,
+                          isEditable: checked,
+                        }));
+                      }}
+                      style={{
+                        backgroundColor:
+                        (e?.creds_structure?.type === 'custom'? true : isEditable.index === i) ? "#339a35" : "#e9e9ea",
+                        transform: "scale(1.0)",
+                        marginRight: "20px",
+                        marginLeft: "20px",
+                        fontFamily: "Outfit, sans-serif",
+                        borderColor: "black",
+                      }}
+                    />
+                  </div>}
+                </div>}
                 {
                   <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
                     <label
                       htmlFor={e?.platform}
                       className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
                     >
-                      {formatName("account_ID") + " :"}
+                      {formatName("account_ID")}
                     </label>
                     <input
                       type="text"
@@ -533,47 +541,44 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     />
                   </div>
                 )}
-                {(e?.creds_structure?.type === "custom"
-                  ? true
-                  : isEditable.index === i) &&
-                  Object.keys(e?.creds_structure?.credentials || {}).map(
-                    (key) => (
-                      <div
-                        key={key}
-                        className="flex flex-row justify-between items-center"
+                {Object.keys(e?.creds_structure?.credentials || {}).map(
+                  (key) => (
+                    <div
+                      key={key}
+                      className="flex flex-row justify-between items-center"
+                    >
+                      <label
+                        htmlFor={e?.platform}
+                        className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
                       >
-                        <label
-                          htmlFor={e?.platform}
-                          className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
-                        >
-                          {formatName(key)}
-                        </label>
-                        <input
-                          key={key}
-                          readOnly={
-                            isEditable.index !== i &&
-                            e?.creds_structure?.credentials[key]?.length === 0
-                          }
-                          type="text"
-                          placeholder={formatName(key)}
-                          value={
-                            e?.creds_structure?.credentials[key]?.length > 0
-                              ? e?.creds_structure?.credentials[key]
-                              : ""
-                          }
-                          onChange={(event) =>
-                            handleInputChange(
-                              e.platform,
-                              key,
-                              event.target.value,
-                              true
-                            )
-                          }
-                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-                        />
-                      </div>
-                    )
-                  )}
+                        {formatName(key)}
+                      </label>
+                      <input
+                        key={key}
+                        readOnly={
+                          isEditable.index !== i &&
+                          e?.creds_structure?.credentials[key]?.length === 0
+                        }
+                        type="text"
+                        placeholder={formatName(key)}
+                        value={
+                          e?.creds_structure?.credentials[key]?.length > 0
+                            ? e?.creds_structure?.credentials[key]
+                            : ""
+                        }
+                        onChange={(event) =>
+                          handleInputChange(
+                            e.platform,
+                            key,
+                            event.target.value,
+                            true
+                          )
+                        }
+                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                      />
+                    </div>
+                  )
+                )}
               </div>
             </div>
           </AccordionItem>
