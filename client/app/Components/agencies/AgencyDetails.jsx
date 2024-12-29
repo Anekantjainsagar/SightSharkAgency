@@ -12,7 +12,7 @@ function formatName(input) {
 }
 
 const AgencyDetails = ({ data }) => {
-  const { clientCreds, mainDataSource } = useContext(Context);
+  const { clientCreds, mainDataSource ,selectedClientDetails} = useContext(Context);
   const [addDataSouces, setAddDataSouces] = useState(false);
   console.log(clientCreds)
 
@@ -220,18 +220,10 @@ const AgencyDetails = ({ data }) => {
           </button>
         </div>
         <div className="m-3">
-          {clientCreds?.data?.length > 0 ? (
+          {selectedClientDetails?.platforms_images?.length > 0 ? (
             <div className="h-[25vh] bg-[#171C2A] rounded-lg">
               <div className="h-fit grid grid-cols-2 gap-y-5 p-2 min-[1600px]:p-4">
-                {clientCreds?.data
-                  ?.map((e) => {
-                    return {
-                      ...e,
-                      img_link: mainDataSource?.find(
-                        (event) => event?.name == e?.platform_name
-                      )?.img_link,
-                    };
-                  })
+                {selectedClientDetails?.platforms_images
                   ?.map((e, i) => {
                     return (
                       <div
@@ -240,15 +232,15 @@ const AgencyDetails = ({ data }) => {
                       >
                         <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
                           <Image
-                            src={e?.img_link}
-                            alt={e?.img_link?.src}
+                            src={e?.logo}
+                            alt={e?.platform}
                             width={1000}
                             height={1000}
                             className="object-contain"
                           />
                         </div>
                         <label
-                          htmlFor={e?.platform_name}
+                          htmlFor={e?.platform}
                           className="text-sm min-[1600px]:text-base"
                         >
                           {formatName(e?.platform)}

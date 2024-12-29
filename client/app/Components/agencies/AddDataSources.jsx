@@ -41,7 +41,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
   let maxPage = 2;
   const [credentialsState, setCredentialsState] = useState([]);
   const [allowedPlatforms, setAllowedPlatforms] = useState([]);
-  const { mainDataSource,agencies,clientId,selectedClientDetails, clientCreds, getCredentialsForClient,dataSourceStructure } =
+  const { mainDataSource,getAgencies,clientId,selectedClientDetails, clientCreds, getCredentialsForClient,dataSourceStructure } =
     useContext(Context);
   
   const [search, setSearch] = useState("");
@@ -59,7 +59,12 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
       setAllowedPlatforms(() => {
         const newPlatforms = selectedClientDetails?.platforms_images?.map((e) => e?.platform);
         console.log(newPlatforms)
-        return Array.from(new Set([...newPlatforms]));
+        if(newPlatforms?.length>0){
+          return Array.from(new Set([...newPlatforms]));
+        }
+        else{
+          return []
+        }
       });
     }
   }, [selectedClientDetails]);
@@ -88,7 +93,9 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
         );
 
         if (response.data) {
+          getAgencies();
           toast.success("Updated Data Sources Successfully");
+          closeModal();
         }
       } catch (error) {
         console.error("Error creating user:", error);
@@ -234,6 +241,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
               disabled={page == 1}
               onClick={() => {
                 // setAllowedPlatforms([])
+                setCredentialsState([]);
                 setPage(page - 1);
               }}
             >
@@ -369,6 +377,7 @@ const Page4 = ({
           }
           return e;
         });
+      console.log(newCredentials)
       setCredentialsState(newCredentials);
     }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);

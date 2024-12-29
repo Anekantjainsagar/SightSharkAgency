@@ -68,7 +68,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     getAgencies,
     checkPasswordCriteria,
     timezones,
-    dataSourceStructure
+    dataSourceStructure,
+    getDataSourceStructure
   } = useContext(Context);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -314,6 +315,7 @@ return true; // Validation passed
 
   useEffect(() => {
     // setPage(1);
+    getDataSourceStructure();
     setData({ ...data, timezone: timezones[0]?.region_name });
   }, [timezones]);
 

@@ -28,9 +28,10 @@ const Overview = ({ params }) => {
   const { name } = params;
 
   useEffect(() => {
-    // console.log(agencies)
+    console.log(name)
+    console.log(agencies?.data?.[2]?.client_name)
     let temp = agencies?.data?.find(
-      (e) => e?.client_id == clientId
+      (e) => e?.client_name.replaceAll(" ","-") == decodeURIComponent(name)
     );
     setSelectedClientDetails(temp)
     console.log('the client ',temp)

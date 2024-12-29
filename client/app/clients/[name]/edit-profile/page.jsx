@@ -51,25 +51,28 @@ const Overview = ({ params }) => {
   }, [name, agencies]);
 
   const updateDataTemp = () => {
-    
-    setOriginal_data(selectedClientDetails);
+    let temp = agencies?.data?.find(
+      (e) => e?.client_name.replaceAll(" ","-") == decodeURIComponent(name)
+    );
+    // setSelectedClientDetails(temp)
+    setOriginal_data(temp);
     setData({
-      name: selectedClientDetails?.client_name,
-      website: selectedClientDetails?.website,
-      location: selectedClientDetails?.location,
-      agency_id: selectedClientDetails?.agency_id,
+      name: temp?.client_name,
+      website: temp?.website,
+      location: temp?.location,
+      agency_id: temp?.agency_id,
       keyContact: {
-        name: selectedClientDetails?.key_contact_name,
-        designation: selectedClientDetails?.key_contact_designation,
-        phone: selectedClientDetails?.key_contact_phone,
-        email: selectedClientDetails?.key_contact_email_address,
+        name: temp?.key_contact_name,
+        designation: temp?.key_contact_designation,
+        phone: temp?.key_contact_phone,
+        email: temp?.key_contact_email_address,
       },
       credentials: {
-        email: selectedClientDetails?.email_address,
+        email: temp?.email_address,
       },
     });
-    setStatus(selectedClientDetails?.status);
-    setFile(selectedClientDetails?.profile_picture);
+    setStatus(temp?.status);
+    setFile(temp?.profile_picture);
   };
 
   const handleFileChangeProfile = (event) => {
