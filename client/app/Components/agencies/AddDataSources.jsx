@@ -50,15 +50,15 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
   function closeModal() {
     setShowSubscribe(false);
   }
-  console.log(allowedPlatforms);
+  
 
   useEffect(() => {
     
-    console.log(selectedClientDetails)
+    
     if (selectedClientDetails?.platform_name) {
       setAllowedPlatforms(() => {
         const newPlatforms = selectedClientDetails?.platforms_images?.map((e) => e?.platform);
-        console.log(newPlatforms)
+        
         if(newPlatforms?.length>0){
           return Array.from(new Set([...newPlatforms]));
         }
@@ -270,7 +270,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
 const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   const [checked, setChecked] = useState(false);
   const { clientCreds,selectedClientDetails } = useContext(Context);
-  console.log(allowedPlatforms)
+  
   useEffect(() => {
     if (
       selectedClientDetails?.platform_images?.find((el) => el?.platform === e?.name)?.client_id
@@ -361,7 +361,7 @@ const Page4 = ({
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
-      console.log(dataSourceStructure);
+      
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
@@ -377,7 +377,7 @@ const Page4 = ({
           }
           return e;
         });
-      console.log(newCredentials)
+      
       setCredentialsState(newCredentials);
     }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);

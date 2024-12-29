@@ -978,7 +978,6 @@ const Page4 = ({
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
-      console.log(dataSourceStructure);
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {

@@ -141,9 +141,9 @@ const Block = ({ e }) => {
     setIsModalOpen(false);
   }
   useEffect(() => {
-    console.log(dataSourceStructure);
+
     const areCredentialsEmpty = (creds) => {
-      console.log(creds);
+
       return Object.values(creds).every((value) => value === null);
     };
     dataSourceStructure?.map((item) => {
@@ -200,7 +200,7 @@ const Block = ({ e }) => {
   const addClientCredentials = async () => {
     try {
       let credentials = credentialsState[0]?.creds_structure?.credentials;
-      console.log(credentialsState[0]?.creds_structure);
+
       const response = await axios.post(
         `${BACKEND_URI}/client/connect-datasource?platform_name=${credentialsState[0]?.platform}`,
         { ...credentials },
@@ -370,7 +370,7 @@ const Page4 = ({
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
-      console.log(dataSourceStructure);
+
       const newCredentials = dataSourceStructure
         ?.filter((e) => selectedPlatform === e?.platform)
         ?.map((e) => {
@@ -386,7 +386,7 @@ const Page4 = ({
       setCredentialsState(newCredentials);
     }
   }, [dataSourceStructure, mainDataSource, selectedPlatform]);
-  console.log(credentialsState);
+
   const handleInputChange = (platform, field, value, isCredential = false) => {
     setCredentialsState((prevState) =>
       prevState.map((item) =>

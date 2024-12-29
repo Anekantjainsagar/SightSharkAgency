@@ -4,7 +4,7 @@ import DeleteAgency from "../agencies/DeleteAgency";
 import Context from "@/app/Context/Context";
 
 const AgencyDetailsBlock = ({ data }) => {
-  console.log(data)
+  
   const { selectedAgencies, setSelectedAgencies, setClientId } = useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);

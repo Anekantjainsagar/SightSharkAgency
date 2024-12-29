@@ -9,7 +9,7 @@ const Navbar = () => {
   const history = useRouter();
   const { userData, setSearchTextClients, searchTextClients, agencies } =
     useContext(Context);
-  console.log(agencies)
+  
 
   return (
     <div className="text-white py-6 flex items-center justify-between w-full px-6">

@@ -14,7 +14,6 @@ function formatName(input) {
 const AgencyDetails = ({ data }) => {
   const { clientCreds, mainDataSource ,selectedClientDetails} = useContext(Context);
   const [addDataSouces, setAddDataSouces] = useState(false);
-  console.log(clientCreds)
 
   return (
     <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
