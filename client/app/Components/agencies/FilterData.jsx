@@ -20,7 +20,10 @@ const FilterData = () => {
           },
         ].map((e, i) => {
           return (
-            <div className="relative w-[10.5vw] border border-gray-400 text-gray-400 ml-4 rounded-md">
+            <div
+              key={i}
+              className="relative w-[10.5vw] border border-gray-400 text-gray-400 ml-4 rounded-md"
+            >
               <select
                 className="bg-transparent px-4 py-0.5 outline-none appearance-none w-full"
                 // value={selectedOption}
