@@ -18,7 +18,6 @@ const Overview = ({ params }) => {
     getCredentialsForClient,
     rawReportsClient,
     getRawReports,
-    clientId,
     setLinkToEmbed,
     setSelectedClientDetails
   } = useContext(Context);

@@ -46,6 +46,25 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
     password: "",
     profile: "",
   });
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileChangeProfile({ target: { files: [file] } });
+    }
+  };
 
   useEffect(() => {
     if (userData?.role == "superadmin") {
@@ -156,7 +175,16 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
             <h1 className="mainLogoSize font-semibold">User Details</h1>
           </div>
           <div className="h-fit px-[8vw] w-full">
-            <div className="flex items-center justify-center mb-6">
+            <div
+              className={`flex items-center justify-center mb-6 ${
+                isDragging
+                  ? "border-2 border-dashed border-blue-500 bg-black/30 cursor-pointer"
+                  : ""
+              }`}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
               <div className="relative">
                 <input
                   type="file"
@@ -180,7 +208,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   className="w-[6vw] min-[1600px]:w-[4vw] h-[6vw] min-[1600px]:h-[4vw] object-cover rounded-full"
                 />
               </div>
+              {isDragging && (
+                <p className="absolute text-blue-500 mt-3">
+                  Drop file to upload
+                </p>
+              )}
             </div>
+
             <div className="grid grid-cols-2 gap-x-8 gap-y-4">
               <div className="flex flex-col">
                 <label

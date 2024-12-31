@@ -10,12 +10,12 @@ import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
 const State = (props) => {
   const pathname = usePathname();
   const history = useRouter();
-  const [clientId,setClientId] = useState("");
-  const [selectedClientDetails,setSelectedClientDetails] = useState();
+  const [clientId, setClientId] = useState("");
+  const [selectedClientDetails, setSelectedClientDetails] = useState();
   const [userData, setUserData] = useState();
   const [actualUser, setActualUser] = useState();
   const [users, setUsers] = useState([]);
-  const [searchTextClients,setSearchTextClients] = useState("");
+  const [searchTextClients, setSearchTextClients] = useState("");
   const [agencies, setAgencies] = useState([]);
   const [mainDataSource, setMainDataSource] = useState();
   const [mainTemplates, setMainTemplates] = useState();
@@ -31,7 +31,8 @@ const State = (props) => {
   const [rawReportsClient, setRawReportsClient] = useState([]);
   const [linkToEmbed, setLinkToEmbed] = useState("");
   const [timezones, setTimezones] = useState([]);
-  console.log('selected Client',selectedClientDetails);
+  console.log("selected Client", selectedClientDetails);
+
   const checkToken = () => {
     let cookie = getCookie("token");
     if (cookie?.length > 5) {
@@ -355,14 +356,14 @@ const State = (props) => {
   const getDataSourceStructure = (id) => {
     let cookie = getCookie("token");
     setDataSourceStructure([]);
-    console.log(id)
+    console.log(id);
     if (cookie?.length > 5) {
       try {
         axios
           .post(
             `${BACKEND_URI}/client/get-client-credentials`,
             {
-              "client_id": ""
+              client_id: "",
             },
             {
               headers: {
@@ -394,7 +395,7 @@ const State = (props) => {
           .post(
             `${BACKEND_URI}/client/get-client-credentials`,
             {
-              "client_id": id
+              client_id: id,
             },
             {
               headers: {
@@ -454,7 +455,7 @@ const State = (props) => {
     getAgencies();
     getTimezones();
     getUsers();
-    getMainDataSources(userData?.agency_id)
+    getMainDataSources(userData?.agency_id);
     getMainTemplates(userData?.agency_id);
     getDataSourceStructure(clientId);
     getUserAgency();

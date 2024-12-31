@@ -62,7 +62,7 @@ const Overview = () => {
             <div className="grid grid-cols-4 gap-x-6">
               {[
                 {
-                  name: "Total Clients",
+                  name: "Total Clients Added",
                   value: actualUser?.current_number_of_clients,
                   img: "/Overview/Icons/total.png",
                 },

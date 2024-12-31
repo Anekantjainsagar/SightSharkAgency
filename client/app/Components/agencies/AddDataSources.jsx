@@ -37,40 +37,45 @@ function formatName(input) {
     .join(" ");
 }
 
-const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
+const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
   let maxPage = 2;
   const [credentialsState, setCredentialsState] = useState([]);
   const [allowedPlatforms, setAllowedPlatforms] = useState([]);
-  const { mainDataSource,getAgencies,clientId,selectedClientDetails, clientCreds, getCredentialsForClient,dataSourceStructure } =
-    useContext(Context);
-  
+  const {
+    mainDataSource,
+    getAgencies,
+    selectedClientDetails,
+    dataSourceStructure,
+    getCredentialsForClient,
+  } = useContext(Context);
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   function closeModal() {
     setShowSubscribe(false);
   }
-  
 
   useEffect(() => {
-    
-    
     if (selectedClientDetails?.platform_name) {
       setAllowedPlatforms(() => {
-        const newPlatforms = selectedClientDetails?.platforms_images?.map((e) => e?.platform);
-        
-        if(newPlatforms?.length>0){
+        const newPlatforms = selectedClientDetails?.platforms_images?.map(
+          (e) => e?.platform
+        );
+
+        if (newPlatforms?.length > 0) {
           return Array.from(new Set([...newPlatforms]));
-        }
-        else{
-          return []
+        } else {
+          return [];
         }
       });
     }
   }, [selectedClientDetails]);
 
   const addClientCredentials = async () => {
-    if ((selectedClientDetails?.client_id, selectedClientDetails?.parent_name)) {
+    if (
+      (selectedClientDetails?.client_id, selectedClientDetails?.parent_name)
+    ) {
       try {
         const platforms = credentialsState.reduce((acc, e) => {
           acc[e?.platform] = {
@@ -94,6 +99,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
 
         if (response.data) {
           getAgencies();
+          getCredentialsForClient(selectedClientDetails?.client_id);
           toast.success("Updated Data Sources Successfully");
           closeModal();
         }
@@ -113,12 +119,12 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
           if (item?.creds_structure?.credentials) {
             const areCredentialsEmpty = (creds) =>
               Object.values(creds).every((value) => value === null);
-            if(item?.platform === "shopify"){
+            if (item?.platform === "shopify") {
               continue;
             }
             if (areCredentialsEmpty(item?.creds_structure?.credentials)) {
               flag = false;
-              unConfiguredPlatform = item?.platform
+              unConfiguredPlatform = item?.platform;
               break;
             }
           }
@@ -126,15 +132,20 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
       }
       if (!flag) break;
     }
-    if(!flag){
-      toast.error(`${unConfiguredPlatform.replaceAll("_"," ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
-        .join(" ")} data source is not configured`);
-    }
-    else{
+    if (!flag) {
+      toast.error(
+        `${unConfiguredPlatform
+          .replaceAll("_", " ")
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          ) // Capitalize the first letter
+          .join(" ")} data source is not configured`
+      );
+    } else {
       setPage(page + 1);
-    } 
-    
-  }
+    }
+  };
 
   return (
     <div className="z-50">
@@ -214,12 +225,16 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
                   })
                   .map((e, i) => {
                     return (
-                      <DataSourceBox
-                        key={i}
-                        e={e}
-                        setAllowedPlatforms={setAllowedPlatforms}
-                        allowedPlatforms={allowedPlatforms}
-                      />
+                      !selectedClientDetails?.platform_name?.includes(
+                        e?.name
+                      ) && (
+                        <DataSourceBox
+                          key={i}
+                          e={e}
+                          setAllowedPlatforms={setAllowedPlatforms}
+                          allowedPlatforms={allowedPlatforms}
+                        />
+                      )
                     );
                   })}
               </div>
@@ -236,7 +251,9 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
           <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
             <button
               className={`text-white text-base min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
-                page == 1 ? "bg-[#898989]/15 invisible" : "bg-newBlue cursor-pointer visible"
+                page == 1
+                  ? "bg-[#898989]/15 invisible"
+                  : "bg-newBlue cursor-pointer visible"
               } h-10 min-[1600px]:h-12 rounded-lg`}
               disabled={page == 1}
               onClick={() => {
@@ -250,7 +267,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
             <button
               onClick={() => {
                 if (page == maxPage) {
-                  addClientCredentials()
+                  addClientCredentials();
                 } else {
                   isAllDataSourceConfigured();
                   // setPage(page + 1);
@@ -269,12 +286,13 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe, data }) => {
 
 const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   const [checked, setChecked] = useState(false);
-  const { clientCreds,selectedClientDetails } = useContext(Context);
-  
+  const { clientCreds, selectedClientDetails } = useContext(Context);
+
   useEffect(() => {
     if (
-      selectedClientDetails?.platform_images?.find((el) => el?.platform === e?.name)?.client_id
-        ?.length > 0 &&
+      selectedClientDetails?.platform_images?.find(
+        (el) => el?.platform === e?.name
+      )?.client_id?.length > 0 &&
       !allowedPlatforms?.includes(e?.name)
     ) {
       setChecked(true);
@@ -343,11 +361,7 @@ const DataSourceBox = ({ e, setAllowedPlatforms, allowedPlatforms }) => {
   );
 };
 
-const Page4 = ({
-  credentialsState,
-  setCredentialsState,
-  allowedPlatforms,
-}) => {
+const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   const [isEditable, setIsEditable] = useState({
     index: 1000,
     isEditable: false,
@@ -361,7 +375,6 @@ const Page4 = ({
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
-      
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
@@ -377,7 +390,7 @@ const Page4 = ({
           }
           return e;
         });
-      
+
       setCredentialsState(newCredentials);
     }
   }, [dataSourceStructure, mainDataSource, allowedPlatforms]);
@@ -465,36 +478,49 @@ const Page4 = ({
               <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
               <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
-                {false && <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
-                  <p className="font-[500] text-[1.25rem]">Credentials</p>
-                  {<div className="flex flex-row justify-center items-center">
-                    <p>Customize Data Source</p>
-                    <Switch
-                      checked={e?.creds_structure?.type === 'custom'? true : isEditable.index === i}
-                      onChange={(checked) => {
-                        handleInputChange(
-                          e.platform,
-                          "type",
-                          checked ? 'custom':'default'
-                        )
-                        setIsChecked(checked);
-                        setIsEditable((prevState) => ({
-                          index: checked ? i : null,
-                          isEditable: checked,
-                        }));
-                      }}
-                      style={{
-                        backgroundColor:
-                        (e?.creds_structure?.type === 'custom'? true : isEditable.index === i) ? "#339a35" : "#e9e9ea",
-                        transform: "scale(1.0)",
-                        marginRight: "20px",
-                        marginLeft: "20px",
-                        fontFamily: "Outfit, sans-serif",
-                        borderColor: "black",
-                      }}
-                    />
-                  </div>}
-                </div>}
+                {false && (
+                  <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                    <p className="font-[500] text-[1.25rem]">Credentials</p>
+                    {
+                      <div className="flex flex-row justify-center items-center">
+                        <p>Customize Data Source</p>
+                        <Switch
+                          checked={
+                            e?.creds_structure?.type === "custom"
+                              ? true
+                              : isEditable.index === i
+                          }
+                          onChange={(checked) => {
+                            handleInputChange(
+                              e.platform,
+                              "type",
+                              checked ? "custom" : "default"
+                            );
+                            setIsChecked(checked);
+                            setIsEditable((prevState) => ({
+                              index: checked ? i : null,
+                              isEditable: checked,
+                            }));
+                          }}
+                          style={{
+                            backgroundColor: (
+                              e?.creds_structure?.type === "custom"
+                                ? true
+                                : isEditable.index === i
+                            )
+                              ? "#339a35"
+                              : "#e9e9ea",
+                            transform: "scale(1.0)",
+                            marginRight: "20px",
+                            marginLeft: "20px",
+                            fontFamily: "Outfit, sans-serif",
+                            borderColor: "black",
+                          }}
+                        />
+                      </div>
+                    }
+                  </div>
+                )}
                 {
                   <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
                     <label

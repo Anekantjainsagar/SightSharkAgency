@@ -1,69 +1,45 @@
 import Context from "@/app/Context/Context";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { AiOutlineClose, AiOutlineFilter } from "react-icons/ai";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 const FilterData = () => {
   const { agencies } = useContext(Context);
-  const [selectedOption, setSelectedOption] = useState("Report Name");
-  const [data, setData] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    if (selectedOption === "Report Name") {
-      setData(agencies?.data?.map((e) => e?.client_name));
-    } else if (selectedOption == "Report Type") {
-      setData(["Parent Report", "Child Report"]);
-    } else {
-      setData(agencies?.data?.map((e) => e?.template_name));
-    }
-  }, [selectedOption]);
 
   return (
     <div className="flex items-center gap-x-4">
-      <div className="relative w-[10.5vw]">
-        <select
-          className="bg-transparent px-4 w-full py-0.5 outline-none border border-gray-400 text-gray-400 rounded-md appearance-none"
-          value={selectedOption}
-          onChange={(e) => setSelectedOption(e.target.value)}
-        >
-          {["Report Name", "Report Type", "Template Name"].map((e, i) => {
-            return (
-              <option key={i} className="bg-main">
-                {e}
-              </option>
-            );
-          })}
-        </select>
-        <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-4 w-4 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-      </div>
-      <div className="relative">
-        {!isOpen ? (
-          <AiOutlineFilter
-            className="text-3xl text-gray-400 cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        ) : (
-          <AiOutlineClose
-            className="text-3xl text-gray-400 cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
-          />
-        )}
-        <Popup data={data} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <div className="flex">
+        {[
+          {
+            title: "Report Name",
+            options: agencies?.data?.map((e) => e?.client_name),
+          },
+          { title: "Report Type", options: ["Parent Report", "Child Report"] },
+          {
+            title: "Template Name",
+            options: agencies?.data?.map((e) => e?.template_name),
+          },
+        ].map((e, i) => {
+          return (
+            <div className="relative w-[10.5vw] border border-gray-400 text-gray-400 ml-4 rounded-md">
+              <select
+                className="bg-transparent px-4 py-0.5 outline-none appearance-none w-full"
+                // value={selectedOption}
+                // onChange={(e) => setSelectedOption(e.target.value)}
+              >
+                {[e?.title, ...e?.options]?.map((e, i) => {
+                  return (
+                    <option key={i} className="bg-main">
+                      {e}
+                    </option>
+                  );
+                })}{" "}
+              </select>
+              <span className="absolute right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                <MdKeyboardArrowDown />
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

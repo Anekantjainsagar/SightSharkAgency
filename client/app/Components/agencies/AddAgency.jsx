@@ -69,7 +69,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     checkPasswordCriteria,
     timezones,
     dataSourceStructure,
-    getDataSourceStructure
+    getDataSourceStructure,
   } = useContext(Context);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -108,12 +108,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           if (item?.creds_structure?.credentials) {
             const areCredentialsEmpty = (creds) =>
               Object.values(creds).every((value) => value === null);
-            if(item?.platform === "shopify"){
+            if (item?.platform === "shopify") {
               continue;
             }
             if (areCredentialsEmpty(item?.creds_structure?.credentials)) {
               flag = false;
-              unConfiguredPlatform = item?.platform
+              unConfiguredPlatform = item?.platform;
               break;
             }
           }
@@ -121,15 +121,20 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
       }
       if (!flag) break;
     }
-    if(!flag){
-      toast.error(`${unConfiguredPlatform.replaceAll("_"," ").split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize the first letter
-        .join(" ")} data source is not configured`);
-    }
-    else{
+    if (!flag) {
+      toast.error(
+        `${unConfiguredPlatform
+          .replaceAll("_", " ")
+          .split(" ")
+          .map(
+            (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+          ) // Capitalize the first letter
+          .join(" ")} data source is not configured`
+      );
+    } else {
       setPage(page + 1);
-    } 
-    
-  }
+    }
+  };
 
   const handleFileChangeProfile = (event) => {
     const file = event.target.files[0];
@@ -156,6 +161,26 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     setShowSubscribe(false);
   }
 
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      handleFileChangeProfile({ target: { files: [file] } });
+    }
+  };
+
   let nav_data = [
     "Client Details",
     "Key Contact Details",
@@ -168,53 +193,57 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const validateDataSources = () => {
     const errorsMap = {};
 
-// Collect errors for each platform
-credentialsState.forEach((credential) => {
-  const { platform, creds_structure } = credential;
+    // Collect errors for each platform
+    credentialsState.forEach((credential) => {
+      const { platform, creds_structure } = credential;
 
-  if (!creds_structure) {
-    errorsMap[platform] = ["Missing credentials structure"];
-    return;
-  }
-
-  // Check for required fields
-  const requiredFields = ["account_id", ...Object.keys(creds_structure.credentials || {})];
-  requiredFields.forEach((field) => {
-    const fieldValue = creds_structure[field] || creds_structure.credentials?.[field];
-    if (!fieldValue || fieldValue.length === 0) {
-      if (!errorsMap[platform]) {
-        errorsMap[platform] = [];
+      if (!creds_structure) {
+        errorsMap[platform] = ["Missing credentials structure"];
+        return;
       }
-      errorsMap[platform].push(formatName(field));
+
+      // Check for required fields
+      const requiredFields = [
+        "account_id",
+        ...Object.keys(creds_structure.credentials || {}),
+      ];
+      requiredFields.forEach((field) => {
+        const fieldValue =
+          creds_structure[field] || creds_structure.credentials?.[field];
+        if (!fieldValue || fieldValue.length === 0) {
+          if (!errorsMap[platform]) {
+            errorsMap[platform] = [];
+          }
+          errorsMap[platform].push(formatName(field));
+        }
+      });
+    });
+
+    // Prepare grouped error messages
+    const groupedErrors = Object.entries(errorsMap).map(
+      ([platform, fields]) =>
+        `${platform.replace("_", " ")}: ${fields.join(", ")} is missing`
+    );
+
+    if (groupedErrors.length > 0) {
+      toast.error(
+        <div className="w-[auto]">
+          <p>Please fill all fields for data source:</p>
+          <ul>
+            {groupedErrors.map((error, index) => (
+              <li className="capitalize" key={index}>
+                {error}
+              </li>
+            ))}
+          </ul>
+        </div>,
+        { duration: 5000, className: "custom-toast-container" }
+      );
+      return false; // Validation failed
     }
-  });
-});
 
-
-
-// Prepare grouped error messages
-const groupedErrors = Object.entries(errorsMap).map(
-  ([platform, fields]) => `${platform.replace("_"," ")}: ${fields.join(", ")} is missing`
-);
-
-if (groupedErrors.length > 0) {
-  toast.error(
-    <div className="w-[auto]">
-      <p>Please fill all fields for data source:</p>
-      <ul>
-        {groupedErrors.map((error, index) => (
-          <li className="capitalize" key={index}>{error}</li>
-        ))}
-      </ul>
-    </div>,
-    { duration: 5000 ,className: "custom-toast-container"}
-  );
-  return false; // Validation failed
-}
-
-return true; // Validation passed
+    return true; // Validation passed
   };
-  
 
   const addClientCredentials = async (client_id, parent_name) => {
     if ((client_id, parent_name)) {
@@ -365,7 +394,16 @@ return true; // Validation passed
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
             {page === 1 ? (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
-                <div className="flex flex-col items-center justify-center mb-6">
+                <div
+                  className={`flex flex-col items-center justify-center mb-6 ${
+                    isDragging
+                      ? "border-2 border-dashed border-blue-500 bg-black/30 cursor-pointer"
+                      : ""
+                  }`}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                >
                   <div className="relative">
                     <input
                       type="file"
@@ -400,8 +438,13 @@ return true; // Validation passed
                     />
                   </div>
                   <p className="text-center mt-3 text-gray-300">
-                    {fileInput?.name}
+                    {data?.fileInput?.name}
                   </p>
+                  {isDragging && (
+                    <p className="absolute text-blue-500 mt-3">
+                      Drop file to upload
+                    </p>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-x-6 min-[1600px]:gap-x-8 gap-y-4 min-[1600px]:gap-y-6">
                   <div className="flex flex-col">
@@ -737,18 +780,15 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                         }}
                         className={`border ${
                           e?.id == data?.templates[0] && "border-white"
-                        } flex items-center justify-center border-gray-300/20 rounded-xl cursor-pointer h-[18vh]`}
+                        } flex items-center p-3 justify-center border-gray-300/20 rounded-xl cursor-pointer`}
                       >
-                        {e?.template_image ? (
-                          <Image
-                            src={e?.template_image}
-                            alt={e?.template_image?.src}
-                            width={1000}
-                            height={1000}
-                          />
-                        ) : (
-                          <p>{e?.template_name}</p>
-                        )}
+                        <Image
+                          src={e?.template_image}
+                          alt={e?.template_image?.src}
+                          width={1000}
+                          height={1000}
+                          className="h-[18vh] object-cover"
+                        />
                       </div>
                     );
                   })}
@@ -926,21 +966,16 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                     data?.timezone
                   ) {
                     setPage(page + 1);
-                  }
-                  else if(page == 3){
+                  } else if (page == 3) {
                     isAllDataSourceConfigured();
-                  }
-                  else if(page == 4){
-                    if(validateDataSources()){
-                      setPage(page + 1)
+                  } else if (page == 4) {
+                    if (validateDataSources()) {
+                      setPage(page + 1);
                     }
                   } else {
                     if (page == 2 && data?.keyContact?.email) {
                       setPage(page + 1);
-                    } else if (
-                      page == 5 ||
-                      page == 6
-                    ) {
+                    } else if (page == 5 || page == 6) {
                       setPage(page + 1);
                     } else {
                       toast.error("Please fill all the details");
@@ -1080,36 +1115,49 @@ const Page4 = ({
               <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
               <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
-                {false && <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
-                  <p className="font-[500] text-[1.25rem]">Credentials</p>
-                  {<div className="flex flex-row justify-center items-center">
-                    <p>Customize Data Source</p>
-                    <Switch
-                      checked={e?.creds_structure?.type === 'custom'? true : isEditable.index === i}
-                      onChange={(checked) => {
-                        handleInputChange(
-                          e.platform,
-                          "type",
-                          checked ? 'custom':'default'
-                        )
-                        setIsChecked(checked);
-                        setIsEditable((prevState) => ({
-                          index: checked ? i : null,
-                          isEditable: checked,
-                        }));
-                      }}
-                      style={{
-                        backgroundColor:
-                        (e?.creds_structure?.type === 'custom'? true : isEditable.index === i) ? "#339a35" : "#e9e9ea",
-                        transform: "scale(1.0)",
-                        marginRight: "20px",
-                        marginLeft: "20px",
-                        fontFamily: "Outfit, sans-serif",
-                        borderColor: "black",
-                      }}
-                    />
-                  </div>}
-                </div>}
+                {false && (
+                  <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                    <p className="font-[500] text-[1.25rem]">Credentials</p>
+                    {
+                      <div className="flex flex-row justify-center items-center">
+                        <p>Customize Data Source</p>
+                        <Switch
+                          checked={
+                            e?.creds_structure?.type === "custom"
+                              ? true
+                              : isEditable.index === i
+                          }
+                          onChange={(checked) => {
+                            handleInputChange(
+                              e.platform,
+                              "type",
+                              checked ? "custom" : "default"
+                            );
+                            setIsChecked(checked);
+                            setIsEditable((prevState) => ({
+                              index: checked ? i : null,
+                              isEditable: checked,
+                            }));
+                          }}
+                          style={{
+                            backgroundColor: (
+                              e?.creds_structure?.type === "custom"
+                                ? true
+                                : isEditable.index === i
+                            )
+                              ? "#339a35"
+                              : "#e9e9ea",
+                            transform: "scale(1.0)",
+                            marginRight: "20px",
+                            marginLeft: "20px",
+                            fontFamily: "Outfit, sans-serif",
+                            borderColor: "black",
+                          }}
+                        />
+                      </div>
+                    }
+                  </div>
+                )}
                 {
                   <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
                     <label

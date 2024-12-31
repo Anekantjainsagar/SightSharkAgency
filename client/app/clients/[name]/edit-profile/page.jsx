@@ -15,13 +15,22 @@ import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import Required from "@/app/Components/Utils/Required";
 import axios from "axios";
-let databar = ["Client Details", "Key Contact Information"];
+import { AiOutlineClose } from "react-icons/ai";
+import { BsCheckLg } from "react-icons/bs";
+let databar = ["Client Details", "Key Contact Information", "Data Sources"];
+
+function formatName(input) {
+  return input
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
 
 const Overview = ({ params }) => {
+  const { setSelectedClientDetails } = useContext(Context);
   const [status, setStatus] = useState("Active");
   const [selected, setSelected] = useState("Client Details");
   const [deleteAgency, setDeleteAgency] = useState(false);
-  
   const [file, setFile] = useState("");
   const [fileInput, setFileInput] = useState();
   const [data, setData] = useState({
@@ -39,22 +48,30 @@ const Overview = ({ params }) => {
     dataSources: [],
     agency_id: "",
     credentials: { email: "", password: "" },
+    timezone: "",
   });
   const fileInputRef = React.useRef(null);
-  const { agencies, getAgencies,selectedClientDetails } = useContext(Context);
+  const {
+    agencies,
+    getAgencies,
+    selectedClientDetails,
+    getCredentialsForClient,
+    timezones,
+  } = useContext(Context);
   const { name } = params;
   const [original_data, setOriginal_data] = useState(selectedClientDetails);
   const history = useRouter();
 
   useEffect(() => {
     updateDataTemp();
+    getCredentialsForClient(original_data?.client_id);
   }, [name, agencies]);
 
   const updateDataTemp = () => {
     let temp = agencies?.data?.find(
-      (e) => e?.client_name.replaceAll(" ","-") == decodeURIComponent(name)
+      (e) => e?.client_name.replaceAll(" ", "-") == decodeURIComponent(name)
     );
-    // setSelectedClientDetails(temp)
+    setSelectedClientDetails(temp);
     setOriginal_data(temp);
     setData({
       name: temp?.client_name,
@@ -70,6 +87,7 @@ const Overview = ({ params }) => {
       credentials: {
         email: temp?.email_address,
       },
+      timezone: temp?.time_zone,
     });
     setStatus(temp?.status);
     setFile(temp?.profile_picture);
@@ -189,21 +207,39 @@ const Overview = ({ params }) => {
                         </div>
                         <div className="flex flex-col">
                           <label
-                            htmlFor="location"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            htmlFor="Timezone"
+                            className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                           >
-                            Location
+                            Timezone
+                            <Required />
                           </label>
-                          <input
-                            id="location"
-                            value={data?.location}
-                            onChange={(e) => {
-                              setData({ ...data, location: e.target.value });
-                            }}
-                            type="text"
-                            placeholder="Enter Location"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
-                          />
+
+                          <div className="relative w-full">
+                            <select
+                              value={data?.timezone}
+                              onChange={(e) => {
+                                setData({ ...data, timezone: e.target.value });
+                              }}
+                              id="Timezone"
+                              className="bg-[#898989]/15 w-full outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
+                            >
+                              {timezones?.map((e, i) => {
+                                return (
+                                  <option
+                                    value={e?.region_name}
+                                    key={i}
+                                    className="bg-main"
+                                  >
+                                    {e?.region_name}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                            {/* Custom dropdown icon */}
+                            <span className="absolute right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                              <MdKeyboardArrowDown />
+                            </span>
+                          </div>
                         </div>
                         <div className="flex flex-col">
                           <label
@@ -236,7 +272,7 @@ const Overview = ({ params }) => {
                         </div>
                       </div>
                     </div>
-                  ) : (
+                  ) : selected == databar[1] ? (
                     <div className="flex items-start justify-between mt-4 px-3">
                       <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full">
                         <div className="flex flex-col">
@@ -338,6 +374,22 @@ const Overview = ({ params }) => {
                         </div>
                       </div>
                     </div>
+                  ) : (
+                    <div className="flex items-start justify-between mt-4 px-3">
+                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full">
+                        {selectedClientDetails?.platforms_images?.map(
+                          (e, i) => {
+                            return (
+                              <DataSourceBox
+                                key={i}
+                                e={e}
+                                original_data={original_data}
+                              />
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
                   )}
                 </div>
                 <div className="flex h-[10%] items-center justify-between min-[1600px]:mt-0 mt-6">
@@ -381,6 +433,8 @@ const Overview = ({ params }) => {
                             service_account_api: data?.serviceAcc?.acc2,
                             email_address: data?.credentials?.email,
                             status,
+                            time_zone: data?.timezone,
+                            ...data,
                           }).toString();
 
                           const formData = new FormData();
@@ -446,6 +500,116 @@ const Overview = ({ params }) => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+};
+
+const DataSourceBox = ({ e, original_data }) => {
+  const [account_id, setAccount_id] = useState("");
+  const { dataSourceStructure, getAgencies, getCredentialsForClient } =
+    useContext(Context);
+
+  useEffect(() => {
+    if (dataSourceStructure) {
+      setAccount_id(
+        dataSourceStructure?.find((item) => item?.platform === e?.platform)
+          ?.creds_structure?.account_id
+      );
+    }
+  }, [e]);
+
+  return (
+    <div className="flex items-center justify-between h-fit">
+      <div className="flex items-center ">
+        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
+          <Image
+            src={e?.logo}
+            alt={e?.platform}
+            width={1000}
+            height={1000}
+            className="object-contain"
+          />
+        </div>
+        <label htmlFor={e?.platform} className="text-sm min-[1600px]:text-base">
+          {formatName(e?.platform)}
+        </label>
+      </div>
+      <div className="flex items-center gap-x-2">
+        <input
+          type="text"
+          value={account_id}
+          placeholder="Account ID"
+          onChange={(eve) => setAccount_id(eve.target.value)}
+          className="bg-transparent outline-none border border-gray-400/30 text-gray-400 rounded-md px-3 py-0.5"
+        />
+        <BsCheckLg
+          className="text-green-500 cursor-pointer text-xl"
+          onClick={async () => {
+            try {
+              let platforms = dataSourceStructure
+                .filter((item) =>
+                  original_data?.platform_name.includes(item?.platform)
+                )
+                .reduce((acc, item) => {
+                  acc[item?.platform] = {
+                    ...item.creds_structure,
+                    ...(item?.platform === e?.platform && { account_id }),
+                    report_start_date: "2024-01-11",
+                    account_filter: "blank",
+                  };
+                  return acc;
+                }, {});
+
+              if (Object.keys(platforms)) {
+                const response = await axios.post(
+                  `${BACKEND_URI}/client/update-client-credentials?client_id=${original_data?.client_id}&parent_name=${original_data?.parent_name}`,
+                  { platforms },
+                  {
+                    headers: {
+                      Accept: "application/json",
+                      Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                  }
+                );
+
+                if (response.data) {
+                  // getAgencies();
+                  getCredentialsForClient(original_data?.client_id);
+                  toast.success("Updated Data Sources Successfully");
+                }
+              }
+            } catch (err) {
+              console.error(err.response?.data || err.message);
+              toast.error(err.message);
+            }
+          }}
+        />
+        <AiOutlineClose
+          className="text-red-500 cursor-pointer text-xl"
+          onClick={async () => {
+            try {
+              const response = await axios.post(
+                `${BACKEND_URI}/client/delete-platform-credentials?client_id=${original_data?.client_id}&platform_name=${e?.platform}`,
+                {},
+                {
+                  headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${getCookie("token")}`,
+                  },
+                }
+              );
+
+              if (response.data) {
+                getAgencies();
+                // getCredentialsForClient(original_data?.client_id);
+                toast.success("Deleted Data Sources Successfully");
+              }
+            } catch (err) {
+              toast.error(err.message);
+            }
+          }}
+        />
       </div>
     </div>
   );
