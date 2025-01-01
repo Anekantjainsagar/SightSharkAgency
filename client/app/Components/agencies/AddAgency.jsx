@@ -252,7 +252,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           acc[e?.platform] = {
             ...e.creds_structure,
             // report_start_date: "2024-01-11",
-            account_filter: "blank",
+            account_filter: e?.creds_structure?.account_filter || "blank",
           };
           return acc;
         }, {});
@@ -299,6 +299,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
           key_contact_email_address: data?.keyContact?.email,
           key_contact_phone: data?.keyContact?.phone,
           time_zone: data?.timezone,
+          report_start_date: data?.report_start_date,
+          ...data,
         }).toString();
 
         const formData = new FormData();
@@ -963,7 +965,8 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                     data?.name &&
                     data?.website &&
                     data?.parent_name &&
-                    data?.timezone
+                    data?.timezone &&
+                    data?.report_start_date
                   ) {
                     setPage(page + 1);
                   } else if (page == 3) {
@@ -1186,33 +1189,36 @@ const Page4 = ({
                   </div>
                 }
 
-                {e?.creds_structure?.account_filter && (
-                  <div className="flex flex-row justify-between items-center">
-                    <label
-                      htmlFor={e?.platform}
-                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
-                    >
-                      {formatName("account_filter")}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={formatName("account_filter")}
-                      value={
-                        e?.creds_structure?.account_filter?.length > 0
-                          ? e?.creds_structure?.account_filter
-                          : null
-                      }
-                      onChange={(event) =>
-                        handleInputChange(
-                          e.platform,
-                          "account_filter",
-                          event.target.value
-                        )
-                      }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
-                    />
-                  </div>
-                )}
+                {e?.creds_structure &&
+                  Object.keys(e?.creds_structure)?.includes(
+                    "account_filter"
+                  ) && (
+                    <div className="flex flex-row justify-between items-center">
+                      <label
+                        htmlFor={e?.platform}
+                        className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                      >
+                        {formatName("account_filter")}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={formatName("account_filter")}
+                        value={
+                          e?.creds_structure?.account_filter?.length > 0
+                            ? e?.creds_structure?.account_filter
+                            : null
+                        }
+                        onChange={(event) =>
+                          handleInputChange(
+                            e.platform,
+                            "account_filter",
+                            event.target.value
+                          )
+                        }
+                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                      />
+                    </div>
+                  )}
                 {Object.keys(e?.creds_structure?.credentials || {}).map(
                   (key) => (
                     <div

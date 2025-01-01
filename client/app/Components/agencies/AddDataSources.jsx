@@ -81,7 +81,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
           acc[e?.platform] = {
             ...e.creds_structure,
             // report_start_date: "2024-01-11",
-            account_filter: "blank",
+            account_filter: e?.creds_structure?.account_filter || "blank",
           };
           return acc;
         }, {});
@@ -478,47 +478,45 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
               <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
               <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
-                {false && (
+                {true && (
                   <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
                     <p className="font-[500] text-[1.25rem]">Credentials</p>
-                    {
-                      <div className="flex flex-row justify-center items-center">
-                        <p>Customize Data Source</p>
-                        <Switch
-                          checked={
+                    <div className="flex flex-row justify-center items-center">
+                      <p>Customize Data Source</p>
+                      <Switch
+                        checked={
+                          e?.creds_structure?.type === "custom"
+                            ? true
+                            : isEditable.index === i
+                        }
+                        onChange={(checked) => {
+                          handleInputChange(
+                            e.platform,
+                            "type",
+                            checked ? "custom" : "default"
+                          );
+                          setIsChecked(checked);
+                          setIsEditable((prevState) => ({
+                            index: checked ? i : null,
+                            isEditable: checked,
+                          }));
+                        }}
+                        style={{
+                          backgroundColor: (
                             e?.creds_structure?.type === "custom"
                               ? true
                               : isEditable.index === i
-                          }
-                          onChange={(checked) => {
-                            handleInputChange(
-                              e.platform,
-                              "type",
-                              checked ? "custom" : "default"
-                            );
-                            setIsChecked(checked);
-                            setIsEditable((prevState) => ({
-                              index: checked ? i : null,
-                              isEditable: checked,
-                            }));
-                          }}
-                          style={{
-                            backgroundColor: (
-                              e?.creds_structure?.type === "custom"
-                                ? true
-                                : isEditable.index === i
-                            )
-                              ? "#339a35"
-                              : "#e9e9ea",
-                            transform: "scale(1.0)",
-                            marginRight: "20px",
-                            marginLeft: "20px",
-                            fontFamily: "Outfit, sans-serif",
-                            borderColor: "black",
-                          }}
-                        />
-                      </div>
-                    }
+                          )
+                            ? "#339a35"
+                            : "#a4a4a4",
+                          transform: "scale(1.0)",
+                          marginRight: "20px",
+                          marginLeft: "20px",
+                          fontFamily: "Outfit, sans-serif",
+                          borderColor: "black",
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
                 {
@@ -549,33 +547,36 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                   </div>
                 }
 
-                {e?.creds_structure?.account_filter && (
-                  <div className="flex flex-row justify-between items-center">
-                    <label
-                      htmlFor={e?.platform}
-                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
-                    >
-                      {formatName("account_filter")}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={formatName("account_filter")}
-                      value={
-                        e?.creds_structure?.account_filter?.length > 0
-                          ? e?.creds_structure?.account_filter
-                          : null
-                      }
-                      onChange={(event) =>
-                        handleInputChange(
-                          e.platform,
-                          "account_filter",
-                          event.target.value
-                        )
-                      }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
-                    />
-                  </div>
-                )}
+                {e?.creds_structure &&
+                  Object.keys(e?.creds_structure)?.includes(
+                    "account_filter"
+                  ) && (
+                    <div className="flex flex-row justify-between items-center">
+                      <label
+                        htmlFor={e?.platform}
+                        className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                      >
+                        {formatName("account_filter")}
+                      </label>
+                      <input
+                        type="text"
+                        placeholder={formatName("account_filter")}
+                        value={
+                          e?.creds_structure?.account_filter?.length > 0
+                            ? e?.creds_structure?.account_filter
+                            : null
+                        }
+                        onChange={(event) =>
+                          handleInputChange(
+                            e.platform,
+                            "account_filter",
+                            event.target.value
+                          )
+                        }
+                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                      />
+                    </div>
+                  )}
                 {Object.keys(e?.creds_structure?.credentials || {}).map(
                   (key) => (
                     <div
