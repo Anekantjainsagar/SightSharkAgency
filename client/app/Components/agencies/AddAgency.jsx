@@ -48,19 +48,6 @@ function formatName(input) {
     .join(" ");
 }
 
-function formatNameWithoutUppercase(input) {
-  return input
-    .toLowerCase()
-    .split("_")
-    .map((word) => {
-      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
-        return word.toUpperCase();
-      }
-      return word.charAt(0) + word.slice(1);
-    })
-    .join(" ");
-}
-
 const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   const {
     mainDataSource,
@@ -181,6 +168,14 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     }
   };
 
+  const handlePaste = (e) => {
+    const clipboardItem = e.clipboardData.items[0];
+    if (clipboardItem && clipboardItem.type.startsWith("image")) {
+      const file = clipboardItem.getAsFile();
+      handleFileChangeProfile({ target: { files: [file] } });
+    }
+  };
+
   let nav_data = [
     "Client Details",
     "Key Contact Details",
@@ -207,16 +202,16 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         "account_id",
         ...Object.keys(creds_structure.credentials || {}),
       ];
-      requiredFields.forEach((field) => {
-        const fieldValue =
-          creds_structure[field] || creds_structure.credentials?.[field];
-        if (!fieldValue || fieldValue.length === 0) {
-          if (!errorsMap[platform]) {
-            errorsMap[platform] = [];
-          }
-          errorsMap[platform].push(formatName(field));
-        }
-      });
+      // requiredFields.forEach((field) => {
+      //   const fieldValue =
+      //     creds_structure[field] || creds_structure.credentials?.[field];
+      //   if (!fieldValue || fieldValue.length === 0) {
+      //     if (!errorsMap[platform]) {
+      //       errorsMap[platform] = [];
+      //     }
+      //     errorsMap[platform].push(formatName(field));
+      //   }
+      // });
     });
 
     // Prepare grouped error messages
@@ -249,11 +244,23 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     if ((client_id, parent_name)) {
       try {
         const platforms = credentialsState.reduce((acc, e) => {
-          acc[e?.platform] = {
-            ...e.creds_structure,
-            // report_start_date: "2024-01-11",
-            account_filter: e?.creds_structure?.account_filter || "blank",
-          };
+          let prefilled_platform = dataSourceStructure?.find(
+            (ds) => e?.platform == ds?.platform
+          );
+          if (e?.platform === "recharge" || e?.platform == "shopify") {
+            acc[e?.platform] = {
+              ...e?.creds_structure,
+              account_filter: e?.creds_structure?.account_filter || "blank",
+            };
+          } else {
+            acc[e?.platform] = {
+              type: e?.creds_structure?.type,
+              account_id: e?.creds_structure?.account_id,
+              report_start_date: e?.creds_structure?.report_start_date,
+              account_filter: e?.creds_structure?.account_filter || "blank",
+              credentials: prefilled_platform.creds_structure.credentials,
+            };
+          }
           return acc;
         }, {});
 
@@ -331,10 +338,29 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
               response?.data?.data?.parent_name
             );
             setShowSubscribe(false);
+            setData({
+              profile: "",
+              name: "",
+              parent_name: "",
+              report_start_date: "",
+              website: "",
+              location: "",
+              timezone: "",
+              keyContact: {
+                name: "",
+                profile: "",
+                designation: "",
+                email: "",
+                phone: "",
+              },
+              platforms: [],
+              templates: [],
+              credentials: { email: "", password: "", cpassword: "" },
+            });
           }
         } catch (error) {
           console.error("Error creating user:", error);
-          toast.error("An error occurred while creating the user");
+          toast.error(error.response.data.detail);
         }
       } else {
         toast.error("Both Password should Match!!");
@@ -405,6 +431,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   onDragOver={handleDragOver}
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
+                  onPaste={handlePaste} // Adding the paste event listener
                 >
                   <div className="relative">
                     <input
@@ -1019,9 +1046,9 @@ const Page4 = ({
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
-          // if(e?.creds_structure.type === "custom"){
-          //   setIsChecked(true);
-          // }
+          if (e?.platform === "recharge" || e?.platform == "shopify") {
+            setIsChecked(true);
+          }
           if (e?.creds_structure) {
             e.creds_structure["report_start_date"] = data?.report_start_date;
           }
@@ -1116,7 +1143,7 @@ const Page4 = ({
                 </label>
               </div>
               <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
-              <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
+              <div className="flex-1 flex justify-center min-h-[200px] flex-col px-6">
                 {/* Show inputs only for the current platform */}
                 {false && (
                   <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
@@ -1219,44 +1246,45 @@ const Page4 = ({
                       />
                     </div>
                   )}
-                {Object.keys(e?.creds_structure?.credentials || {}).map(
-                  (key) => (
-                    <div
-                      key={key}
-                      className="flex flex-row justify-between items-center"
-                    >
-                      <label
-                        htmlFor={e?.platform}
-                        className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
-                      >
-                        {formatName(key)}
-                      </label>
-                      <input
+                {(e?.platform === "recharge" || e?.platform == "shopify") &&
+                  Object.keys(e?.creds_structure?.credentials || {}).map(
+                    (key) => (
+                      <div
                         key={key}
-                        readOnly={
-                          isEditable.index !== i &&
-                          e?.creds_structure?.credentials[key]?.length === 0
-                        }
-                        type="text"
-                        placeholder={formatName(key)}
-                        value={
-                          e?.creds_structure?.credentials[key]?.length > 0
-                            ? e?.creds_structure?.credentials[key]
-                            : ""
-                        }
-                        onChange={(event) =>
-                          handleInputChange(
-                            e.platform,
-                            key,
-                            event.target.value,
-                            true
-                          )
-                        }
-                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-                      />
-                    </div>
-                  )
-                )}
+                        className="flex flex-row justify-between items-center"
+                      >
+                        <label
+                          htmlFor={e?.platform}
+                          className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                        >
+                          {formatName(key)}
+                        </label>
+                        <input
+                          key={key}
+                          readOnly={
+                            isEditable.index !== i &&
+                            e?.creds_structure?.credentials[key]?.length === 0
+                          }
+                          type="text"
+                          placeholder={formatName(key)}
+                          value={
+                            e?.creds_structure?.credentials[key]?.length > 0
+                              ? e?.creds_structure?.credentials[key]
+                              : ""
+                          }
+                          onChange={(event) =>
+                            handleInputChange(
+                              e.platform,
+                              key,
+                              event.target.value,
+                              true
+                            )
+                          }
+                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                        />
+                      </div>
+                    )
+                  )}
               </div>
             </div>
           </AccordionItem>

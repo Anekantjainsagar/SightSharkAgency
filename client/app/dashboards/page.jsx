@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 const Overview = () => {
   const history = useRouter();
-  const { agencies, setLinkToEmbed } = useContext(Context);
+  const { agencies, setLinkToEmbed, agencyReports } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   return (
@@ -27,7 +27,7 @@ const Overview = () => {
               <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
                 Dashboards{" "}
                 <span className="text-lg min-[1600px]:text-xl text-white/80">
-                  ({agencies?.total_count})
+                  ({agencyReports ? agencyReports?.total_count : 0})
                 </span>
               </h3>
               <FilterData />
@@ -53,7 +53,7 @@ const Overview = () => {
                 })}
               </div>
               <div className="h-[72vh] overflow-y-auto small-scroller min-[1600px]:h-[70vh]">
-                {agencies?.data?.map((data, i) => {
+                {agencyReports?.map((data, i) => {
                   return (
                     <div
                       key={i}

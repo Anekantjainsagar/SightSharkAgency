@@ -15,8 +15,8 @@ import { getCookie } from "cookies-next";
 import toast from "react-hot-toast";
 import Required from "@/app/Components/Utils/Required";
 import axios from "axios";
+import { BsCheckLg, BsThreeDotsVertical } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
-import { BsCheckLg } from "react-icons/bs";
 let databar = ["Client Details", "Key Contact Information", "Data Sources"];
 
 function formatName(input) {
@@ -49,6 +49,8 @@ const Overview = ({ params }) => {
     agency_id: "",
     credentials: { email: "", password: "" },
     timezone: "",
+    report_start_date: "",
+    parent_name: "",
   });
   const fileInputRef = React.useRef(null);
   const {
@@ -88,6 +90,9 @@ const Overview = ({ params }) => {
         email: temp?.email_address,
       },
       timezone: temp?.time_zone,
+      report_start_date: temp?.report_start_date,
+      parent_name: temp?.parent_name,
+      ...temp,
     });
     setStatus(temp?.status);
     setFile(temp?.profile_picture);
@@ -186,6 +191,25 @@ const Overview = ({ params }) => {
                             placeholder="Enter Client Name"
                             className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
                           />
+                        </div>{" "}
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="parent_name"
+                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                          >
+                            Parent Name
+                            <Required />
+                          </label>
+                          <input
+                            id="parent_name"
+                            value={data?.parent_name}
+                            onChange={(e) => {
+                              setData({ ...data, parent_name: e.target.value });
+                            }}
+                            type="text"
+                            placeholder="Enter Parent Name"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                          />
                         </div>
                         <div className="flex flex-col">
                           <label
@@ -240,6 +264,26 @@ const Overview = ({ params }) => {
                               <MdKeyboardArrowDown />
                             </span>
                           </div>
+                        </div>{" "}
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="deployment"
+                            className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                          >
+                            Report Start Date <Required />
+                          </label>
+                          <input
+                            id="deployment"
+                            value={data?.report_start_date}
+                            onChange={(e) => {
+                              setData({
+                                ...data,
+                                report_start_date: e.target.value,
+                              });
+                            }}
+                            type="date"
+                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                          />
                         </div>
                         <div className="flex flex-col">
                           <label
@@ -376,7 +420,7 @@ const Overview = ({ params }) => {
                     </div>
                   ) : (
                     <div className="flex items-start justify-between mt-4 px-3">
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full">
+                      <div className="grid grid-cols-4 gap-x-4 gap-y-6 w-full">
                         {selectedClientDetails?.platforms_images?.map(
                           (e, i) => {
                             return (
@@ -420,6 +464,12 @@ const Overview = ({ params }) => {
                           data?.website &&
                           data?.keyContact?.email
                         ) {
+                          const filteredData = Object.fromEntries(
+                            Object.entries(selectedClientDetails).filter(
+                              ([key, value]) => value != null
+                            )
+                          );
+
                           const queryParams = new URLSearchParams({
                             client_name: data?.name,
                             website: data?.website,
@@ -434,7 +484,8 @@ const Overview = ({ params }) => {
                             email_address: data?.credentials?.email,
                             status,
                             time_zone: data?.timezone,
-                            ...data,
+                            parent_name: data?.parent_name,
+                            ...filteredData,
                           }).toString();
 
                           const formData = new FormData();
@@ -506,6 +557,8 @@ const Overview = ({ params }) => {
 };
 
 const DataSourceBox = ({ e, original_data }) => {
+  const [showMenu, setShowMenu] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
   const [account_id, setAccount_id] = useState("");
   const { dataSourceStructure, getAgencies, getCredentialsForClient } =
     useContext(Context);
@@ -520,96 +573,137 @@ const DataSourceBox = ({ e, original_data }) => {
   }, [e]);
 
   return (
-    <div className="flex items-center justify-between h-fit">
-      <div className="flex items-center ">
-        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/50 from-[75%] w-7 min-[1600px]:w-8 aspect-square p-1.5 mr-3">
-          <Image
-            src={e?.logo}
-            alt={e?.platform}
-            width={1000}
-            height={1000}
-            className="object-contain"
-          />
-        </div>
-        <label htmlFor={e?.platform} className="text-sm min-[1600px]:text-base">
+    <div className="flex flex-col items-center justify-between h-fit border rounded-2xl border-gray-300/30 p-2">
+      <div className="flex items-center flex-col gap-2 h-[7vw] justify-center aspect-square">
+        <Image
+          src={e?.logo}
+          alt={e?.platform}
+          width={1000}
+          height={1000}
+          className="min-[1600px]:w-10 min-[1600px]:h-14 w-10 h-14 mr-2 aspect-square object-contain"
+        />
+        <label
+          htmlFor={e?.platform}
+          className="text-[14px] min-[1600px]:text-[1.15rem] capitalize cursor-pointer"
+        >
           {formatName(e?.platform)}
         </label>
       </div>
-      <div className="flex items-center gap-x-2">
-        <input
-          type="text"
-          value={account_id}
-          placeholder="Account ID"
-          onChange={(eve) => setAccount_id(eve.target.value)}
-          className="bg-transparent outline-none border border-gray-400/30 text-gray-400 rounded-md px-3 py-0.5"
-        />
-        <BsCheckLg
-          className="text-green-500 cursor-pointer text-xl"
-          onClick={async () => {
-            try {
-              let platforms = dataSourceStructure
-                .filter((item) =>
-                  original_data?.platform_name.includes(item?.platform)
-                )
-                .reduce((acc, item) => {
-                  acc[item?.platform] = {
-                    ...item.creds_structure,
-                    ...(item?.platform === e?.platform && { account_id }),
-                    report_start_date: "2024-01-11",
-                    account_filter: "blank",
-                  };
-                  return acc;
-                }, {});
+      <div className="border-[0.5px] border-gray-300/20 w-full mb-2"></div>
+      <div className="flex items-center w-full px-2 justify-between gap-x-2 relative">
+        {isEditable ? (
+          <div className="w-11/12 flex items-center relative">
+            <input
+              type="text"
+              value={account_id}
+              placeholder="Account ID"
+              onChange={(eve) => setAccount_id(eve.target.value)}
+              className="bg-transparent w-full outline-none border border-gray-400/30 text-gray-400 rounded-2xl px-3"
+            />
+            <BsCheckLg
+              className="text-green-500 absolute cursor-pointer -right-1 -bottom-1 bg-white rounded-full text-xl"
+              onClick={async () => {
+                try {
+                  let platforms = dataSourceStructure
+                    .filter((item) =>
+                      original_data?.platform_name.includes(item?.platform)
+                    )
+                    .reduce((acc, item) => {
+                      acc[item?.platform] = {
+                        ...item.creds_structure,
+                        ...(item?.platform === e?.platform && { account_id }),
+                        report_start_date: "2024-01-11",
+                        account_filter: "blank",
+                      };
+                      return acc;
+                    }, {});
 
-              if (Object.keys(platforms)) {
-                const response = await axios.post(
-                  `${BACKEND_URI}/client/update-client-credentials?client_id=${original_data?.client_id}&parent_name=${original_data?.parent_name}`,
-                  { platforms },
-                  {
-                    headers: {
-                      Accept: "application/json",
-                      Authorization: `Bearer ${getCookie("token")}`,
-                    },
+                  if (Object.keys(platforms)) {
+                    const response = await axios.post(
+                      `${BACKEND_URI}/client/update-client-credentials?client_id=${original_data?.client_id}&parent_name=${original_data?.parent_name}`,
+                      { platforms },
+                      {
+                        headers: {
+                          Accept: "application/json",
+                          Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                      }
+                    );
+
+                    if (response.data) {
+                      // getAgencies();
+                      getCredentialsForClient(original_data?.client_id);
+                      toast.success("Updated Data Sources Successfully");
+                      setIsEditable(false);
+                    }
                   }
-                );
-
-                if (response.data) {
-                  // getAgencies();
-                  getCredentialsForClient(original_data?.client_id);
-                  toast.success("Updated Data Sources Successfully");
+                } catch (err) {
+                  console.error(err.response?.data || err.message);
+                  toast.error(err.message);
                 }
-              }
-            } catch (err) {
-              console.error(err.response?.data || err.message);
-              toast.error(err.message);
-            }
-          }}
-        />
-        <AiOutlineClose
-          className="text-red-500 cursor-pointer text-xl"
-          onClick={async () => {
-            try {
-              const response = await axios.post(
-                `${BACKEND_URI}/client/delete-platform-credentials?client_id=${original_data?.client_id}&platform_name=${e?.platform}`,
-                {},
-                {
-                  headers: {
-                    Accept: "application/json",
-                    Authorization: `Bearer ${getCookie("token")}`,
-                  },
-                }
-              );
+              }}
+            />
+          </div>
+        ) : (
+          <p className="w-11/12">Account ID: {account_id}</p>
+        )}
+        {showMenu ? (
+          <AiOutlineClose
+            className="text-gray-300 w-1/12 cursor-pointer"
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+          />
+        ) : (
+          <BsThreeDotsVertical
+            className="text-gray-300 w-1/12 cursor-pointer"
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+          />
+        )}
+        {showMenu && (
+          <div className="absolute right-0 top-8 backdrop-blur-xl text-sm border border-gray-200/20 rounded-md">
+            <p
+              onClick={() => {
+                setIsEditable(!isEditable);
+                setShowMenu(false);
+              }}
+              className="px-2 py-0.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
+            >
+              Edit Account ID
+            </p>
+            <p
+              onClick={async () => {
+                try {
+                  const response = await axios.post(
+                    `${BACKEND_URI}/client/delete-platform-credentials?client_id=${original_data?.client_id}&platform_name=${e?.platform}`,
+                    {},
+                    {
+                      headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    }
+                  );
 
-              if (response.data) {
-                getAgencies();
-                // getCredentialsForClient(original_data?.client_id);
-                toast.success("Deleted Data Sources Successfully");
-              }
-            } catch (err) {
-              toast.error(err.message);
-            }
-          }}
-        />
+                  if (response.data) {
+                    getAgencies();
+                    // getCredentialsForClient(original_data?.client_id);
+                    setShowMenu(false);
+                    setIsEditable(false);
+                    toast.success("Data Source Deleted Successfully");
+                  }
+                } catch (err) {
+                  toast.error(err.message);
+                }
+              }}
+              className="px-2 py-0.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
+            >
+              Delete Data Source
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

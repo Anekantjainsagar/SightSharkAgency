@@ -31,7 +31,8 @@ const State = (props) => {
   const [rawReportsClient, setRawReportsClient] = useState([]);
   const [linkToEmbed, setLinkToEmbed] = useState("");
   const [timezones, setTimezones] = useState([]);
-  console.log("selected Client", selectedClientDetails);
+  const [lookerStudioSecret, setLookerStudioSecret] = useState(false);
+  const [agencyReports, setAgencyReports] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -215,7 +216,6 @@ const State = (props) => {
             },
           })
           .then((res) => {
-            console.log(res.data);
             setPlatformsData(res.data.data);
           })
           .catch((err) => {
@@ -356,7 +356,6 @@ const State = (props) => {
   const getDataSourceStructure = (id) => {
     let cookie = getCookie("token");
     setDataSourceStructure([]);
-    console.log(id);
     if (cookie?.length > 5) {
       try {
         axios
@@ -443,6 +442,44 @@ const State = (props) => {
     }
   };
 
+  const getLookerStudioData = async () => {
+    let cookie = getCookie("token");
+    if (cookie) {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URI}/credential/is-looker-secret-created`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie}`,
+            },
+          }
+        );
+        setLookerStudioSecret(response.data.is_secret_created);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const getAgencyReports = async () => {
+    let cookie = getCookie("token");
+    if (cookie) {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BACKEND_URI}/agency/reports`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie}`,
+            },
+          }
+        );
+        setAgencyReports(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   useEffect(() => {
     checkToken();
   }, []);
@@ -459,6 +496,8 @@ const State = (props) => {
     getMainTemplates(userData?.agency_id);
     getDataSourceStructure(clientId);
     getUserAgency();
+    getLookerStudioData();
+    getAgencyReports();
   }, [userData]);
 
   useEffect(() => {
@@ -530,6 +569,8 @@ const State = (props) => {
         linkToEmbed,
         setLinkToEmbed,
         timezones,
+        agencyReports,
+        lookerStudioSecret,
       }}
     >
       {props.children}

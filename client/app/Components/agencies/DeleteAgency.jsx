@@ -113,6 +113,7 @@ const DeleteAgency = ({ showSubscribe, setShowSubscribe, name, id }) => {
                           getAgencies();
                           toast.success("Client Deleted Successfully");
                           history.push("/clients");
+                          setValue("");
                         }
                       })
                       .catch((err) => {

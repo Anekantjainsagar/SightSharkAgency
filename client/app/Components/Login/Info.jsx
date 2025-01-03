@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const Info = ({ text }) => {
+const Info = ({ text, placement }) => {
   return (
-    <PopoverComponent content={text}>
+    <PopoverComponent content={text} placement={placement}>
       <svg
         width="15"
         height="16"
@@ -56,7 +56,7 @@ const PopoverComponent = ({ children, placement = "top", content }) => {
       <div
         className={`absolute w-[280px] text-center ${
           placement === "bottom" ? "top-full mt-2" : "bottom-full mb-2"
-        } left-1/2 transform -translate-x-1/2 bg-gray-800 border border-gray-300/5 rounded-lg shadow-lg px-2 py-1.5 z-10 text-[12px] transition-transform duration-300 ease-in-out ${
+        } left-1/2 transform -translate-x-1/2 bg-gray-800 leading-normal border border-gray-300/5 rounded-lg shadow-lg px-2 py-1.5 z-10 text-[12px] transition-transform duration-300 ease-in-out ${
           isOpen ? "scale-100 opacity-100" : "scale-90 opacity-0"
         }`}
       >

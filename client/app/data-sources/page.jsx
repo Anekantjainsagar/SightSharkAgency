@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AddAgency from "@/app/Components/agencies/AddAgency";
@@ -13,7 +13,6 @@ import { getCookie } from "cookies-next";
 import Modal from "react-modal";
 import { AiOutlineClose } from "react-icons/ai";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import axios from "axios";
 
 function formatName(input) {
@@ -31,7 +30,8 @@ function formatName(input) {
     .join(" ");
 }
 const DataSources = () => {
-  const { platformsData, getDataSourcesDataFromAPI } = useContext(Context);
+  const { platformsData, getDataSourcesDataFromAPI, lookerStudioSecret } =
+    useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   const refreshByAgencyId = async (platformList) => {
@@ -94,11 +94,63 @@ const DataSources = () => {
                 Refresh All
               </button>
             </div>
-            <div className="mt-5 border border-gray-200/5 h-[75vh] rounded-2xl">
-              <div className="h-fit p-6 grid grid-cols-6 gap-5">
+            <div
+              className={`mt-5 border border-gray-200/5 ${"h-[41vh]"} rounded-2xl`}
+            >
+              <div className="h-fit p-5 grid grid-cols-6 gap-5">
                 {platformsData?.platforms?.map((e, i) => {
                   return <Block e={e} key={i} />;
                 })}
+              </div>
+            </div>
+            <div className="flex items-center justify-between mt-5">
+              <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
+                Reporting Platforms
+              </h3>
+            </div>
+            <div className="border mt-2 border-gray-200/5 h-fit rounded-2xl">
+              <div className="h-fit p-5 grid grid-cols-6 gap-5">
+                <div className="border border-gray-400/20 rounded-2xl p-2 relative">
+                  <div className="py-10 border-gray-400/20 cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-0 h-fit">
+                    <Image
+                      src={"/looker-icon-svgrepo-com.svg"}
+                      alt={"Looker Studio Logo"}
+                      width={1000}
+                      height={1000}
+                      className="aspect-square object-contain w-2/12"
+                    />
+                    <p className="text-sm text-center min-[1600px]:text-base cursor-pointer mt-2">
+                      Looker Studio
+                    </p>
+                  </div>
+                  {lookerStudioSecret ? (
+                    <div className="mt-2 border-t border-gray-400/20 flex items-end justify-between px-2">
+                      <p
+                        className="text-[10px] w-full text-center mt-2 justify-center min-[1600px]:text-xs cursor-pointer bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
+                        onClick={() => {
+                          window.open(
+                            `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`
+                          );
+                        }}
+                      >
+                        Reconnect
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="mt-2 border-t border-gray-400/20 flex items-end justify-between px-2">
+                      <p
+                        className="text-[10px] w-full text-center mt-2 justify-center min-[1600px]:text-xs cursor-pointer bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
+                        onClick={() => {
+                          window.open(
+                            `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`
+                          );
+                        }}
+                      >
+                        Connect
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -137,13 +189,13 @@ const Block = ({ e }) => {
   const [isRotating, setIsRotating] = useState(false);
   const [credentialsState, setCredentialsState] = useState([]);
   const [isNewPlatform, setIsNewPlatform] = useState(false);
+
   function closeModal() {
     setIsModalOpen(false);
   }
+
   useEffect(() => {
-
     const areCredentialsEmpty = (creds) => {
-
       return Object.values(creds).every((value) => value === null);
     };
     dataSourceStructure?.map((item) => {
@@ -155,6 +207,7 @@ const Block = ({ e }) => {
     });
     // dataSourceStructure.map((item));
   }, [dataSourceStructure]);
+
   const handleReloadClick = async () => {
     setIsRotating(true);
 
@@ -225,7 +278,12 @@ const Block = ({ e }) => {
   };
 
   return (
-    <div className="border border-gray-400/20 rounded-2xl p-2">
+    <div className="border border-gray-400/20 rounded-2xl p-2 relative">
+      {(!isNewPlatform || e?.platform === "shopify") && (
+        <div className="bg-mainBlue text-white text-xs absolute left-0 top-0 rounded-tl-2xl px-3 py-0.5 rounded-br-xl">
+          Connected
+        </div>
+      )}
       {
         <div
           className={`mr-4 w-full flex justify-end items-end ${
@@ -333,9 +391,10 @@ const Page4 = ({
   selectedPlatform,
   data,
 }) => {
+  let fileInputRef2 = useRef();
   const { mainDataSource, dataSourceStructure } = useContext(Context);
 
-  const handleFileUpload = (event,platform,key) => {
+  const handleFileUpload = (event, platform, key) => {
     const file = event.target.files[0];
     // setserviceAcc1(file);
     if (file && file.type === "application/json") {
@@ -347,7 +406,7 @@ const Page4 = ({
           // Check if the file content is not empty before parsing
           if (result) {
             const content = JSON.parse(result);
-            handleInputChange(platform,key,JSON.stringify(content),true)
+            handleInputChange(platform, key, JSON.stringify(content), true);
           } else {
             throw new Error("Empty file content");
           }
@@ -370,7 +429,6 @@ const Page4 = ({
 
   useEffect(() => {
     if (credentialsState?.length == 0) {
-
       const newCredentials = dataSourceStructure
         ?.filter((e) => selectedPlatform === e?.platform)
         ?.map((e) => {
@@ -470,7 +528,7 @@ const Page4 = ({
 
                 {Object.keys(e?.creds_structure?.credentials || {}).map(
                   (key) => {
-                    <p className="text-white">{key}</p>
+                    <p className="text-white">{key}</p>;
                     if (key !== "google_service_account") {
                       return (
                         <div
@@ -515,41 +573,50 @@ const Page4 = ({
                           >
                             {formatName(key)}
                           </label>
-                          <div className="flex flex-col">
-                            {/* {e?.creds_structure?.credentials[key]?.length >
+                          {e?.creds_structure?.credentials[key]?.length > 0 ? (
+                            <div className="flex flex-col">
+                              {/* {e?.creds_structure?.credentials[key]?.length >
                               0 && (
                               <p className="text-sm text-gray-500 mb-2">
                                 File already exists:{" "}
                                 {e?.creds_structure?.credentials[key]}
                               </p>
                             )} */}
-                            <input
-                              placeholder={formatName(key)}
-                              type="file"
-                              onChange={(file)=>handleFileUpload(file,e?.platform,key)}
-                              // ref={fileInputRef}
-                              // value="" // File inputs generally shouldn't have a controlled `value`.
-                              className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
-                            />
-                          </div>
-                          {/* <input
-                            type="text"
-                            placeholder={formatName(key)}
-                            value={
-                              e?.creds_structure?.credentials[key]?.length > 0
-                                ? e?.creds_structure?.credentials[key]
-                                : ""
-                            }
-                            onChange={(event) =>
-                              handleInputChange(
-                                e.platform,
-                                key,
-                                event.target.value,
-                                true
-                              )
-                            }
-                            className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-                          /> */}
+                              <label
+                                className={`border border-gray-300/20 py-1 px-4 rounded-md cursor-pointer`}
+                              >
+                                Replace file
+                                <input
+                                  type="file"
+                                  onChange={(file) =>
+                                    handleFileUpload(file, e?.platform, key)
+                                  }
+                                  ref={fileInputRef2}
+                                  style={{ display: "none" }} // Hide the input
+                                />
+                              </label>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col">
+                              {/* {e?.creds_structure?.credentials[key]?.length >
+                              0 && (
+                              <p className="text-sm text-gray-500 mb-2">
+                                File already exists:{" "}
+                                {e?.creds_structure?.credentials[key]}
+                              </p>
+                            )} */}
+                              <input
+                                placeholder={formatName(key)}
+                                type="file"
+                                onChange={(file) =>
+                                  handleFileUpload(file, e?.platform, key)
+                                }
+                                // ref={fileInputRef}
+                                // value="" // File inputs generally shouldn't have a controlled `value`.
+                                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
+                              />
+                            </div>
+                          )}
                         </div>
                       );
                     }

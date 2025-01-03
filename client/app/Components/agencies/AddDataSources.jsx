@@ -74,13 +74,13 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
 
   const addClientCredentials = async () => {
     if (
-      (selectedClientDetails?.client_id, selectedClientDetails?.parent_name)
+      selectedClientDetails?.client_id &&
+      selectedClientDetails?.parent_name
     ) {
       try {
         const platforms = credentialsState.reduce((acc, e) => {
           acc[e?.platform] = {
             ...e.creds_structure,
-            // report_start_date: "2024-01-11",
             account_filter: e?.creds_structure?.account_filter || "blank",
           };
           return acc;
@@ -367,7 +367,8 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
     isEditable: false,
   });
   const [isChecked, setIsChecked] = useState(false);
-  const { mainDataSource, dataSourceStructure } = useContext(Context);
+  const { mainDataSource, dataSourceStructure, selectedClientDetails } =
+    useContext(Context);
 
   const handleEditClick = (index) => {
     setIsEditable({ index: index, isEditable: true });
@@ -378,9 +379,9 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
       const newCredentials = dataSourceStructure
         ?.filter((e) => allowedPlatforms?.includes(e?.platform))
         ?.map((e) => {
-          // if(e?.creds_structure.type === "custom"){
-          //   setIsChecked(true);
-          // }
+          if (e?.platform === "recharge" || e?.platform == "shopify") {
+            setIsChecked(true);
+          }
           if (e?.creds_structure) {
             e.creds_structure["report_start_date"] = "";
           }
@@ -421,204 +422,216 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
   return (
     <div className="flex flex-col w-full mb-6">
       <Accordion>
-        {credentialsState?.map((e, i) => (
-          <AccordionItem
-            initialEntered={i === 0}
-            key={i}
-            header={({ state }) => (
-              <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
+        {credentialsState
+          ?.filter((e) => {
+            return !selectedClientDetails?.platform_name?.includes(e?.platform);
+          })
+          ?.map((e, i) => (
+            <AccordionItem
+              initialEntered={i === 0}
+              key={i}
+              header={({ state }) => (
+                <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
+                  <div
+                    className={`flex items-center ${
+                      state.isEnter ? "visible" : "visible"
+                    }`}
+                  >
+                    <Image
+                      src={e?.img_link}
+                      alt={e?.platform}
+                      width={1000}
+                      height={1000}
+                      className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
+                        state.isEnter ? "invisible" : "visible"
+                      }`}
+                    />
+                    <label
+                      htmlFor={e?.platform}
+                      className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                    >
+                      {formatName(e?.platform)}
+                    </label>
+                  </div>
+                  <div className="">
+                    {state.isEnter ? <FaChevronUp /> : <FaChevronDown />}
+                  </div>
+                </div>
+              )}
+            >
+              <div
+                key={i}
+                className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+              >
                 <div
-                  className={`flex items-center ${
-                    state.isEnter ? "visible" : "visible"
-                  }`}
+                  className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
                 >
                   <Image
                     src={e?.img_link}
                     alt={e?.platform}
                     width={1000}
                     height={1000}
-                    className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
-                      state.isEnter ? "invisible" : "visible"
-                    }`}
+                    className="min-[1600px]:w-12 min-[1600px]:h-16 w-12 h-16 mr-2 aspect-square object-contain"
                   />
                   <label
                     htmlFor={e?.platform}
-                    className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                    className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
                   >
                     {formatName(e?.platform)}
                   </label>
                 </div>
-                <div className="">
-                  {state.isEnter ? <FaChevronUp /> : <FaChevronDown />}
-                </div>
-              </div>
-            )}
-          >
-            <div
-              key={i}
-              className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
-            >
-              <div
-                className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
-              >
-                <Image
-                  src={e?.img_link}
-                  alt={e?.platform}
-                  width={1000}
-                  height={1000}
-                  className="min-[1600px]:w-12 min-[1600px]:h-16 w-12 h-16 mr-2 aspect-square object-contain"
-                />
-                <label
-                  htmlFor={e?.platform}
-                  className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
-                >
-                  {formatName(e?.platform)}
-                </label>
-              </div>
-              <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
-              <div className="mt-3 flex-1 flex min-h-[200px] flex-col px-6">
-                {/* Show inputs only for the current platform */}
-                {true && (
-                  <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
-                    <p className="font-[500] text-[1.25rem]">Credentials</p>
-                    <div className="flex flex-row justify-center items-center">
-                      <p>Customize Data Source</p>
-                      <Switch
-                        checked={
-                          e?.creds_structure?.type === "custom"
-                            ? true
-                            : isEditable.index === i
-                        }
-                        onChange={(checked) => {
-                          handleInputChange(
-                            e.platform,
-                            "type",
-                            checked ? "custom" : "default"
-                          );
-                          setIsChecked(checked);
-                          setIsEditable((prevState) => ({
-                            index: checked ? i : null,
-                            isEditable: checked,
-                          }));
-                        }}
-                        style={{
-                          backgroundColor: (
+                <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
+                <div className="flex-1 flex min-h-[200px] flex-col justify-center px-6">
+                  {/* Show inputs only for the current platform */}
+                  {false && (
+                    <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
+                      <p className="font-[500] text-[1.25rem]">Credentials</p>
+                      <div className="flex flex-row justify-center items-center">
+                        <p>Customize Data Source</p>
+                        <Switch
+                          checked={
                             e?.creds_structure?.type === "custom"
                               ? true
                               : isEditable.index === i
-                          )
-                            ? "#339a35"
-                            : "#a4a4a4",
-                          transform: "scale(1.0)",
-                          marginRight: "20px",
-                          marginLeft: "20px",
-                          fontFamily: "Outfit, sans-serif",
-                          borderColor: "black",
-                        }}
-                      />
+                          }
+                          onChange={(checked) => {
+                            handleInputChange(
+                              e.platform,
+                              "type",
+                              checked ? "custom" : "default"
+                            );
+                            setIsChecked(checked);
+                            setIsEditable((prevState) => ({
+                              index: checked ? i : null,
+                              isEditable: checked,
+                            }));
+                          }}
+                          style={{
+                            backgroundColor: (
+                              e?.creds_structure?.type === "custom"
+                                ? true
+                                : isEditable.index === i
+                            )
+                              ? "#339a35"
+                              : "#a4a4a4",
+                            transform: "scale(1.0)",
+                            marginRight: "20px",
+                            marginLeft: "20px",
+                            fontFamily: "Outfit, sans-serif",
+                            borderColor: "black",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
-                {
-                  <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
-                    <label
-                      htmlFor={e?.platform}
-                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
-                    >
-                      {formatName("account_ID")}
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={formatName("account_id")}
-                      value={
-                        e?.creds_structure?.account_id?.length > 0
-                          ? e?.creds_structure?.account_id
-                          : null
-                      }
-                      onChange={(event) =>
-                        handleInputChange(
-                          e.platform,
-                          "account_id",
-                          event.target.value
-                        )
-                      }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
-                    />
-                  </div>
-                }
-
-                {e?.creds_structure &&
-                  Object.keys(e?.creds_structure)?.includes(
-                    "account_filter"
-                  ) && (
-                    <div className="flex flex-row justify-between items-center">
+                  )}
+                  {
+                    <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
                       <label
                         htmlFor={e?.platform}
                         className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
                       >
-                        {formatName("account_filter")}
+                        {formatName("account_ID")}
                       </label>
                       <input
                         type="text"
-                        placeholder={formatName("account_filter")}
+                        placeholder={formatName("account_id")}
                         value={
-                          e?.creds_structure?.account_filter?.length > 0
-                            ? e?.creds_structure?.account_filter
+                          e?.creds_structure?.account_id?.length > 0
+                            ? e?.creds_structure?.account_id
                             : null
                         }
                         onChange={(event) =>
                           handleInputChange(
                             e.platform,
-                            "account_filter",
+                            "account_id",
                             event.target.value
-                          )
-                        }
-                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
-                      />
-                    </div>
-                  )}
-                {Object.keys(e?.creds_structure?.credentials || {}).map(
-                  (key) => (
-                    <div
-                      key={key}
-                      className="flex flex-row justify-between items-center"
-                    >
-                      <label
-                        htmlFor={e?.platform}
-                        className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
-                      >
-                        {formatName(key)}
-                      </label>
-                      <input
-                        key={key}
-                        readOnly={
-                          isEditable.index !== i &&
-                          e?.creds_structure?.credentials[key]?.length === 0
-                        }
-                        type="text"
-                        placeholder={formatName(key)}
-                        value={
-                          e?.creds_structure?.credentials[key]?.length > 0
-                            ? e?.creds_structure?.credentials[key]
-                            : ""
-                        }
-                        onChange={(event) =>
-                          handleInputChange(
-                            e.platform,
-                            key,
-                            event.target.value,
-                            true
                           )
                         }
                         className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
                       />
                     </div>
-                  )
-                )}
+                  }
+
+                  {e?.creds_structure &&
+                    Object.keys(e?.creds_structure)?.includes(
+                      "account_filter"
+                    ) && (
+                      <div className="flex flex-row justify-between items-center">
+                        <label
+                          htmlFor={e?.platform}
+                          className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                        >
+                          {formatName("account_filter")}
+                        </label>
+                        <input
+                          type="text"
+                          placeholder={formatName("account_filter")}
+                          value={
+                            e?.creds_structure?.account_filter?.length > 0
+                              ? e?.creds_structure?.account_filter
+                              : null
+                          }
+                          onChange={(event) =>
+                            handleInputChange(
+                              e.platform,
+                              "account_filter",
+                              event.target.value
+                            )
+                          }
+                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                        />
+                      </div>
+                    )}
+                  {(e?.platform === "recharge" || e?.platform == "shopify") &&
+                    Object.keys(e?.creds_structure?.credentials || {}).map(
+                      (key) => (
+                        <div
+                          key={key}
+                          className="flex flex-row justify-between items-center"
+                        >
+                          <label
+                            htmlFor={e?.platform}
+                            className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                          >
+                            {formatName(key)}
+                          </label>
+                          <input
+                            key={key}
+                            readOnly={
+                              isEditable.index !== i &&
+                              e?.creds_structure?.credentials[key]?.length === 0
+                            }
+                            type="text"
+                            placeholder={formatName(key)}
+                            value={
+                              e?.creds_structure?.credentials[key]?.length > 0
+                                ? e?.creds_structure?.credentials[key]
+                                : ""
+                            }
+                            onChange={(event) =>
+                              handleInputChange(
+                                e.platform,
+                                key,
+                                event.target.value,
+                                true
+                              )
+                            }
+                            className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                          />
+                        </div>
+                      )
+                    )}
+                </div>
               </div>
-            </div>
-          </AccordionItem>
-        ))}
+            </AccordionItem>
+          ))}
+        {credentialsState?.filter((e) => {
+          return !selectedClientDetails?.platform_name?.includes(e?.platform);
+        })?.length == 0 && (
+          <div className="text-lg flex items-center w-full justify-center text-gray-400 h-full">
+            No Data Sources are Selected!
+          </div>
+        )}
       </Accordion>
     </div>
   );

@@ -233,7 +233,7 @@ const AgencyDetails = ({ data }) => {
         </div>
         <div className="m-3">
           {selectedClientDetails?.platforms_images?.length > 0 ? (
-            <div className="h-[25vh] bg-[#171C2A] rounded-lg">
+            <div className="h-[22vh] bg-[#171C2A] rounded-lg">
               <div className="h-fit grid grid-cols-2 gap-y-5 p-2 min-[1600px]:p-4">
                 {selectedClientDetails?.platforms_images?.map((e, i) => {
                   return (
@@ -262,7 +262,7 @@ const AgencyDetails = ({ data }) => {
               </div>
             </div>
           ) : (
-            <div className="bg-[#171C2A] h-[25vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
+            <div className="bg-[#171C2A] h-[22vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
               No Data Sources Available Please Add some of the Data Sources
             </div>
           )}

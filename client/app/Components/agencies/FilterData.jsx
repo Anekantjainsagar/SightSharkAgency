@@ -22,20 +22,21 @@ const FilterData = () => {
           return (
             <div
               key={i}
-              className="relative w-[10.5vw] border border-gray-400 text-gray-400 ml-4 rounded-md"
+              className="relative w-[10.5vw] border border-gray-400/20 text-gray-400 ml-4 rounded-md"
             >
               <select
-                className="bg-transparent px-4 py-0.5 outline-none appearance-none w-full"
+                className="bg-transparent px-4 py-2.5 min-[1600px]:py-3 outline-none appearance-none w-full"
                 // value={selectedOption}
                 // onChange={(e) => setSelectedOption(e.target.value)}
               >
-                {[e?.title, ...e?.options]?.map((e, i) => {
-                  return (
-                    <option key={i} className="bg-main">
-                      {e}
-                    </option>
-                  );
-                })}{" "}
+                {e?.options &&
+                  [e?.title, ...e?.options]?.map((e, i) => {
+                    return (
+                      <option key={i} className="bg-main">
+                        {e}
+                      </option>
+                    );
+                  })}{" "}
               </select>
               <span className="absolute right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
                 <MdKeyboardArrowDown />

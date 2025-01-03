@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
 import { FaPlus } from "react-icons/fa";
+import Info from "@/app/Components/Login/Info";
 
 const Overview = ({ params }) => {
   const history = useRouter();
@@ -19,7 +20,7 @@ const Overview = ({ params }) => {
     rawReportsClient,
     getRawReports,
     setLinkToEmbed,
-    setSelectedClientDetails
+    setSelectedClientDetails,
   } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
@@ -28,9 +29,9 @@ const Overview = ({ params }) => {
 
   useEffect(() => {
     let temp = agencies?.data?.find(
-      (e) => e?.client_name.replaceAll(" ","-") == decodeURIComponent(name)
+      (e) => e?.client_name.replaceAll(" ", "-") == decodeURIComponent(name)
     );
-    setSelectedClientDetails(temp)
+    setSelectedClientDetails(temp);
     setData(temp);
     getCredentialsForClient(temp?.client_id);
     getRawReports(temp?.client_id);
@@ -60,8 +61,12 @@ const Overview = ({ params }) => {
               <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[16.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <h4 className="min-[1600px]:text-xl">
-                    Unsaved Reports (
+                    Unpublished Reports (
                     {rawReportsClient ? rawReportsClient?.length : 0})
+                    <Info
+                      placement={"bottom"}
+                      text="These reports are dynamically generated and temporary. To save them to your Looker Studio account, follow the steps outlined in the tutorial here: [link]"
+                    />
                   </h4>
                   <div className="gradient-line my-4"></div>
                   {rawReportsClient?.length > 0 ? (
@@ -85,14 +90,18 @@ const Overview = ({ params }) => {
                       })}
                     </ul>
                   ) : (
-                    <div className="mt-2 text-center">
-                      No Pre-Saved Reports Available
-                    </div>
+                    <div className="mt-2 text-center">No Unpublished Reports</div>
                   )}
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[61vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="min-[1600px]:text-xl">Dashboards </h4>
+                    <h4 className="min-[1600px]:text-xl">
+                      Published Reports{" "}
+                      <Info
+                        placement={"bottom"}
+                        text="This section provides access to all the latest reports saved in your Looker Studio account, specifically for this client."
+                      />
+                    </h4>{" "}
                     {/* <button
                       onClick={() => {}}
                       className="bg-newBlue p-2.5 mr-3 justify-center rounded-full flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
@@ -113,9 +122,7 @@ const Overview = ({ params }) => {
                       />
                     </div>
                   ) : (
-                    <div className="mt-2 text-center">
-                      No Templates Available Please Add some of the Templates
-                    </div>
+                    <div className="mt-2 text-center">No Published Reports</div>
                   )}
                 </div>
                 {/* <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[26vh]">
