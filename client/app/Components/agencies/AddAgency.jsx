@@ -558,7 +558,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                             <option
                               value={e?.region_name}
                               key={i}
-                              className="bg-main"
+                              className="bg-main text-sm min-[1600px]:text-base"
                             >
                               {e?.region_name}
                             </option>
