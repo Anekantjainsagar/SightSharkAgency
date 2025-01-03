@@ -5,6 +5,8 @@ import Image from "next/image";
 import Context from "../Context/Context";
 import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { IoMdCopy } from "react-icons/io";
+import toast from "react-hot-toast";
 
 function formatName(input) {
   return input
@@ -40,13 +42,13 @@ const Overview = () => {
           <Navbar />
           <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
             <div className="text-white w-full flex items-end justify-between rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5">
-              <div className="w-fit flex items-center gap-x-6">
+              <div className="w-fit flex items-end gap-x-6">
                 <Image
                   src={actualUser?.profile_picture}
                   alt={actualUser?.agency_name}
                   width={1000}
                   height={1000}
-                  className="w-4/12"
+                  className="w-[12vw] h-[12vw] rounded-full"
                 />
                 <div className="">
                   <h5 className="text-3xl font-semibold">
@@ -55,15 +57,18 @@ const Overview = () => {
                   <p className="mt-2 text-lg">
                     <span className="text-gray-300">Location:</span> India
                   </p>
-                  <div className="flex mt-3 items-center gap-x-4">
-                    <button
+                  <p className="mt-2 text-lg">
+                    <span className="text-gray-300">Website:</span>{" "}
+                    <span
                       onClick={() => {
-                        window.open(actualUser?.client_portal, "__blank");
+                        window.open(actualUser?.webiste, "__blank");
                       }}
-                      className="border-newBlue text-newBlue border bg-white font-medium px-6 py-2.5 min-[1600px]:py-3 rounded-xl flex items-center text-sm min-[1600px]:text-base"
+                      className="cursor-pointer hover:underline"
                     >
-                      Website
-                    </button>
+                      {actualUser?.webiste}
+                    </span>
+                  </p>
+                  <div className="flex mt-3 items-center gap-x-4">
                     <button
                       onClick={() => {
                         window.open(actualUser?.client_portal, "__blank");
@@ -72,18 +77,30 @@ const Overview = () => {
                     >
                       Client Portal
                     </button>
+                    <IoMdCopy
+                      className="text-3xl text-white cursor-pointer"
+                      onClick={() => {
+                        navigator.clipboard.writeText(
+                          actualUser?.client_portal
+                        );
+                        toast.success("Client Portal URL Copied Successfully");
+                      }}
+                      title="Copy Client Portal URL"
+                    />
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-4 w-8/12 gap-x-4">
+              <div className="grid grid-cols-2 w-[43%] gap-4">
                 {[
                   {
                     name: "Total Clients Added",
                     value: actualUser?.current_number_of_clients,
+                    img: "/Overview/Icons/total.png",
                   },
                   {
                     name: "Active Clients",
                     value: actualUser?.active_clients,
+                    img: "/Overview/Icons/active.png",
                   },
                   {
                     name: "License Limit",
@@ -94,6 +111,7 @@ const Overview = () => {
                     }/${
                       actualUser?.license_limit ? actualUser?.license_limit : ""
                     }`,
+                    img: "/Overview/Icons/dashboard.png",
                   },
                   {
                     name: "Warranty Period",
@@ -101,19 +119,40 @@ const Overview = () => {
                       actualUser?.deployment_date,
                       actualUser?.warrenty_period
                     )} days left`,
+                    img: "/Overview/Icons/satisfaction.png",
                   },
                 ].map((e, i) => {
-                  return (
+                  return e?.img && e?.value?.toString() ? (
                     <div
                       key={i}
-                      className="flex flex-col items-start px-4 py-2 rounded-xl justify-center border border-gray-500/5 bg-[#171C2A]/50"
+                      className="flex items-center justify-between px-4 py-2 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
                     >
-                      <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
-                        {e?.name}
-                      </p>
-                      <p className="text-[20px] min-[1600px]:text-[26px] font-semibold mt-1">
-                        {e?.value}
-                      </p>
+                      <div>
+                        <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
+                          {e?.name}
+                        </p>
+                        <p className="text-[20px] min-[1600px]:text-[26px] font-semibold mt-1">
+                          {e?.value}
+                        </p>
+                      </div>
+                      <Image
+                        src={e.img}
+                        alt={e.img?.src}
+                        width={1000}
+                        height={1000}
+                        className="w-[50px] min-[1600px]:w-[60px] aspect-square"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      key={i}  xx
+                      className="flex items-center justify-between px-4 py-2 rounded-xl border border-gray-500/5 bg-[#171C2A]/50 animate-pulse"
+                    >
+                      <div>
+                        <div className="h-4 bg-gray-200 rounded w-1/2 mb-1"></div>
+                        <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+                      </div>
+                      <div className="w-12 h-12 min-w-[60px] min-h-[60px] rounded-full bg-gray-200"></div>
                     </div>
                   );
                 })}
@@ -159,7 +198,7 @@ const Overview = () => {
                               alt={e?.template_image?.src}
                               width={1000}
                               height={1000}
-                              className="h-[36vh] object-cover rounded-lg"
+                              className="h-[33vh] object-cover rounded-lg"
                             />
                             <p className="mt-2.5">{e?.template_name}</p>
                           </div>

@@ -100,9 +100,9 @@ const Leftbar = () => {
       ],
     },
     {
-      title: "Data Sources",
+      title: "Connectors",
       icon: <IoNewspaperOutline className="text-2xl" key={"4"} />,
-      route: "/data-sources",
+      route: "/connectors",
       temp_icon: [
         <svg
           width="22"
