@@ -500,8 +500,9 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       htmlFor="parent_name"
                       className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
                     >
-                      Parent Name
-                      <Info text="Parent Name" />
+                      Parent Organization
+
+                      <Info text="If there is no Parent Organization then use the client name" />
                       <Required />
                     </label>
                     <input
@@ -511,7 +512,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                         setData({ ...data, parent_name: e.target.value });
                       }}
                       type="text"
-                      placeholder="Enter Parent Name"
+                      placeholder="Enter Parent Organization"
                       className="bg-[#898989]/15 outline-none border border-gray-500/20 h-[45px] text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>

@@ -54,10 +54,10 @@ const Overview = () => {
                   <h5 className="text-3xl font-semibold">
                     {actualUser?.agency_name}
                   </h5>
-                  <p className="mt-2 text-lg">
+                  <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
                     <span className="text-gray-300">Location:</span> India
                   </p>
-                  <p className="mt-2 text-lg">
+                  <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
                     <span className="text-gray-300">Website:</span>{" "}
                     <span
                       onClick={() => {
