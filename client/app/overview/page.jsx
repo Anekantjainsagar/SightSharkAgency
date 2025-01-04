@@ -41,20 +41,20 @@ const Overview = () => {
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
           <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
-            <div className="text-white w-full flex items-end justify-between rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5">
-              <div className="w-fit flex items-end gap-x-6">
+            <div className="text-white w-full flex items-center justify-between rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5">
+              <div className="w-fit flex items-center gap-x-6">
                 <Image
                   src={actualUser?.profile_picture}
                   alt={actualUser?.agency_name}
                   width={1000}
                   height={1000}
-                  className="w-[12vw] h-[12vw] rounded-full"
+                  className="w-[10vw] h-[10vw] rounded-full"
                 />
                 <div className="">
                   <h5 className="text-3xl font-semibold">
                     {actualUser?.agency_name}
                   </h5>
-                  <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
+                  {/* <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
                     <span className="text-gray-300">Location:</span>{" "}
                     {actualUser?.location}
                   </p>
@@ -68,7 +68,7 @@ const Overview = () => {
                     >
                       {actualUser?.webiste}
                     </span>
-                  </p>
+                  </p> */}
                   <div className="flex mt-3 items-center gap-x-4">
                     <button
                       onClick={() => {
@@ -126,7 +126,7 @@ const Overview = () => {
                   return e?.img && e?.value?.toString() ? (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-4 py-2 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
+                      className="flex items-center justify-between px-4 py-4 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
                     >
                       <div>
                         <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
@@ -181,7 +181,7 @@ const Overview = () => {
                 })}
               </div>
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[41vh]">
+              <div className="h-[44vh]">
                 {currentlyVisible === "Templates" ? (
                   <div className="overflow-y-auto small-scroller h-full">
                     <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
