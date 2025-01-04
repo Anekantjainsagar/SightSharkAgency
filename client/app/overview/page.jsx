@@ -126,7 +126,7 @@ const Overview = () => {
                   return e?.img && e?.value?.toString() ? (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-4 py-4 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
+                      className="flex items-center justify-between px-4 py-6 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
                     >
                       <div>
                         <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
@@ -181,7 +181,7 @@ const Overview = () => {
                 })}
               </div>
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[44vh]">
+              <div className="h-[41vh]">
                 {currentlyVisible === "Templates" ? (
                   <div className="overflow-y-auto small-scroller h-full">
                     <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
