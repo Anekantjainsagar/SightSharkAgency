@@ -69,7 +69,7 @@ const Overview = () => {
                       {actualUser?.webiste}
                     </span>
                   </p> */}
-                  <div className="flex mt-3 items-center gap-x-4">
+                  <div className="flex mt-4 items-center gap-x-4">
                     <button
                       onClick={() => {
                         window.open(actualUser?.client_portal, "__blank");
