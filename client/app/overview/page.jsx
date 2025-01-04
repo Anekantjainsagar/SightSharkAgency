@@ -55,7 +55,8 @@ const Overview = () => {
                     {actualUser?.agency_name}
                   </h5>
                   <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
-                    <span className="text-gray-300">Location:</span> India
+                    <span className="text-gray-300">Location:</span>{" "}
+                    {actualUser?.location}
                   </p>
                   <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
                     <span className="text-gray-300">Website:</span>{" "}
@@ -111,7 +112,7 @@ const Overview = () => {
                     }/${
                       actualUser?.license_limit ? actualUser?.license_limit : ""
                     }`,
-                    img: "/Overview/Icons/dashboard.png",
+                    img: "/Overview/Icons/satisfaction.png",
                   },
                   {
                     name: "Warranty Period",
@@ -119,7 +120,7 @@ const Overview = () => {
                       actualUser?.deployment_date,
                       actualUser?.warrenty_period
                     )} days left`,
-                    img: "/Overview/Icons/satisfaction.png",
+                    img: "/Overview/Icons/dashboard.png",
                   },
                 ].map((e, i) => {
                   return e?.img && e?.value?.toString() ? (
@@ -145,7 +146,8 @@ const Overview = () => {
                     </div>
                   ) : (
                     <div
-                      key={i}  xx
+                      key={i}
+                      xx
                       className="flex items-center justify-between px-4 py-2 rounded-xl border border-gray-500/5 bg-[#171C2A]/50 animate-pulse"
                     >
                       <div>

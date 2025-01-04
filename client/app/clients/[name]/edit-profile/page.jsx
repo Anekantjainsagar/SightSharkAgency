@@ -592,7 +592,7 @@ const DataSourceBox = ({ e, original_data }) => {
       <div className="border-[0.5px] border-gray-300/20 w-full mb-2"></div>
       <div className="flex items-center w-full px-2 justify-between gap-x-2 relative">
         {isEditable ? (
-          <div className="w-11/12 flex items-center relative">
+          <div className="w-11/12 flex items-center ">
             <input
               type="text"
               value={account_id}
@@ -600,8 +600,14 @@ const DataSourceBox = ({ e, original_data }) => {
               onChange={(eve) => setAccount_id(eve.target.value)}
               className="bg-transparent w-full outline-none border border-gray-400/30 text-gray-400 rounded-2xl px-3"
             />
+          </div>
+        ) : (
+          <p className="w-11/12">Account ID: {account_id}</p>
+        )}
+        {isEditable ? (
+          !showMenu ? (
             <BsCheckLg
-              className="text-green-500 absolute cursor-pointer -right-1 -bottom-1 bg-white rounded-full text-xl"
+              className="text-green-500 cursor-pointer bg-white rounded-full text-xl"
               onClick={async () => {
                 try {
                   let platforms = dataSourceStructure
@@ -643,17 +649,14 @@ const DataSourceBox = ({ e, original_data }) => {
                 }
               }}
             />
-          </div>
-        ) : (
-          <p className="w-11/12">Account ID: {account_id}</p>
-        )}
-        {showMenu ? (
-          <AiOutlineClose
-            className="text-gray-300 w-1/12 cursor-pointer"
-            onClick={() => {
-              setShowMenu(!showMenu);
-            }}
-          />
+          ) : (
+            <AiOutlineClose
+              className="text-gray-300 w-1/12 cursor-pointer"
+              onClick={() => {
+                setShowMenu(!showMenu);
+              }}
+            />
+          )
         ) : (
           <BsThreeDotsVertical
             className="text-gray-300 w-1/12 cursor-pointer"

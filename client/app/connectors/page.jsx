@@ -105,7 +105,7 @@ const DataSources = () => {
             </div>
             <div className="flex items-center justify-between mt-5">
               <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
-                Reporting Platforms
+                Reporting Platform
               </h3>
             </div>
             <div className="border mt-2 border-gray-200/5 h-fit rounded-2xl">
@@ -393,10 +393,12 @@ const Page4 = ({
 }) => {
   let fileInputRef2 = useRef();
   const { mainDataSource, dataSourceStructure } = useContext(Context);
+  const [fileData, setFileData] = useState("");
 
   const handleFileUpload = (event, platform, key) => {
     const file = event.target.files[0];
     // setserviceAcc1(file);
+    setFileData(file);
     if (file && file.type === "application/json") {
       const reader = new FileReader();
 
@@ -581,11 +583,12 @@ const Page4 = ({
                                 File already exists:{" "}
                                 {e?.creds_structure?.credentials[key]}
                               </p>
-                            )} */}
+                            )} */}{" "}
                               <label
-                                className={`border border-gray-300/20 py-1 px-4 rounded-md cursor-pointer`}
+                                className={`border border-gray-300/20 py-1 px-5 rounded-md cursor-pointer`}
                               >
-                                Replace file
+                                {/* Show file name or "Replace file" */}
+                                {fileData ? fileData.name : "Replace file"}
                                 <input
                                   type="file"
                                   onChange={(file) =>
@@ -595,6 +598,22 @@ const Page4 = ({
                                   style={{ display: "none" }} // Hide the input
                                 />
                               </label>
+                              {/* {fileData && (
+                                <AiOutlineClose
+                                  className="text-lg cursor-pointer ml-2"
+                                  onClick={handleClearFile}
+                                />
+                              )} */}
+                              {/* <label
+                                className={`border border-gray-300/20 py-1 px-4 rounded-md cursor-pointer`}
+                              >
+                                Replace file
+                                <input
+                                  onChange={(file) =>
+                                    handleFileUpload(file, e?.platform, key)
+                                  }
+                                />
+                              </label> */}
                             </div>
                           ) : (
                             <div className="flex flex-col">
