@@ -505,7 +505,7 @@ const Page4 = ({
           >
             <div
               key={i}
-              className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+              className="gap-2 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
                 className={`flex items-center flex-col gap-4 justify-center basis-[30%]`}
@@ -524,7 +524,7 @@ const Page4 = ({
                   {formatName(e?.platform)}
                 </label>
               </div>
-              <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div>
+              {/* <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div> */}
               <div className="mt-3 flex-1 px-6">
                 {/* Show inputs only for the current platform */}
 

@@ -33,6 +33,7 @@ const State = (props) => {
   const [timezones, setTimezones] = useState([]);
   const [lookerStudioSecret, setLookerStudioSecret] = useState(false);
   const [agencyReports, setAgencyReports] = useState([]);
+  const [publishedReports, setPublishedReports] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -423,7 +424,7 @@ const State = (props) => {
     if (cookie?.length > 5 && id) {
       try {
         axios
-          .get(`${BACKEND_URI}/raw-reports/reports?client_id=${id}`, {
+          .get(`${BACKEND_URI}/raw-reports/reports?client_id=${id}&status=${"pending"}`, {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -432,6 +433,35 @@ const State = (props) => {
           })
           .then(async (res) => {
             setRawReportsClient(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const getPublishedReports = (id) => {
+    let cookie = getCookie("token");
+    setPublishedReports([]);
+
+    if (cookie?.length > 5 && id) {
+      try {
+        axios
+          .get(
+            `${process.env.NEXT_PUBLIC_BACKEND_URI}/agency/reports?client_id=${id}`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          )
+          .then(async (res) => {
+            setPublishedReports(res.data.data);
           })
           .catch((err) => {
             console.log(err);
@@ -466,7 +496,7 @@ const State = (props) => {
     if (cookie) {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URI}/agency/reports`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URI}/agency/reports?client_id=""`,
           {
             headers: {
               Authorization: `Bearer ${cookie}`,
@@ -571,6 +601,8 @@ const State = (props) => {
         timezones,
         agencyReports,
         lookerStudioSecret,
+        publishedReports,
+        getPublishedReports,
       }}
     >
       {props.children}

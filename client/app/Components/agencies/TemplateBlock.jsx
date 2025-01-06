@@ -21,7 +21,7 @@ const TemplateBlock = ({ data }) => {
           alt={data?.templat_image?.src}
           width={1000}
           height={1000}
-          className="rounded-md cursor-pointer h-[20vh] object-cover"
+          className="cursor-pointer h-[16vh] object-cover rounded-xl"
         />
       )}
       <p className="text-center text-sm my-1 mx-auto">{data?.template_name}</p>

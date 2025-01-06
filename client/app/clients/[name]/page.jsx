@@ -21,6 +21,8 @@ const Overview = ({ params }) => {
     getRawReports,
     setLinkToEmbed,
     setSelectedClientDetails,
+    publishedReports,
+    getPublishedReports,
   } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
@@ -35,6 +37,7 @@ const Overview = ({ params }) => {
     setData(temp);
     getCredentialsForClient(temp?.client_id);
     getRawReports(temp?.client_id);
+    getPublishedReports(temp?.client_id);
   }, [name, agencies]);
 
   return (
@@ -70,27 +73,38 @@ const Overview = ({ params }) => {
                   </h4>
                   <div className="gradient-line my-4"></div>
                   {rawReportsClient?.length > 0 ? (
-                    <ul className="grid list-disc grid-cols-3 gap-4 mt-2 px-5 relative">
+                    <ul className="list-disc gap-2.5 mt-1.5 px-2 relative">
                       {rawReportsClient?.map((e, i) => {
                         return (
-                          <li key={i}>
-                            {e?.report_name} (
-                            <span
-                              className="cursor-pointer hover:text-blue-500 transition-all hover:underline"
-                              onClick={() => {
-                                setLinkToEmbed(e?.report_url);
-                                history.push("/view-report");
-                              }}
-                            >
-                              Report URL
+                          <li
+                            key={i}
+                            className="flex items-start justify-between"
+                          >
+                            <span className="break-words w-10/12">
+                              <span className="text-xl mr-2">•</span>
+                              {e?.report_name}
                             </span>
-                            )
+                            <span>
+                              (
+                              <span
+                                className="cursor-pointer hover:text-blue-500 transition-all hover:underline"
+                                onClick={() => {
+                                  setLinkToEmbed(e?.report_url);
+                                  history.push("/view-report");
+                                }}
+                              >
+                                Report URL
+                              </span>
+                              )
+                            </span>
                           </li>
                         );
                       })}
                     </ul>
                   ) : (
-                    <div className="mt-2 text-center">No Unpublished Reports</div>
+                    <div className="mt-2 text-center">
+                      No Unpublished Reports
+                    </div>
                   )}
                 </div>
                 <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[61vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
@@ -110,16 +124,21 @@ const Overview = ({ params }) => {
                     </button> */}
                   </div>
                   <div className="gradient-line my-4"></div>
-                  {data?.template_name?.length > 0 ? (
+                  {publishedReports?.length > 0 ? (
                     <div className="grid grid-cols-3 gap-x-4 mt-2 relative">
-                      <TemplateBlock
-                        data={{
-                          template_name: data?.template_name,
-                          template_link: data?.template_link,
-                          templat_image: data?.templat_image,
-                        }}
-                        original_data={data}
-                      />
+                      {publishedReports?.map((data, i) => {
+                        return (
+                          <TemplateBlock
+                            key={i}
+                            data={{
+                              template_name: data?.report_name,
+                              template_link: data?.link,
+                              templat_image: data?.report_image,
+                            }}
+                            original_data={data}
+                          />
+                        );
+                      })}
                     </div>
                   ) : (
                     <div className="mt-2 text-center">No Published Reports</div>
