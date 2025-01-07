@@ -23,7 +23,7 @@ const AgencyDetailsBlock = ({ data }) => {
           history.push(`/clients/${data?.client_name?.replaceAll(" ", "-")}`);
           setClientId(data?.client_id)
         }}
-        className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base"
+        className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-[15px]"
       >
         <div
           className="inline-flex items-start"

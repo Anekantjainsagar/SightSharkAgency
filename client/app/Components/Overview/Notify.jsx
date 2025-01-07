@@ -15,7 +15,6 @@ const Notify = ({ status, data }) => {
           className="w-[26px] min-[1600px]:w-[30px] aspect-square"
         />
         <p className="text-sm min-[1600px]:text-base font-medium ml-4 min-[1600px]:ml-6">
-          ProWiz Analytics -{" "}
           <span className="font-normal mainText14">{data?.message}</span>
         </p>
       </div>

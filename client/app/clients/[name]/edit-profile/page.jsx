@@ -573,41 +573,93 @@ const DataSourceBox = ({ e, original_data }) => {
   }, [e]);
 
   return (
-    <div className="flex flex-col items-center justify-between h-fit border rounded-2xl border-gray-300/30 p-2">
-      <div className="flex items-center flex-col gap-2 h-[7vw] justify-center aspect-square">
+    <div className="flex flex-col items-center justify-between h-fit relative border rounded-2xl border-gray-300/30 bg-[#171C2A]/50 p-2">
+      <div className="flex items-center flex-col gap-2 h-[8vw] w-[6vw] justify-center">
         <Image
           src={e?.logo}
           alt={e?.platform}
           width={1000}
           height={1000}
-          className="min-[1600px]:w-10 min-[1600px]:h-14 w-10 h-14 mr-2 aspect-square object-contain"
+          className="min-[1600px]:w-10 min-[1600px]:h-14 w-10 h-14 aspect-square object-contain"
         />
         <label
           htmlFor={e?.platform}
-          className="text-[14px] min-[1600px]:text-[1.15rem] capitalize cursor-pointer"
+          className="text-[14px] min-[1600px]:text-[1.15rem] capitalize text-center cursor-pointer"
         >
           {formatName(e?.platform)}
         </label>
       </div>
-      <div className="border-[0.5px] border-gray-300/20 w-full mb-2"></div>
+      <div>
+        {!showMenu ? (
+          <BsThreeDotsVertical
+            className="text-gray-300 w-1/12 cursor-pointer text-lg absolute right-2 top-3"
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+          />
+        ) : (
+          <AiOutlineClose
+            className="text-gray-300 w-1/12 cursor-pointer absolute text-lg right-2 top-3"
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+          />
+        )}
+        {showMenu && (
+          <div className="absolute -right-[6.5vw] top-10 backdrop-blur-2xl text-sm border border-gray-200/20 rounded-md">
+            <p
+              onClick={() => {
+                setIsEditable(!isEditable);
+                setShowMenu(false);
+              }}
+              className="px-2 py-1.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
+            >
+              Edit Account ID
+            </p>
+            <p
+              onClick={async () => {
+                try {
+                  const response = await axios.post(
+                    `${BACKEND_URI}/client/delete-platform-credentials?client_id=${original_data?.client_id}&platform_name=${e?.platform}`,
+                    {},
+                    {
+                      headers: {
+                        Accept: "application/json",
+                        Authorization: `Bearer ${getCookie("token")}`,
+                      },
+                    }
+                  );
+
+                  if (response.data) {
+                    getAgencies();
+                    // getCredentialsForClient(original_data?.client_id);
+                    setShowMenu(false);
+                    setIsEditable(false);
+                    toast.success("Data Source Deleted Successfully");
+                  }
+                } catch (err) {
+                  toast.error(err.message);
+                }
+              }}
+              className="px-2 py-1.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
+            >
+              Delete Data Source
+            </p>
+          </div>
+        )}
+      </div>
       <div className="flex items-center w-full px-2 justify-between gap-x-2 relative">
         {isEditable ? (
-          <div className="w-11/12 flex items-center ">
+          <div className="flex items-center w-full justify-between gap-x-2">
             <input
               type="text"
               value={account_id}
               placeholder="Account ID"
               onChange={(eve) => setAccount_id(eve.target.value)}
-              className="bg-transparent w-full outline-none border border-gray-400/30 text-gray-400 rounded-2xl px-3"
+              className="bg-transparent w-11/12 outline-none border border-gray-400/30 text-gray-400 rounded-2xl px-3"
             />
-          </div>
-        ) : (
-          <p className="w-11/12">Account ID: {account_id}</p>
-        )}
-        {isEditable ? (
-          !showMenu ? (
             <BsCheckLg
-              className="text-green-500 cursor-pointer bg-white rounded-full text-xl"
+              className="text-green-800 cursor-pointer rounded-full text-3xl"
               onClick={async () => {
                 try {
                   let platforms = dataSourceStructure
@@ -649,63 +701,9 @@ const DataSourceBox = ({ e, original_data }) => {
                 }
               }}
             />
-          ) : (
-            <AiOutlineClose
-              className="text-gray-300 w-1/12 cursor-pointer"
-              onClick={() => {
-                setShowMenu(!showMenu);
-              }}
-            />
-          )
-        ) : (
-          <BsThreeDotsVertical
-            className="text-gray-300 w-1/12 cursor-pointer"
-            onClick={() => {
-              setShowMenu(!showMenu);
-            }}
-          />
-        )}
-        {showMenu && (
-          <div className="absolute right-0 top-8 backdrop-blur-xl text-sm border border-gray-200/20 rounded-md">
-            <p
-              onClick={() => {
-                setIsEditable(!isEditable);
-                setShowMenu(false);
-              }}
-              className="px-2 py-0.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
-            >
-              Edit Account ID
-            </p>
-            <p
-              onClick={async () => {
-                try {
-                  const response = await axios.post(
-                    `${BACKEND_URI}/client/delete-platform-credentials?client_id=${original_data?.client_id}&platform_name=${e?.platform}`,
-                    {},
-                    {
-                      headers: {
-                        Accept: "application/json",
-                        Authorization: `Bearer ${getCookie("token")}`,
-                      },
-                    }
-                  );
-
-                  if (response.data) {
-                    getAgencies();
-                    // getCredentialsForClient(original_data?.client_id);
-                    setShowMenu(false);
-                    setIsEditable(false);
-                    toast.success("Data Source Deleted Successfully");
-                  }
-                } catch (err) {
-                  toast.error(err.message);
-                }
-              }}
-              className="px-2 py-0.5 hover:bg-gray-200/10 cursor-pointer rounded-md"
-            >
-              Delete Data Source
-            </p>
           </div>
+        ) : (
+          <p className="w-11/12">Account ID: {account_id}</p>
         )}
       </div>
     </div>

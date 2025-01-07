@@ -6,20 +6,16 @@ import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
 import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
 import AddTemplates from "../../Components/agencies/AddTemplates";
 import AddDataSouces from "../../Components/agencies/AddDataSources";
-import { useRouter } from "next/navigation";
 import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
-import { FaPlus } from "react-icons/fa";
 import Info from "@/app/Components/Login/Info";
+import UnpublishedReports from "@/app/Components/agencies/UnpublishedReports";
 
 const Overview = ({ params }) => {
-  const history = useRouter();
   const {
     agencies,
     getCredentialsForClient,
-    rawReportsClient,
     getRawReports,
-    setLinkToEmbed,
     setSelectedClientDetails,
     publishedReports,
     getPublishedReports,
@@ -62,52 +58,8 @@ const Overview = ({ params }) => {
             <div className="w-[69%]">
               <AgencyDetailsTopbar name={name} />
               <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[16.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
-                  <h4 className="min-[1600px]:text-xl">
-                    Unpublished Reports (
-                    {rawReportsClient ? rawReportsClient?.length : 0})
-                    <Info
-                      placement={"bottom"}
-                      text="These reports are dynamically generated and temporary. To save them to your Looker Studio account, follow the steps outlined in the tutorial here: [link]"
-                    />
-                  </h4>
-                  <div className="gradient-line my-4"></div>
-                  {rawReportsClient?.length > 0 ? (
-                    <ul className="list-disc gap-2.5 mt-1.5 px-2 relative">
-                      {rawReportsClient?.map((e, i) => {
-                        return (
-                          <li
-                            key={i}
-                            className="flex items-start justify-between"
-                          >
-                            <span className="break-words w-10/12">
-                              <span className="text-xl mr-2">•</span>
-                              {e?.report_name}
-                            </span>
-                            <span>
-                              (
-                              <span
-                                className="cursor-pointer hover:text-blue-500 transition-all hover:underline"
-                                onClick={() => {
-                                  setLinkToEmbed(e?.report_url);
-                                  history.push("/view-report");
-                                }}
-                              >
-                                Report URL
-                              </span>
-                              )
-                            </span>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  ) : (
-                    <div className="mt-2 text-center">
-                      No Unpublished Reports
-                    </div>
-                  )}
-                </div>
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[61vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                <UnpublishedReports />
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[51vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <div className="flex items-center justify-between">
                     <h4 className="min-[1600px]:text-xl">
                       Published Reports{" "}
@@ -198,13 +150,5 @@ const Overview = ({ params }) => {
     </div>
   );
 };
-
-// const Circle0 = () => {
-//   return (
-//     <div className="bg-[#FFE8CC] p-2 w-7 rounded-full aspect-square">
-//       <div className="bg-[#FDC53E] w-full h-full rounded-full"></div>
-//     </div>
-//   );
-// };
 
 export default Overview;

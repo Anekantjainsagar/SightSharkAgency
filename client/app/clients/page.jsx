@@ -39,7 +39,7 @@ const Overview = () => {
           <Navbar />
           <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
+              <h3 className="text-xl min-[1600px]:text-[22px] font-semibold">
                 Clients{" "}
                 <span className="text-lg min-[1600px]:text-xl text-white/80">
                   ({agencies?.total_count})
@@ -58,7 +58,7 @@ const Overview = () => {
                   <CSVLink filename={"clients.csv"} data={selectedAgencies}>
                     <button
                       onClick={() => {}}
-                      className="bg-white/10 backdrop-blur-sm px-6 py-2 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+                      className="bg-white/10 backdrop-blur-sm px-6 py-2.5 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
                     >
                       <svg
                         width="24"
@@ -133,7 +133,7 @@ const Overview = () => {
                   return (
                     <h5
                       key={i}
-                      className={`text-[13px] min-[1600px]:text-base ${
+                      className={`text-[13px] min-[1600px]:text-sm ${
                         !e?.includes("Name")
                           ? "text-center"
                           : "min-[1600px]:ml-0 ml-2"
@@ -144,7 +144,7 @@ const Overview = () => {
                   );
                 })}
               </div>
-              <div className="h-[69.5vh] min-[1600px]:h-[70vh]">
+              <div className="h-[69.5vh] min-[1600px]:h-[66vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   {agencies?.data?.map((e, i) => {
                     return <AgencyDetailsBlock key={i} data={e} />;

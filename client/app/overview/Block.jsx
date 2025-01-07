@@ -1,166 +1,15 @@
 "use client";
-import React, { useContext, useEffect, useRef, useState } from "react";
-import Leftbar from "@/app/Components/Utils/Leftbar";
-import Navbar from "@/app/Components/Utils/Navbar";
-import AddAgency from "@/app/Components/agencies/AddAgency";
+import { useContext, useEffect, useRef, useState } from "react";
 import Context from "../Context/Context";
-import Image from "next/image";
-import { IoReload } from "react-icons/io5";
-import { TfiReload } from "react-icons/tfi";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import toast from "react-hot-toast";
-import { BACKEND_URI } from "../utils/url";
 import { getCookie } from "cookies-next";
-import Modal from "react-modal";
+import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import axios from "axios";
-
-
-function formatName(input) {
-  return input
-    .toLowerCase()
-    .split("_")
-    .map((word) => {
-      // Check if the word contains "id" or "url"
-      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
-        return word.toUpperCase();
-      }
-      // Otherwise, capitalize the first letter of the word
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(" ");
-}
-
-const DataSources = () => {
-  const { platformsData, getDataSourcesDataFromAPI, lookerStudioSecret } =
-    useContext(Context);
-  const [addAgency, setAddAgency] = useState(false);
-
-  const refreshByAgencyId = async (platformList) => {
-    let platforms = platformList?.map((e) => e?.platform);
-
-    try {
-      const token = getCookie("token");
-
-      const response = await fetch(`${BACKEND_URI}/data-refresh/refersh-all`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(platforms),
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const responseData = await response.json();
-      if (responseData?.msg?.includes("Failed")) {
-        toast.error(responseData.msg);
-      } else {
-        toast.success(responseData.msg);
-      }
-      getDataSourcesDataFromAPI();
-    } catch (err) {
-      console.error("Fetch Error:", err.message);
-      toast.error("Internal Server Error");
-    }
-  };
-
-  return (
-    <div className="flex items-start h-[100vh]">
-      <Leftbar />
-      <AddAgency showSubscribe={addAgency} setShowSubscribe={setAddAgency} />
-      <div className="w-[85%] bg-main h-full relative">
-        <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
-        <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
-        <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
-        <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
-          <Navbar />
-          <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
-                All Data Sources{" "}
-                <span className="text-lg min-[1600px]:text-xl text-white/80">
-                  ({platformsData?.platforms?.length})
-                </span>
-              </h3>
-              <button
-                onClick={() => {
-                  refreshByAgencyId(platformsData?.platforms);
-                }}
-                className="bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
-              >
-                <TfiReload />
-                Refresh All
-              </button>
-            </div>
-            <div
-              className={`mt-5 border border-gray-200/5 ${"h-[41vh]"} rounded-2xl`}
-            >
-              <div className="h-fit p-5 grid grid-cols-6 gap-5">
-                {platformsData?.platforms?.map((e, i) => {
-                  return <Block e={e} key={i} />;
-                })}
-              </div>
-            </div>
-            <div className="flex items-center justify-between mt-5">
-              <h3 className="text-xl min-[1600px]:text-2xl font-semibold">
-                Reporting Platform
-              </h3>
-            </div>
-            <div className="border mt-2 border-gray-200/5 h-fit rounded-2xl">
-              <div className="h-fit p-5 grid grid-cols-6 gap-5">
-                <div className="border border-gray-400/20 rounded-2xl p-2 relative">
-                  <div className="py-10 border-gray-400/20 cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-0 h-fit">
-                    <Image
-                      src={"/looker-icon-svgrepo-com.svg"}
-                      alt={"Looker Studio Logo"}
-                      width={1000}
-                      height={1000}
-                      className="aspect-square object-contain w-2/12"
-                    />
-                    <p className="text-sm text-center min-[1600px]:text-base cursor-pointer mt-2">
-                      Looker Studio
-                    </p>
-                  </div>
-                  {lookerStudioSecret ? (
-                    <div className="mt-2 border-t border-gray-400/20 flex items-end justify-between px-2">
-                      <p
-                        className="text-[10px] w-full text-center mt-2 justify-center min-[1600px]:text-xs cursor-pointer bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
-                        onClick={() => {
-                          window.open(
-                            `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`
-                          );
-                        }}
-                      >
-                        Reconnect
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="mt-2 border-t border-gray-400/20 flex items-end justify-between px-2">
-                      <p
-                        className="text-[10px] w-full text-center mt-2 justify-center min-[1600px]:text-xs cursor-pointer bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
-                        onClick={() => {
-                          window.open(
-                            `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`
-                          );
-                        }}
-                      >
-                        Connect
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import Modal from "react-modal";
+import { BACKEND_URI } from "../utils/url";
 
 const customStyles = {
   overlay: { zIndex: 50 },
@@ -177,7 +26,33 @@ const customStyles = {
   },
 };
 
-const Block = ({ e }) => {
+function formatName(input) {
+  return input
+    .toLowerCase()
+    .split("_")
+    .map((word) => {
+      // Check if the word contains "id" or "url"
+      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
+        return word.toUpperCase();
+      }
+      // Otherwise, capitalize the first letter of the word
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
+const Block = ({
+  name,
+  img,
+  time,
+  values,
+  isDataSource,
+  original_name,
+  isNew,
+  idx,
+}) => {
+  const [clicked, setClicked] = useState(false);
+  const dropdownRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState({
     platforms: [],
@@ -188,35 +63,83 @@ const Block = ({ e }) => {
     dataSourceStructure,
     getDataSourceStructure,
   } = useContext(Context);
-  const [isRotating, setIsRotating] = useState(false);
   const [credentialsState, setCredentialsState] = useState([]);
   const [isNewPlatform, setIsNewPlatform] = useState(false);
+  const [dropDownValues, setDropDownValues] = useState([]);
+  const isConfigured =
+    (!isNewPlatform ||
+      original_name === "shopify" ||
+      original_name === "recharge") &&
+    !isNew;
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setClicked(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function closeModal() {
     setIsModalOpen(false);
   }
 
   useEffect(() => {
-    const areCredentialsEmpty = (creds) => {
-      return Object.values(creds).every((value) => value === null);
-    };
-    dataSourceStructure?.map((item) => {
-      if (item?.platform == e?.platform) {
-        setIsNewPlatform(
-          areCredentialsEmpty(item?.creds_structure?.credentials)
-        );
+    if (isDataSource) {
+      const areCredentialsEmpty = (creds) => {
+        return Object.values(creds).every((value) => value === null);
+      };
+
+      dataSourceStructure?.map((item) => {
+        if (item?.platform == original_name) {
+          setIsNewPlatform(
+            areCredentialsEmpty(item?.creds_structure?.credentials)
+          );
+        }
+      });
+    }
+  }, [dataSourceStructure, original_name]);
+
+  useEffect(() => {
+    if (isDataSource) {
+      if (isNew) {
+        setDropDownValues([
+          {
+            title: "Request Data Source",
+            onClick: () => {},
+          },
+        ]);
+      } else {
+        if (!isConfigured) {
+          setDropDownValues([
+            {
+              title: "Setup Platform",
+              onClick: () => setIsModalOpen(true),
+            },
+          ]);
+        } else {
+          setDropDownValues([
+            { title: "Edit Connection", onClick: () => setIsModalOpen(true) },
+            {
+              title: "Refresh Data Source",
+              onClick: () => handleReloadClick(),
+            },
+          ]);
+        }
       }
-    });
-    // dataSourceStructure.map((item));
-  }, [dataSourceStructure]);
+    }
+  }, [isDataSource, isNew, isNewPlatform]);
 
   const handleReloadClick = async () => {
-    setIsRotating(true);
-
     const token = getCookie("token");
     const url = `${BACKEND_URI}/data-refresh/refersh?agency_id=${encodeURIComponent(
       userData?.agency_id
-    )}&script_name=${encodeURIComponent(e?.platform)}`;
+    )}&script_name=${encodeURIComponent(name)}`;
     const headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -241,15 +164,12 @@ const Block = ({ e }) => {
       } else {
         toast.success(responseData.message);
       }
+      setClicked(false);
       getDataSourcesDataFromAPI();
     } catch (err) {
       console.error("Fetch Error:", err.message);
       toast.error("Internal Server Error");
     }
-
-    setTimeout(() => {
-      setIsRotating(false);
-    }, 1000);
   };
 
   const addClientCredentials = async () => {
@@ -280,72 +200,79 @@ const Block = ({ e }) => {
   };
 
   return (
-    <div className="border border-gray-400/20 rounded-2xl p-2 relative">
-      {(!isNewPlatform || e?.platform === "shopify") && (
-        <div className="bg-mainBlue text-white text-xs absolute left-0 top-0 rounded-tl-2xl px-3 py-0.5 rounded-br-xl">
-          Connected
-        </div>
-      )}
-      {
-        <div
-          className={`mr-4 w-full flex justify-end items-end ${
-            !isNewPlatform ? "visible" : "invisible"
-          } cursor-pointer`}
-        >
-          <svg
-            className="w-4 min-[1600px]:w-5 h-4 min-[1600px]:h-5"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <path
-              d="M9.1665 3.33332H5.6665C4.26637 3.33332 3.56631 3.33332 3.03153 3.6058C2.56112 3.84549 2.17867 4.22794 1.93899 4.69834C1.6665 5.23312 1.6665 5.93319 1.6665 7.33332V14.3333C1.6665 15.7335 1.6665 16.4335 1.93899 16.9683C2.17867 17.4387 2.56112 17.8212 3.03153 18.0608C3.56631 18.3333 4.26637 18.3333 5.6665 18.3333H12.6665C14.0666 18.3333 14.7667 18.3333 15.3015 18.0608C15.7719 17.8212 16.1543 17.4387 16.394 16.9683C16.6665 16.4335 16.6665 15.7335 16.6665 14.3333V10.8333M6.66648 13.3333H8.06193C8.46959 13.3333 8.67341 13.3333 8.86522 13.2873C9.03528 13.2464 9.19786 13.1791 9.34698 13.0877C9.51517 12.9847 9.6593 12.8405 9.94755 12.5523L17.9165 4.58332C18.6069 3.89296 18.6069 2.77368 17.9165 2.08332C17.2261 1.39296 16.1069 1.39296 15.4165 2.08332L7.44753 10.0523C7.15928 10.3405 7.01515 10.4847 6.91208 10.6528C6.8207 10.802 6.75336 10.9645 6.71253 11.1346C6.66648 11.3264 6.66648 11.5302 6.66648 11.9379V13.3333Z"
-              stroke="#85888E"
-              strokeWidth="1.66667"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-      }
-      <div className="py-10 border-b-[2px] border-gray-400/20  cursor-pointer flex flex-col text-white justify-center items-center lg:px-0 px-0 h-fit">
+    <div
+      ref={dropdownRef}
+      className={`flex items-start gap-x-2 shadow-md ${
+        isConfigured || name == "Looker Studio" || name == "Big Query"
+          ? "shadow-green-600/40"
+          : "shadow-gray-500/10"
+      } px-5 py-7 bg-[#171C2A]/50 rounded-xl relative`}
+    >
+      {name == "Looker Studio" || name == "Big Query" ? (
         <Image
-          src={e?.logo}
-          alt={e?.logo?.src}
+          src={img}
+          alt={name + " Logo"}
           width={1000}
           height={1000}
-          className="aspect-square object-contain w-2/12"
+          className="aspect-square object-contain w-12 min-[1600px]:w-14"
         />
-        <p className="text-sm text-center min-[1600px]:text-base cursor-pointer mt-2">
-          {formatName(e?.platform)}
-        </p>
-      </div>
-      <div className="mt-2 flex items-end justify-between px-2">
-        {isNewPlatform && e?.platform !== "shopify" && (
-          <p
-            className="text-[10px] w-full text-center justify-center min-[1600px]:text-xs cursor-pointer bg-newBlue text-white flex items-center gap-x-2 rounded-lg px-6 py-3"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Setup Platform
+      ) : (
+        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-12 min-[1600px]:w-14 aspect-square p-2 mr-0 min-[1600px]:mr-0">
+          <Image
+            src={img}
+            alt={name + " Logo"}
+            width={1000}
+            height={1000}
+            className="aspect-square object-contain"
+          />
+        </div>
+      )}
+      <div className="ml-2">
+        <p className="text-base min-[1600px]:text-lg cursor-pointer">{name}</p>
+        {time && isConfigured && (
+          <p className="text-[12px] mt-0.5 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+            Last Refresh
+            <br />
+            {new Date(time).toString().slice(4, 21)}
           </p>
         )}
-        {(!isNewPlatform || e?.platform === "shopify") && (
-          <>
-            <p className="text-[10px] min-[1600px]:text-xs cursor-pointer">
-              Last Refresh Time
-              <br />
-              {new Date(e?.last_run).toString().slice(4, 21)}
-            </p>
-            <IoReload
-              className={`text-lg cursor-pointer transition-transform ${
-                isRotating ? "animate-spin" : ""
-              }`}
-              onClick={handleReloadClick}
-            />
-          </>
+        {!isConfigured && !isNew && (
+          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+            Connect your {name} account to fetch data
+          </p>
         )}
       </div>
+      {(dropDownValues?.length > 0 || values?.length > 0) && (
+        <BsThreeDotsVertical
+          onClick={() => {
+            setClicked(!clicked);
+          }}
+          className="absolute right-2 top-2 aspect-square rounded-full p-1.5 text-[28px] cursor-pointer hover:bg-gray-200/20 transition-all text-gray-300"
+        />
+      )}
+      {clicked && (
+        <div
+          className={`w-[9vw] absolute ${
+            idx % 4 !== 0 ? "-right-[7.5vw]" : "right-2"
+          } z-50 top-10 shadow-sm text-sm shadow-gray-200/30 bg-main rounded-md`}
+        >
+          {(values || dropDownValues)?.map((e, i) => (
+            <p
+              key={i}
+              onClick={() => {
+                if (e?.link) {
+                  window.open(e?.link, "_blank");
+                } else {
+                  e?.onClick();
+                }
+              }}
+              className="py-3 cursor-pointer px-3 hover:bg-gray-50/20 rounded-md"
+            >
+              {e?.title}
+            </p>
+          ))}
+        </div>
+      )}
       <Modal
         isOpen={isModalOpen}
         onRequestCl2ose={closeModal}
@@ -366,7 +293,7 @@ const Block = ({ e }) => {
               <Page4
                 credentialsState={credentialsState}
                 setCredentialsState={setCredentialsState}
-                selectedPlatform={e?.platform}
+                selectedPlatform={original_name}
                 data={data}
               />
             </div>
@@ -507,7 +434,7 @@ const Page4 = ({
           >
             <div
               key={i}
-              className="gap-2 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+              className="gap-2 px-3 py-6 flex w-full border-r-2 border-l-2 border-b-2 border-gray-300/30 h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
                 className={`flex items-center flex-col gap-4 justify-center basis-[30%]`}
@@ -653,4 +580,4 @@ const Page4 = ({
   );
 };
 
-export default DataSources;
+export default Block;

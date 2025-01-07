@@ -3,10 +3,11 @@ import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
 import Context from "../Context/Context";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IoMdCopy } from "react-icons/io";
 import toast from "react-hot-toast";
+import Block from "./Block";
 
 function formatName(input) {
   return input
@@ -18,8 +19,15 @@ function formatName(input) {
 const Overview = () => {
   const history = useRouter();
   const [currentlyVisible, setCurrentlyVisible] = useState("Data Sources");
-  const { mainDataSource, mainTemplates, actualUser, setLinkToEmbed } =
-    useContext(Context);
+  const [dataSourcesShow, setDataSourcesShow] = useState("My Data Sources");
+  const [selectReporting, setSelectReporting] = useState("Platforms");
+  const {
+    platformsData,
+    mainTemplates,
+    actualUser,
+    setLinkToEmbed,
+    lookerStudioSecret,
+  } = useContext(Context);
 
   function calculateRemainingDays(startDate, monthsToAdd) {
     const start = new Date(startDate);
@@ -54,21 +62,6 @@ const Overview = () => {
                   <h5 className="text-3xl font-semibold">
                     {actualUser?.agency_name}
                   </h5>
-                  {/* <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
-                    <span className="text-gray-300">Location:</span>{" "}
-                    {actualUser?.location}
-                  </p>
-                  <p className="mt-2 text-[12px] min-[1600px]:text-[14px]">
-                    <span className="text-gray-300">Website:</span>{" "}
-                    <span
-                      onClick={() => {
-                        window.open(actualUser?.webiste, "__blank");
-                      }}
-                      className="cursor-pointer hover:underline"
-                    >
-                      {actualUser?.webiste}
-                    </span>
-                  </p> */}
                   <div className="flex mt-4 items-center gap-x-4">
                     <button
                       onClick={() => {
@@ -147,7 +140,6 @@ const Overview = () => {
                   ) : (
                     <div
                       key={i}
-                      xx
                       className="flex items-center justify-between px-4 py-2 rounded-xl border border-gray-500/5 bg-[#171C2A]/50 animate-pulse"
                     >
                       <div>
@@ -161,77 +153,156 @@ const Overview = () => {
               </div>
             </div>
             <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
-              <div className="flex items-center gap-x-6">
-                {["Data Sources", "Templates"]?.map((e, i) => {
-                  return (
-                    <h3
-                      className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
-                        currentlyVisible == e
-                          ? "text-white font-medium"
-                          : "text-gray-500"
-                      }`}
-                      onClick={() => {
-                        setCurrentlyVisible(e);
-                      }}
-                      key={i}
-                    >
-                      {e}
-                    </h3>
-                  );
-                })}
+              <div className="flex items-center gap-x-8">
+                {["Data Sources", "Data Destinations", "Reporting"]?.map(
+                  (e, i) => {
+                    return (
+                      <h3
+                        className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                          currentlyVisible == e
+                            ? "text-white font-medium"
+                            : "text-gray-500"
+                        }`}
+                        onClick={() => {
+                          setCurrentlyVisible(e);
+                        }}
+                        key={i}
+                      >
+                        {e}
+                      </h3>
+                    );
+                  }
+                )}
               </div>
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
               <div className="h-[41vh]">
-                {currentlyVisible === "Templates" ? (
-                  <div className="overflow-y-auto small-scroller h-full">
-                    <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
-                      {mainTemplates?.map((e, i) => {
+                {currentlyVisible === "Data Sources" ? (
+                  <div className="h-full rounded-lg">
+                    <div className="flex items-center gap-x-8 mb-4">
+                      {["My Data Sources", "All Data Sources"]?.map((e, i) => {
                         return (
-                          <div
-                            key={i}
+                          <h3
+                            className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                              dataSourcesShow == e
+                                ? "text-white font-medium"
+                                : "text-gray-500"
+                            }`}
                             onClick={() => {
-                              setLinkToEmbed(e?.template_link);
-                              history.push("/view-report");
+                              setDataSourcesShow(e);
                             }}
-                            className="border flex flex-col items-center justify-center border-gray-300/20 rounded-xl cursor-pointer py-3 px-3"
+                            key={i}
                           >
-                            <Image
-                              src={e?.template_image}
-                              alt={e?.template_image?.src}
-                              width={1000}
-                              height={1000}
-                              className="h-[33vh] object-cover rounded-lg"
-                            />
-                            <p className="mt-2.5">{e?.template_name}</p>
-                          </div>
+                            {e}
+                          </h3>
                         );
                       })}
                     </div>
+                    {dataSourcesShow == "My Data Sources" ? (
+                      <div className="h-full overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid grid-cols-4 gap-4">
+                          {platformsData?.platforms?.map((e, i) => {
+                            return (
+                              <Block
+                                name={formatName(e?.platform)}
+                                original_name={e?.platform}
+                                img={e?.logo}
+                                time={e?.last_run}
+                                isDataSource={true}
+                                key={i}
+                                idx={i + 1}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-fit overflow-y-auto small-scroller grid grid-cols-4 gap-4 rounded-lg">
+                        {platformsData?.platforms?.map((e, i) => {
+                          return (
+                            <Block
+                              name={formatName(e?.platform)}
+                              original_name={e?.platform}
+                              img={e?.logo}
+                              time={e?.last_run}
+                              isDataSource={true}
+                              isNew={true}
+                              key={i}
+                              idx={i + 1}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <div className="h-full overflow-y-auto small-scroller rounded-lg">
-                    <div className="h-fit overflow-y-auto small-scroller grid grid-cols-3 gap-y-3 min-[1600px]:gap-y-5 p-3 min-[1600px]:p-4 rounded-lg">
-                      {mainDataSource?.map((e, i) => {
+                ) : currentlyVisible === "Reporting" ? (
+                  <div className="h-full rounded-lg">
+                    <div className="flex items-center gap-x-8 mb-4">
+                      {["Platforms", "Dashboard Templates"]?.map((e, i) => {
                         return (
-                          <div key={i} className="flex items-center">
-                            <div className="flex items-center">
-                              <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-10 min-[1600px]:w-12 aspect-square p-2 mr-3 min-[1600px]:mr-4">
+                          <h3
+                            className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                              selectReporting == e
+                                ? "text-white font-medium"
+                                : "text-gray-500"
+                            }`}
+                            onClick={() => {
+                              setSelectReporting(e);
+                            }}
+                            key={i}
+                          >
+                            {e}
+                          </h3>
+                        );
+                      })}
+                    </div>
+                    {selectReporting == "Platforms" ? (
+                      <div className="h-full overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid grid-cols-4 gap-4">
+                          <Block
+                            name="Looker Studio"
+                            img="/looker-icon-svgrepo-com.svg"
+                            values={[
+                              {
+                                title: !lookerStudioSecret
+                                  ? "Connect"
+                                  : "Reconnect",
+                                link: `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`,
+                              },
+                            ]}
+                          />
+                        </div>{" "}
+                      </div>
+                    ) : (
+                      <div className="h-full w-full overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
+                          {mainTemplates?.map((e, i) => {
+                            return (
+                              <div
+                                key={i}
+                                onClick={() => {
+                                  setLinkToEmbed(e?.template_link);
+                                  history.push("/view-report");
+                                }}
+                                className="border flex flex-col items-center justify-center border-gray-500/10 rounded-xl bg-[#171C2A]/50 cursor-pointer py-3 px-3"
+                              >
                                 <Image
-                                  src={e?.img_link}
-                                  alt={e?.img_link?.src}
+                                  src={e?.template_image}
+                                  alt={e?.template_image?.src}
                                   width={1000}
                                   height={1000}
-                                  className="aspect-squre object-contain"
-                                />{" "}
+                                  className="h-[29vh] object-cover rounded-lg"
+                                />
+                                <p className="mt-2.5">{e?.template_name}</p>
                               </div>
-                              <p className="text-base min-[1600px]:text-lg cursor-pointer">
-                                {formatName(e?.name)}
-                              </p>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-4 gap-4">
+                    <Block name="Big Query" img="/big query.png" />
                   </div>
                 )}
               </div>
@@ -242,5 +313,4 @@ const Overview = () => {
     </div>
   );
 };
-
 export default Overview;
