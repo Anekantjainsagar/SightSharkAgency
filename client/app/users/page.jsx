@@ -7,7 +7,12 @@ import { FaPlus } from "react-icons/fa";
 import AddUsers from "@/app/Components/Users/AddUsers";
 import Context from "../Context/Context";
 import SortByButton from "../Components/Users/SortByButton";
-import { MdOutlineChevronLeft, MdOutlineChevronRight, MdOutlineKeyboardDoubleArrowLeft, MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import {
+  MdOutlineChevronLeft,
+  MdOutlineChevronRight,
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
 
 let sort_by_options = [
   "created_at",
@@ -61,7 +66,7 @@ const Overview = () => {
                     return (
                       <h5
                         key={i}
-                        className={`text-[13px] min-[1600px]:text-base font-light tracking-wider ${
+                        className={`text-[12px] min-[1600px]:text-base font-light tracking-wider ${
                           e?.includes("Name")
                             ? "min-[1600px]:ml-0 ml-2"
                             : "text-center"
@@ -73,8 +78,8 @@ const Overview = () => {
                   }
                 )}
               </div>
-              <div className="h-[68vh] min-[1600px]:h-[70vh]">
-                <div className="overflow-y-auto small-scroller h-[89%]">
+              <div className="h-[66.5vh] min-[1600px]:h-[68vh]">
+                <div className="overflow-y-auto small-scroller h-[90%] min-[1600px]:h-[86%]">
                   {users?.data?.map((e, i) => {
                     return (
                       <UserDetailBlock status={"Online"} data={e} key={i} />

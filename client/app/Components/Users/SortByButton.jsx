@@ -37,7 +37,7 @@ const SortByButton = ({ sort_by_options }) => {
   return (
     <button
       ref={sortRef}
-      className="glass relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+      className="glass relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-[13px] min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
       onClick={() => setShowSortBy(!showSortBy)}
     >
       {/* <svg
@@ -98,7 +98,7 @@ const SortByButton = ({ sort_by_options }) => {
                 setRecentClick(e);
                 setShowSortBy(false);
               }}
-              className="text-gray-200 py-2.5 flex justify-center hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
+              className="text-gray-200 py-2 min-[1600px]:py-2.5 flex justify-center hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
             >
               {e[0]?.toUpperCase() + e?.slice(1)?.replaceAll("_", " ")}
             </p>

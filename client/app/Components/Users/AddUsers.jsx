@@ -196,7 +196,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   onClick={() => {
                     fileInputRef.current.click();
                   }}
-                  className="absolute bg-newBlue flex items-center justify-center text-2xl px-2 bottom-0 min-[1600px]:-bottom-2 cursor-pointer right-0 min-[1600px]:-right-2 rounded-full"
+                  className="absolute bg-newBlue flex items-center justify-center text-xl min-[1600px]:text-2xl px-2 -bottom-1 min-[1600px]:-bottom-2 cursor-pointer -right-1 min-[1600px]:-right-2 rounded-full"
                 >
                   +
                 </div>
@@ -205,7 +205,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[6vw] min-[1600px]:w-[4vw] h-[6vw] min-[1600px]:h-[4vw] object-cover rounded-full"
+                  className="w-[4vw] min-[1600px]:w-[4vw] h-[4vw] min-[1600px]:h-[4vw] object-cover rounded-full"
                 />
               </div>
               {isDragging && (
@@ -219,7 +219,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
               <div className="flex flex-col">
                 <label
                   htmlFor="name"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   First Name
                   <Required />
@@ -232,13 +232,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter First Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-9 min-[1600px]:h-[45px] px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-9 min-[1600px]:h-[45px] px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
                 <label
                   htmlFor="lastName"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   Last Name
                   <Required />
@@ -251,13 +251,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Last Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
                 <label
                   htmlFor="email"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   Email
                   <Required />
@@ -270,11 +270,14 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Email"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>{" "}
               <div className="flex flex-col">
-                <label htmlFor="access" className="mb-1.5 w-fit relative">
+                <label
+                  htmlFor="access"
+                  className="mb-1.5 w-fit relative text-[13px] min-[1600px]:text-base"
+                >
                   Access
                   <Required />
                 </label>
@@ -283,7 +286,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   <select
                     name="access"
                     id="access"
-                    className="glass outline-none w-full border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-sm rounded-md appearance-none pr-10"
+                    className="glass outline-none w-full border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md appearance-none pr-10"
                     value={data?.access}
                     onChange={(e) => {
                       setData({ ...data, access: e.target.value });
@@ -319,7 +322,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                       setData({ ...data, password: e.target.value });
                     }}
                     placeholder="Enter Password"
-                    className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                    className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 min-[1600px]:text-base text-[13px] px-4 py-2 rounded-md"
                   />
                   <div
                     className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
@@ -335,7 +338,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
               <div className="flex flex-col">
                 <label
                   htmlFor="phone"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   Phone
                 </label>
@@ -347,13 +350,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Phone"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>{" "}
               <div className="flex flex-col">
                 <label
                   htmlFor="postal_code"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   Postal Code
                 </label>
@@ -365,13 +368,13 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Postal Code"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
                 <label
                   htmlFor="country"
-                  className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                  className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                 >
                   Country
                 </label>
@@ -383,7 +386,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Country"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-sm rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
             </div>
@@ -397,7 +400,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   setPage(page + 1);
                 }
               }}
-              className={`text-white bg-newBlue w-[170px] h-12 rounded-lg`}
+              className={`text-white bg-newBlue w-[170px] h-9 min-[1600px]:h-12 rounded-lg`}
             >
               Save
             </button>

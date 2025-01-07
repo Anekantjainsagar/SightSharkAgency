@@ -134,16 +134,16 @@ const Settings = () => {
             <SettingsLeftbar />
             <div className="w-8/12 h-fit justify-between flex flex-col items-start border border-gray-500/5 rounded-lg px-6 py-4 text-white">
               <div className="w-full">
-                <h4 className="mainLogoSize font-semibold">Security</h4>
+                <h4 className="mainText20 font-semibold">Security</h4>
                 <div className="mt-5">
-                  <h6 className="text-lg min-[1600px]:text-[20px] font-medium">
+                  <h6 className="text-base min-[1600px]:text-[20px] font-medium">
                     Change your password
                   </h6>{" "}
                   <div className="grid grid-cols-1 gap-y-5 mt-4 w-full">
                     <div className="flex flex-col">
                       <label
                         htmlFor="currentPass"
-                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                        className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                       >
                         Current Password <Required />{" "}
                       </label>
@@ -152,7 +152,7 @@ const Settings = () => {
                           type={showOriginalPassword ? "text" : "password"}
                           name="Password"
                           id="currentPass"
-                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-sm"
+                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-[13px]"
                           placeholder="Your Current Password"
                           value={data?.oldPass}
                           onChange={(e) =>
@@ -172,7 +172,7 @@ const Settings = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="newPass"
-                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                        className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                       >
                         New Password
                         <Required />
@@ -182,7 +182,7 @@ const Settings = () => {
                           type={showNewPassword ? "text" : "password"}
                           name="Password"
                           id="newPass"
-                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-sm"
+                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-[13px]"
                           placeholder="Your New Password"
                           value={data?.newPassword}
                           onChange={(e) =>
@@ -246,7 +246,7 @@ const Settings = () => {
                     <div className="flex flex-col">
                       <label
                         htmlFor="retypeNewPassword"
-                        className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                        className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                       >
                         Confirm New Password
                         <Required />
@@ -256,7 +256,7 @@ const Settings = () => {
                           type={showNewPasswordC ? "text" : "password"}
                           name="Password"
                           id="retypeNewPassword"
-                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-sm"
+                          className="glass outline-none border border-gray-500/5 px-4 py-2 rounded-md w-full min-[1600px]:text-base text-[13px]"
                           placeholder="Your Confirm New Password"
                           value={data?.reNewPassword}
                           onChange={(e) =>
@@ -276,14 +276,14 @@ const Settings = () => {
                   </div>
                 </div>
                 <div className="h-[1px] w-full my-10 bg-gray-600/50"></div>{" "}
-                <h4 className="text-lg min-[1600px]:text-[20px] font-semibold">
+                <h4 className="text-base min-[1600px]:text-[20px] font-semibold">
                   Security preferences
                 </h4>
-                <p className="text-[#B2B4BA] mainText18 my-1">
+                <p className="text-[#B2B4BA] min-[1600px]:text-base text-[13px] my-1">
                   Keep your account safe by setting these preferences
                 </p>
                 <div className="mt-5 flex items-center justify-between w-full">
-                  <h6 className="text-sm min-[1600px]:text-base text-[#fff]">
+                  <h6 className="text-[13px] min-[1600px]:text-base text-[#fff]">
                     Enable two-step authentication
                   </h6>
                   <label className="inline-flex items-center cursor-pointer">
@@ -302,7 +302,7 @@ const Settings = () => {
               </div>
               <div className="mt-10 flex items-center justify-end w-full">
                 <button
-                  className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-sm rounded-xl ml-4`}
+                  className={`bg-[#898989]/15 font-semibold min-[1600px]:w-[160px] w-[120px] min-[1600px]:py-3 py-2 min-[1600px]:text-base text-[13px] rounded-xl ml-4`}
                   onClick={() => {
                     setData({
                       oldPass: "",

@@ -27,7 +27,7 @@ const Alerts = () => {
                 {["Critical Notifications", "Alerts"].map((e, i) => {
                   return (
                     <h3
-                      className={`text-[18px] min-[1600px]:text-[20px] cursor-pointer ${
+                      className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
                         i + 1 == page ? "text-white" : "text-gray-500"
                       }`}
                       onClick={() => {
@@ -43,7 +43,7 @@ const Alerts = () => {
               <div className="gradient-line my-4"></div>
               {page == 1 ? (
                 <div
-                  className={`h-[72vh] pr-5 overflow-y-auto ${
+                  className={`h-[69vh] min-[1600px]:h-[72vh] pr-5 overflow-y-auto ${
                     criticalNotifications?.length == 0 &&
                     "flex items-center justify-center"
                   } small-scroller`}
@@ -61,7 +61,7 @@ const Alerts = () => {
                 </div>
               ) : (
                 <div
-                  className={`h-[72vh] pr-5 overflow-y-auto ${
+                  className={`h-[69vh] min-[1600px]:h-[72vh] pr-5 overflow-y-auto ${
                     alerts?.length == 0 && "flex items-center justify-center"
                   } small-scroller`}
                 >

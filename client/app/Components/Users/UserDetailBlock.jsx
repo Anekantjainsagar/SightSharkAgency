@@ -26,7 +26,7 @@ const UserDetailBlock = ({ data }) => {
         setShowSubscribe={setShowUpdatePopup}
         userData={userClickedData}
       />
-      <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
+      <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-[13px] min-[1600px]:text-base">
         <div className="flex items-start min-[1600px]:ml-0 ml-2">
           {!data?.profile_picture ? (
             <Image

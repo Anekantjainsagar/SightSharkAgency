@@ -466,7 +466,7 @@ const LogoutBtn = () => {
           />
         </svg>
       </div>
-      <p className="ml-4 mainText18">Log Out</p>
+      <p className="ml-4 min-[1600px]:text-lg text-[15px]">Log Out</p>
     </div>
   );
 };
@@ -488,7 +488,7 @@ const NewwBlock = ({ e, setShow, show }) => {
       <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
         {e?.temp_icon[1]}
       </div>
-      <p className="ml-4 mainText18">{e?.title}</p>
+      <p className="ml-4 min-[1600px]:text-lg text-[15px]">{e?.title}</p>
     </div>
   );
 };
@@ -502,7 +502,7 @@ const Block = ({ e }) => {
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`flex items-center rounded-lg cursor-pointer px-3 py-3 mb-2 mainText18 ${
+      className={`flex items-center rounded-lg cursor-pointer px-3 py-3 mb-2 min-[1600px]:text-lg text-[15px] ${
         pathname.includes(e?.route)
           ? "bg-[#898989]/15 border border-gray-200/5"
           : "text-gray-400"

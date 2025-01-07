@@ -15,12 +15,7 @@ import {
   MdOutlineKeyboardDoubleArrowRight,
 } from "react-icons/md";
 
-let sort_by_options = [
-  "created_at",
-  "client_name",
-  "status",
-  // "deployment_date",
-];
+let sort_by_options = ["created_at", "client_name", "status"];
 
 const Overview = () => {
   const { agencies, getAgencies, setSelectedAgencies, selectedAgencies } =
@@ -144,7 +139,7 @@ const Overview = () => {
                   );
                 })}
               </div>
-              <div className="h-[69.5vh] min-[1600px]:h-[66vh]">
+              <div className="h-[66vh] min-[1600px]:h-[69vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   {agencies?.data?.map((e, i) => {
                     return <AgencyDetailsBlock key={i} data={e} />;

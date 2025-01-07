@@ -82,7 +82,7 @@ const SettingsLeftbar = () => {
 
   return (
     <div className="w-4/12 h-full flex flex-col items-start border border-gray-500/5 rounded-lg px-6 py-4 text-white">
-      <h4 className="mainLogoSize">Settings</h4>
+      <h4 className="mainText20">Settings</h4>
       <div className="mt-4">
         {items?.map((e, i) => {
           return <Block e={e} key={i} idx={i} />;
@@ -108,7 +108,9 @@ const Block = ({ e, }) => {
       <div className="w-8 min-[1600px]:mr-4 mr-2">{e?.icon[0]}</div>
       <div>
         <h5 className={`mainText18`}>{e?.title}</h5>
-        <p className={`text-gray-400 min-[1600px]:text-base text-sm mt-1.5`}>
+        <p
+          className={`text-gray-400 min-[1600px]:text-base text-[13px] mt-0.5 min-[1600px]:mt-1.5`}
+        >
           {e?.about}
         </p>
       </div>
