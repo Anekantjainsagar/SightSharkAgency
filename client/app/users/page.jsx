@@ -41,7 +41,7 @@ const Overview = () => {
           <Navbar />
           <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-xl min-[1600px]:text-2xl">
+              <h3 className=" ">
                 Users{" "}
                 <span className="text-lg min-[1600px]:text-xl text-white/80">
                   ({users?.total_count})

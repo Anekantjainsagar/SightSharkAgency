@@ -4,19 +4,18 @@ import Info from "@/app/Components/Login/Info";
 import { useRouter } from "next/navigation";
 
 const UnpublishedReports = () => {
-  const history = useRouter();
-  const { rawReportsClient, setLinkToEmbed } = useContext(Context);
+  const { rawReportsClient } = useContext(Context);
 
   return (
     <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[26.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
-      <h4 className="min-[1600px]:text-xl">
+      <h4 className="min-[1600px]:text-xl text-sm">
         Unpublished Reports ({rawReportsClient ? rawReportsClient?.length : 0})
         <Info
           placement={"bottom"}
           text="These reports are dynamically generated and temporary. To save them to your Looker Studio account, follow the steps outlined in the tutorial here: [link]"
         />
       </h4>
-      <div className="gradient-line my-4"></div>
+      <div className="gradient-line min-[1600px]:my-4 my-3"></div>
       {rawReportsClient?.length > 0 ? (
         <div className="mt-1 px-1">
           <div
@@ -30,7 +29,7 @@ const UnpublishedReports = () => {
               "Report Link",
             ]?.map((e, i) => {
               return (
-                <p key={i} className="text-center text-sm">
+                <p key={i} className="text-center text-xs min-[1600px]:text-sm">
                   {e}
                 </p>
               );
@@ -55,7 +54,7 @@ const UnpublishedReports = () => {
                     return (
                       <p
                         key={i}
-                        className={`text-center text-[15px] break-words px-3 ${
+                        className={`text-center text-[13px] min-[1600px]:text-[15px] break-words px-3 ${
                           i == 3 &&
                           "hover:underline hover:text-blue-500 cursor-pointer"
                         }`}

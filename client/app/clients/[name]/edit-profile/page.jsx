@@ -125,14 +125,14 @@ const Overview = ({ params }) => {
             <AgencyDetails data={original_data} />
             <div className="w-[69%] min-[1600px]:h-[82vh] h-fit">
               <AgencyDetailsTopbar name={name} />
-              <div className="border border-gray-500/5 min-[1600px]:h-[83vh] h-fit w-full rounded-lg p-3 min-[1600px]:p-4 flex flex-col justify-between">
+              <div className="border border-gray-500/5 min-[1600px]:h-[82vh] h-[80vh] w-full rounded-lg p-3 min-[1600px]:p-4 flex flex-col justify-between">
                 <div className="h-[90%]">
                   <div className="flex items-center">
                     {databar.map((e, i) => {
                       return (
                         <h4
                           key={i}
-                          className={`min-[1600px]:text-lg cursor-pointer mr-5 ${
+                          className={`min-[1600px]:text-lg text-[15px] cursor-pointer mr-5 ${
                             selected === e ? "text-blue-600" : "text-gray-300"
                           }`}
                           onClick={() => {
@@ -153,7 +153,7 @@ const Overview = ({ params }) => {
                             onClick={() => {
                               fileInputRef.current.click();
                             }}
-                            className="absolute bg-newBlue text-xl py-1.5 px-1.5 -bottom-1 cursor-pointer -right-1 rounded-full"
+                            className="absolute bg-newBlue min-[1600px]:text-xl text-base bottom-0 right-0 py-1.5 px-1.5 min-[1600px]:-bottom-1 cursor-pointer min-[1600px]:-right-1 rounded-full"
                           >
                             <BiPencil />
                           </div>
@@ -172,11 +172,11 @@ const Overview = ({ params }) => {
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-11/12 pl-[2vw]">
+                      <div className="grid grid-cols-2 gap-x-8 min-[1600px]:gap-y-6 gap-y-4 w-11/12 pl-[2vw]">
                         <div className="flex flex-col">
                           <label
                             htmlFor="name"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Client Name
                             <Required />
@@ -189,13 +189,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Client Name"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>{" "}
                         <div className="flex flex-col">
                           <label
                             htmlFor="parent_name"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Parent Name
                             <Required />
@@ -208,13 +208,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Parent Name"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="website"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Website <Required />
                           </label>
@@ -226,13 +226,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Website"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="Timezone"
-                            className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                            className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                           >
                             Timezone
                             <Required />
@@ -245,7 +245,7 @@ const Overview = ({ params }) => {
                                 setData({ ...data, timezone: e.target.value });
                               }}
                               id="Timezone"
-                              className="bg-[#898989]/15 w-full outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
+                              className="bg-[#898989]/15 w-full outline-none min-[1600px]:h-[45px] h-[35px] glass text-[13px] min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
                             >
                               {timezones?.map((e, i) => {
                                 return (
@@ -260,7 +260,7 @@ const Overview = ({ params }) => {
                               })}
                             </select>
                             {/* Custom dropdown icon */}
-                            <span className="absolute right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                            <span className="absolute right-3 top-1/2 min-[1600px]:text-2xl text-xl z-50 -translate-y-1/2 pointer-events-none">
                               <MdKeyboardArrowDown />
                             </span>
                           </div>
@@ -268,7 +268,7 @@ const Overview = ({ params }) => {
                         <div className="flex flex-col">
                           <label
                             htmlFor="deployment"
-                            className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                            className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                           >
                             Report Start Date <Required />
                           </label>
@@ -282,13 +282,13 @@ const Overview = ({ params }) => {
                               });
                             }}
                             type="date"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="status"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Status
                           </label>
@@ -297,7 +297,7 @@ const Overview = ({ params }) => {
                             <select
                               name="status"
                               id="status"
-                              className="glass h-[45px] w-full outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm appearance-none pr-10"
+                              className="glass min-[1600px]:h-[45px] h-[35px] w-full outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px] appearance-none pr-10"
                               value={status}
                               onChange={(e) => setStatus(e.target.value)}
                             >
@@ -309,7 +309,7 @@ const Overview = ({ params }) => {
                             </select>
 
                             {/* Custom dropdown icon */}
-                            <span className="absolute z-50 right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                            <span className="absolute z-50 right-3 top-1/2 min-[1600px]:text-2xl text-xl -translate-y-1/2 pointer-events-none">
                               <MdKeyboardArrowDown />
                             </span>
                           </div>
@@ -322,7 +322,7 @@ const Overview = ({ params }) => {
                         <div className="flex flex-col">
                           <label
                             htmlFor="namekey"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Name
                           </label>
@@ -340,13 +340,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Name"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="designation"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Designation
                           </label>
@@ -364,13 +364,13 @@ const Overview = ({ params }) => {
                             }}
                             type="text"
                             placeholder="Enter Designation"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="email"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Email Address
                             <Required />
@@ -389,13 +389,13 @@ const Overview = ({ params }) => {
                             }}
                             type="email"
                             placeholder="Enter Email Address"
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                         <div className="flex flex-col">
                           <label
                             htmlFor="phone"
-                            className="mb-1.5 min-[1600px]:text-base text-sm w-fit relative"
+                            className="mb-1.5 min-[1600px]:text-base text-[13px] w-fit relative"
                           >
                             Phone no.
                           </label>
@@ -413,7 +413,7 @@ const Overview = ({ params }) => {
                             }}
                             type="number"
                             placeholder="Enter Phone no."
-                            className="glass h-[45px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-sm"
+                            className="glass min-[1600px]:h-[45px] h-[35px] outline-none border border-gray-500/5 px-4 py-2 rounded-md min-[1600px]:text-base text-[13px]"
                           />
                         </div>
                       </div>
@@ -438,17 +438,17 @@ const Overview = ({ params }) => {
                 </div>
                 <div className="flex h-[10%] items-center justify-between min-[1600px]:mt-0 mt-6">
                   <button
-                    className={`bg-red-600 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl flex items-center ml-4`}
+                    className={`bg-red-600 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl flex items-center ml-4`}
                     onClick={() => {
                       setDeleteAgency(!deleteAgency);
                     }}
                   >
-                    <MdDelete className="mr-1 text-xl" />
+                    <MdDelete className="mr-1 min-[1600px]:text-xl text-lg" />
                     Delete Client
                   </button>
                   <div>
                     <button
-                      className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
+                      className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl ml-4`}
                       onClick={() => {
                         updateDataTemp();
                         toast.success("Changes Discarded");
@@ -457,7 +457,7 @@ const Overview = ({ params }) => {
                       Discard
                     </button>
                     <button
-                      className={`bg-newBlue min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-sm rounded-xl min-[1600px]:rounded-xl ml-4`}
+                      className={`bg-newBlue min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl ml-4`}
                       onClick={() => {
                         if (
                           data?.name &&
@@ -574,7 +574,7 @@ const DataSourceBox = ({ e, original_data }) => {
 
   return (
     <div className="flex flex-col items-center justify-between h-fit relative border rounded-2xl border-gray-300/30 bg-[#171C2A]/50 p-2">
-      <div className="flex items-center flex-col gap-2 h-[8vw] w-[6vw] justify-center">
+      <div className="flex items-center flex-col gap-y-1 min-[1600px]:gap-y-2 h-[8vw] w-[6vw] justify-center">
         <Image
           src={e?.logo}
           alt={e?.platform}
@@ -584,7 +584,7 @@ const DataSourceBox = ({ e, original_data }) => {
         />
         <label
           htmlFor={e?.platform}
-          className="text-[14px] min-[1600px]:text-[1.15rem] capitalize text-center cursor-pointer"
+          className="text-[13px] min-[1600px]:text-[1.15rem] capitalize text-center cursor-pointer"
         >
           {formatName(e?.platform)}
         </label>
@@ -606,7 +606,7 @@ const DataSourceBox = ({ e, original_data }) => {
           />
         )}
         {showMenu && (
-          <div className="absolute -right-[6.5vw] top-10 backdrop-blur-2xl text-sm border border-gray-200/20 rounded-md">
+          <div className="absolute -right-[6.5vw] top-10 backdrop-blur-2xl min-[1600px]:text-sm text-xs border border-gray-200/20 rounded-md">
             <p
               onClick={() => {
                 setIsEditable(!isEditable);
@@ -650,16 +650,16 @@ const DataSourceBox = ({ e, original_data }) => {
       </div>
       <div className="flex items-center w-full px-2 justify-between gap-x-2 relative">
         {isEditable ? (
-          <div className="flex items-center w-full justify-between gap-x-2">
+          <div className="flex items-center w-full justify-between min-[1600px]:gap-x-2 gap-x-1">
             <input
               type="text"
               value={account_id}
               placeholder="Account ID"
               onChange={(eve) => setAccount_id(eve.target.value)}
-              className="bg-transparent w-11/12 outline-none border border-gray-400/30 text-gray-400 rounded-2xl px-3"
+              className="bg-transparent w-11/12 outline-none border border-gray-400/30 text-gray-400 rounded-2xl text-sm py-0.5 min-[1600px]:text-base px-3"
             />
             <BsCheckLg
-              className="text-green-800 cursor-pointer rounded-full text-3xl"
+              className="text-green-800 cursor-pointer rounded-full text-xl min-[1600px]:text-3xl"
               onClick={async () => {
                 try {
                   let platforms = dataSourceStructure
@@ -703,7 +703,9 @@ const DataSourceBox = ({ e, original_data }) => {
             />
           </div>
         ) : (
-          <p className="w-11/12">Account ID: {account_id}</p>
+          <p className="min-[1600px]:text-base w-full text-sm text-center">
+            Account ID: {account_id}
+          </p>
         )}
       </div>
     </div>

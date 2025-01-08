@@ -390,8 +390,10 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
             onClick={closeModal}
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
-          <div className="mb-12">
-            <p className="text-center text-3xl mb-5">{nav_data[page - 1]}</p>
+          <div className="min-[1600px]:mb-12 mb-8">
+            <p className="text-center min-[1600px]:text-3xl text-2xl mb-5">
+              {nav_data[page - 1]}
+            </p>
             <div className="flex items-center justify-between pl-[8vw]">
               {nav_data.map((e, i, arr) => {
                 return (
@@ -403,7 +405,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                           : "border border-gray-500/20 bg-[#343745]"
                       } ${
                         i != arr.length - 1 ? "w-[3vw]" : "w-[2.5vw]"
-                      } aspect-square rounded-full flex items-center justify-center text-[24px]`}
+                      } aspect-square rounded-full flex items-center justify-center text-lg min-[1600px]:text-[24px]`}
                     >
                       {page > i + 1 ? <IoMdCheckmark /> : i + 1}
                     </div>
@@ -419,11 +421,11 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
               })}
             </div>
           </div>
-          <div className="h-[45vh] min-[1600px]:h-[40vh]">
+          <div className="min-[1600px]:h-[40vh] h-[38vh]">
             {page === 1 ? (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
                 <div
-                  className={`flex flex-col items-center justify-center mb-6 ${
+                  className={`flex flex-col items-center justify-center min-[1600px]:mb-6 mb-4 ${
                     isDragging
                       ? "border-2 border-dashed border-blue-500 bg-black/30 cursor-pointer"
                       : ""
@@ -448,10 +450,10 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                           fileInputRef.current.click();
                         }
                       }}
-                      className="absolute bg-newBlue flex items-center justify-center text-2xl w-[1.6vw] aspect-square -bottom-2 cursor-pointer -right-2 rounded-full"
+                      className="absolute bg-newBlue flex items-center justify-center min-[1600px]:text-2xl w-[1.6vw] aspect-square min-[1600px]:-bottom-2 bottom-0 cursor-pointer -right-2 rounded-full"
                     >
                       {data?.profile ? (
-                        <AiOutlineClose className="text-sm" />
+                        <AiOutlineClose className="text-[13px]" />
                       ) : (
                         "+"
                       )}
@@ -479,7 +481,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="name"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Client Name
                       <Required />
@@ -492,16 +494,15 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Client Name"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 h-[45px] text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border border-gray-500/20 min-[1600px]:h-[45px] h-[35px] text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="parent_name"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Parent Organization
-
                       <Info text="If there is no Parent Organization then use the client name" />
                       <Required />
                     </label>
@@ -513,13 +514,13 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Parent Organization"
-                      className="bg-[#898989]/15 outline-none border border-gray-500/20 h-[45px] text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border border-gray-500/20 min-[1600px]:h-[45px] h-[35px] text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="website"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Website
                       <Required />
@@ -532,13 +533,13 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Website"
-                      className="bg-[#898989]/15 outline-none h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="Timezone"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Timezone
                       <Required />
@@ -551,14 +552,14 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                           setData({ ...data, timezone: e.target.value });
                         }}
                         id="Timezone"
-                        className="bg-[#898989]/15 w-full outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
+                        className="bg-[#898989]/15 w-full outline-none border min-[1600px]:h-[45px] h-[35px] border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
                       >
                         {timezones?.map((e, i) => {
                           return (
                             <option
                               value={e?.region_name}
                               key={i}
-                              className="bg-main text-sm min-[1600px]:text-base"
+                              className="bg-main text-[13px] min-[1600px]:text-base"
                             >
                               {e?.region_name}
                             </option>
@@ -574,7 +575,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="emailKey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Report Start Date
                       <Required />
@@ -588,7 +589,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                           report_start_date: event.target.value,
                         })
                       }
-                      className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border min-[1600px]:h-[45px] h-[35px] border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                 </div>
@@ -599,7 +600,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                   <div className="flex flex-col">
                     <label
                       htmlFor="namekey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Name
                     </label>
@@ -617,13 +618,13 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       }}
                       type="text"
                       placeholder="Enter Name"
-                      className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border min-[1600px]:h-[45px] h-[35px] border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="designation"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Designation
                     </label>
@@ -642,13 +643,13 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       type="text"
                       placeholder="Enter Designation"
                       className="bg-[#898989]/15 outline-none 
-h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="email"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Email Address <Required />
                     </label>
@@ -667,13 +668,13 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       type="email"
                       placeholder="Enter Email Address"
                       className="bg-[#898989]/15 outline-none 
-h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="phone"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Phone no.
                     </label>
@@ -692,7 +693,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       type="number"
                       placeholder="Enter Phone no."
                       className="bg-[#898989]/15 outline-none 
-h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                 </div>
@@ -708,7 +709,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                     onChange={(e) => {
                       setSearch(e.target.value);
                     }}
-                    className="outline-none text-sm min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
+                    className="outline-none text-[13px] min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
                   />
                 </div>
                 <div className="grid grid-cols-3 gap-3 mt-5">
@@ -800,7 +801,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
               </div>
             ) : page === 5 ? (
               <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
-                <div className="grid grid-cols-4 gap-x-4 mt-2">
+                <div className="grid min-[1600px]:grid-cols-4 grid-cols-3 gap-x-4 mt-2">
                   {mainTemplates?.map((e, i) => {
                     return (
                       <div
@@ -810,14 +811,14 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                         }}
                         className={`border ${
                           e?.id == data?.templates[0] && "border-white"
-                        } flex items-center p-3 justify-center border-gray-300/20 rounded-xl cursor-pointer`}
+                        } flex items-center min-[1600px]:p-3 p-2 justify-center border-gray-300/20 rounded-xl cursor-pointer`}
                       >
                         <Image
                           src={e?.template_image}
                           alt={e?.template_image?.src}
                           width={1000}
                           height={1000}
-                          className="h-[18vh] object-cover"
+                          className="h-[18vh] object-cover rounded-xl"
                         />
                       </div>
                     );
@@ -830,7 +831,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="emailKey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Portal Owner Email
                       <Required />
@@ -849,13 +850,13 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                       }}
                       type="text"
                       placeholder="Enter Email"
-                      className="bg-[#898989]/15 outline-none border h-[45px] border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 rounded-md"
+                      className="bg-[#898989]/15 outline-none border min-[1600px]:h-[45px] h-[35px] border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 rounded-md"
                     />
                   </div>
                   <div className="flex flex-col">
                     <label
                       htmlFor="passwordKey"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Password <Required />
                     </label>
@@ -874,7 +875,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                           });
                         }}
                         placeholder="Enter Password"
-                        className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                        className="bg-[#898989]/15 w-full outline-none border min-[1600px]:h-[45px] h-[35px] text-[13px] min-[1600px]:text-base border-gray-500/20 px-4 py-2 rounded-md"
                       />
                       <div
                         className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
@@ -888,7 +889,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                     </div>
                   </div>{" "}
                   {data?.credentials?.password && (
-                    <div className="text-sm">
+                    <div className="text-[13px]">
                       <p
                         className={
                           criteria.hasUppercase
@@ -931,7 +932,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   <div className="flex flex-col">
                     <label
                       htmlFor="passwordKeyConfirm"
-                      className="mb-1.5 text-sm min-[1600px]:text-base w-fit relative"
+                      className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
                     >
                       Confirm Password <Required />
                     </label>
@@ -950,7 +951,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                           });
                         }}
                         placeholder="Enter Confirm Password"
-                        className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 px-4 py-2 rounded-md"
+                        className="bg-[#898989]/15 w-full min-[1600px]:h-[45px] h-[35px] text-[13px] min-[1600px]:text-base outline-none border border-gray-500/20 px-4 py-2 rounded-md"
                       />
                       <div
                         className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
@@ -969,7 +970,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
           </div>
           <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
             <button
-              className={`text-white text-base min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
+              className={`text-white text-[13px] min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
                 page == 1 ? "bg-[#898989]/15" : "bg-newBlue cursor-pointer"
               } h-10 min-[1600px]:h-12 rounded-lg`}
               disabled={page == 1}
@@ -1014,7 +1015,7 @@ h-[45px] border border-gray-500/20 text-sm min-[1600px]:text-base px-4 py-2 roun
                   }
                 }
               }}
-              className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
+              className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
             >
               {page == nav_data?.length ? "Submit" : "Next"}
             </button>
@@ -1127,7 +1128,7 @@ const Page4 = ({
               className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
-                className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
+                className={`flex items-center h-full flex-col min-[1600px]:gap-y-4 gap-y-2 justify-center basis-[30%]`}
               >
                 <Image
                   src={e?.img_link}
@@ -1138,7 +1139,7 @@ const Page4 = ({
                 />
                 <label
                   htmlFor={e?.platform}
-                  className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
+                  className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                 >
                   {formatName(e?.platform)}
                 </label>
@@ -1193,7 +1194,7 @@ const Page4 = ({
                   <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
                     <label
                       htmlFor={e?.platform}
-                      className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                      className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                     >
                       {formatName("account_ID")}
                     </label>
@@ -1212,7 +1213,7 @@ const Page4 = ({
                           event.target.value
                         )
                       }
-                      className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                      className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
                     />
                   </div>
                 }
@@ -1224,7 +1225,7 @@ const Page4 = ({
                     <div className="flex flex-row justify-between items-center">
                       <label
                         htmlFor={e?.platform}
-                        className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                        className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                       >
                         {formatName("account_filter")}
                       </label>
@@ -1243,7 +1244,7 @@ const Page4 = ({
                             event.target.value
                           )
                         }
-                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                        className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
                       />
                     </div>
                   )}
@@ -1256,7 +1257,7 @@ const Page4 = ({
                       >
                         <label
                           htmlFor={e?.platform}
-                          className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                          className="text-[13px] min-[1600px]:text-base cursor-pointer"
                         >
                           {formatName(key)}
                         </label>
@@ -1281,7 +1282,7 @@ const Page4 = ({
                               true
                             )
                           }
-                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                          className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
                         />
                       </div>
                     )

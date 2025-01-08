@@ -424,13 +424,16 @@ const State = (props) => {
     if (cookie?.length > 5 && id) {
       try {
         axios
-          .get(`${BACKEND_URI}/raw-reports/reports?client_id=${id}&status=${"pending"}`, {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${cookie}`,
-            },
-          })
+          .get(
+            `${BACKEND_URI}/raw-reports/reports?client_id=${id}&status=${"pending"}`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          )
           .then(async (res) => {
             setRawReportsClient(res.data.data);
           })
@@ -606,6 +609,9 @@ const State = (props) => {
       }}
     >
       {props.children}
+      <div className="absolute md:hidden w-[100vw] h-[100vh] bg-main left-0 top-0 z-50 flex items-center justify-center text-2xl text-white text-center">
+        Coming Soon
+      </div>
     </Context.Provider>
   );
 };

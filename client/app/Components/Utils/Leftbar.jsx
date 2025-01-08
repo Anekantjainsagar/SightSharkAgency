@@ -502,7 +502,7 @@ const Block = ({ e }) => {
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`flex items-center rounded-lg cursor-pointer px-3 py-3 mb-2 min-[1600px]:text-lg text-[15px] ${
+      className={`flex items-center rounded-lg cursor-pointer px-3 min-[1600px]:py-3 py-2 mb-2 min-[1600px]:text-lg text-[15px] ${
         pathname.includes(e?.route)
           ? "bg-[#898989]/15 border border-gray-200/5"
           : "text-gray-400"

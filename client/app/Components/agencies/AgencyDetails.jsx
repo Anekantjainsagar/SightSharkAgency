@@ -16,7 +16,7 @@ const AgencyDetails = ({ data }) => {
   const [addDataSouces, setAddDataSouces] = useState(false);
 
   return (
-    <div className="border border-gray-500/15 h-fit p-4 w-[30%] rounded-lg flex flex-col items-center">
+    <div className="border border-gray-500/15 h-fit min-[1600px]:p-4 p-3 w-[30%] rounded-lg flex flex-col items-center">
       <AddDataSouces
         data={data}
         showSubscribe={addDataSouces}
@@ -31,10 +31,10 @@ const AgencyDetails = ({ data }) => {
             : "/Agency/individual/logo.png"
         }
         alt="Agency logo"
-        className="w-[60px] object-cover aspect-square border border-gray-200/30 rounded-full"
+        className="min-[1600px]:w-[60px] w-12 object-cover aspect-square border border-gray-200/30 rounded-full"
       />
-      <h3 className="mainLogoSize">{data?.client_name}</h3>
-      <div className="w-full mb-4 mt-2">
+      <h3 className="mainText20 mt-0.5">{data?.client_name}</h3>
+      <div className="w-full min-[1600px]:mb-4 mb-3 mt-2">
         {[
           {
             img: (
@@ -130,13 +130,13 @@ const AgencyDetails = ({ data }) => {
           return (
             <div
               key={i}
-              className={`w-full flex items-center justify-between text-base px-3 py-2 border border-gray-500/15 ${
+              className={`w-full flex items-center justify-between text-base px-3 min-[1600px]:py-2 py-1.5 border border-gray-500/15 ${
                 i == 0 && "rounded-t-xl"
               } ${i == 4 && "rounded-b-xl"}`}
             >
               <div className="flex items-center">
                 {e?.img}
-                <h6 className="text-textGrey text-sm min-[1600px]:text-base ml-3">
+                <h6 className="text-textGrey text-[13px] min-[1600px]:text-base ml-3">
                   {e?.title}
                 </h6>
               </div>
@@ -145,11 +145,11 @@ const AgencyDetails = ({ data }) => {
                   e?.title == "Status"
                     ? `status-text-${e?.value?.toLowerCase()}`
                     : "text-[#ECECED]"
-                } flex items-center text-sm min-[1600px]:text-base`}
+                } flex items-center text-[13px] min-[1600px]:text-base`}
               >
                 {e?.title == "Status" && (
                   <div
-                    className={`w-[10px] mr-2 h-[10px] rounded-full status-${e?.value?.toLowerCase()}`}
+                    className={`min-[1600px]:w-[10px] mr-2 w-[8px] h-[8px] min-[1600px]:h-[10px] rounded-full status-${e?.value?.toLowerCase()}`}
                   ></div>
                 )}
                 {e?.title === "Website" ? (
@@ -175,7 +175,7 @@ const AgencyDetails = ({ data }) => {
         })}
       </div>{" "}
       <div className="border rounded-xl w-full border-gray-500/15">
-        <h5 className="w-full p-3 text-sm min-[1600px]:text-base border-b border-b-gray-500/15">
+        <h5 className="w-full px-3 min-[1600px]:py-3 py-2 text-[13px] min-[1600px]:text-base border-b border-b-gray-500/15">
           Key Contact Info
         </h5>
         {[
@@ -203,13 +203,13 @@ const AgencyDetails = ({ data }) => {
           return (
             <div
               key={i}
-              className="w-full flex items-center justify-between px-4 my-2.5"
+              className="w-full flex items-center justify-between px-4 my-1.5 min-[1600px]:my-2.5"
             >
-              <h6 className="text-textGrey text-sm min-[1600px]:text-base">
+              <h6 className="text-textGrey text-[13px] min-[1600px]:text-base">
                 {e?.title}
               </h6>
               <p
-                className={`text-[#ECECED] flex items-center text-sm min-[1600px]:text-base`}
+                className={`text-[#ECECED] flex items-center text-[13px] min-[1600px]:text-base`}
               >
                 {e?.value}
               </p>
@@ -218,22 +218,22 @@ const AgencyDetails = ({ data }) => {
         })}{" "}
       </div>
       <div className="border rounded-xl w-full border-gray-500/15 mt-4">
-        <div className="flex py-3 items-center justify-between w-full border-b border-b-gray-500/15">
-          <h5 className="w-full pb-2 pl-3 text-sm min-[1600px]:text-base">
+        <div className="flex min-[1600px]:py-3 py-2.5 items-center justify-between w-full border-b border-b-gray-500/15">
+          <h5 className="w-full pb-2 pl-3 text-[13px] min-[1600px]:text-base">
             Data Sources
           </h5>
           <button
             onClick={() => {
               setAddDataSouces(!addDataSouces);
             }}
-            className="bg-newBlue p-2.5 mr-3 justify-center rounded-full flex items-center gap-x-2 my text-sm min-[1600px]:text-base"
+            className="bg-newBlue min-[1600px]:p-2.5 p-2 mr-3 justify-center rounded-full flex items-center gap-x-2"
           >
-            <FaPlus className="text-sm" />
+            <FaPlus className="min-[1600px]:text-sm text-xs" />
           </button>
         </div>
         <div className="m-3">
           {selectedClientDetails?.platforms_images?.length > 0 ? (
-            <div className="h-[22vh] bg-[#171C2A] rounded-lg">
+            <div className="min-[1600px]:h-[22vh] h-[18vh] bg-[#171C2A] rounded-lg">
               <div className="h-fit grid grid-cols-2 gap-y-5 p-2 min-[1600px]:p-4">
                 {selectedClientDetails?.platforms_images?.map((e, i) => {
                   return (
@@ -252,7 +252,7 @@ const AgencyDetails = ({ data }) => {
                       </div>
                       <label
                         htmlFor={e?.platform}
-                        className="text-sm min-[1600px]:text-base"
+                        className="text-[13px] min-[1600px]:text-base"
                       >
                         {formatName(e?.platform)}
                       </label>
@@ -262,7 +262,7 @@ const AgencyDetails = ({ data }) => {
               </div>
             </div>
           ) : (
-            <div className="bg-[#171C2A] h-[22vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
+            <div className="bg-[#171C2A] min-[1600px]:h-[22vh] h-[18vh] flex items-center justify-center rounded-lg p-3 min-[1600px]:p-4 text-center">
               No Data Sources Available Please Add some of the Data Sources
             </div>
           )}

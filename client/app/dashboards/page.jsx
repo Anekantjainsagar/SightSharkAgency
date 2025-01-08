@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 
 const Overview = () => {
   const history = useRouter();
-  const { agencies, setLinkToEmbed, agencyReports } = useContext(Context);
+  const { setLinkToEmbed, agencyReports } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
 
   return (
@@ -52,7 +52,7 @@ const Overview = () => {
                   );
                 })}
               </div>
-              <div className="h-[72vh] overflow-y-auto small-scroller min-[1600px]:h-[70vh]">
+              <div className="h-[67vh] overflow-y-auto small-scroller min-[1600px]:h-[70vh]">
                 {agencyReports?.map((data, i) => {
                   return (
                     <div

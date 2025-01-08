@@ -188,7 +188,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
-            <div className="grid grid-cols-2 text-sm min-[1600px]:text-base justify-between mt-2 px-[10vw]">
+            <div className="grid grid-cols-2 text-[13px] min-[1600px]:text-base justify-between mt-2 px-[10vw]">
               {nav_data.map((e, i) => {
                 return (
                   <p className="text-center" key={i}>
@@ -199,7 +199,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
             </div>
           </div>
           {page == 1 ? (
-            <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[38vh] pb-5 overflow-y-auto small-scroller w-full">
               <div className="relative flex items-center w-[350px] min-[1600px]:w-[456px]">
                 <FaSearch className="absolute left-4 z-40 text-white" />{" "}
                 {/* Search Icon */}
@@ -210,7 +210,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                   onChange={(e) => {
                     setSearch(e.target.value);
                   }}
-                  className="outline-none text-sm min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
+                  className="outline-none text-[13px] min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
                 />
               </div>
               <div className="grid grid-cols-3 gap-3 mt-5">
@@ -240,7 +240,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
               </div>
             </div>
           ) : (
-            <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[38vh] pb-5 overflow-y-auto small-scroller w-full">
               <Page4
                 credentialsState={credentialsState}
                 setCredentialsState={setCredentialsState}
@@ -250,7 +250,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
           )}
           <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
             <button
-              className={`text-white text-base min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
+              className={`text-white text-[13px] min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
                 page == 1
                   ? "bg-[#898989]/15 invisible"
                   : "bg-newBlue cursor-pointer visible"
@@ -273,7 +273,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                   // setPage(page + 1);
                 }
               }}
-              className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
+              className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
             >
               {page == maxPage ? "Submit" : "Next"}
             </button>
@@ -628,7 +628,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
         {credentialsState?.filter((e) => {
           return !selectedClientDetails?.platform_name?.includes(e?.platform);
         })?.length == 0 && (
-          <div className="text-lg flex items-center w-full justify-center text-gray-400 h-full">
+          <div className="min-[1600px]:text-lg text-base flex items-center w-full justify-center text-gray-400 h-full">
             No Data Sources are Selected!
           </div>
         )}

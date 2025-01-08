@@ -4,7 +4,6 @@ import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetails from "@/app/Components/agencies/AgencyDetails";
 import AgencyDetailsTopbar from "@/app/Components/agencies/AgencyDetailsTopbar";
-import AddTemplates from "../../Components/agencies/AddTemplates";
 import AddDataSouces from "../../Components/agencies/AddDataSources";
 import TemplateBlock from "@/app/Components/agencies/TemplateBlock";
 import Context from "@/app/Context/Context";
@@ -22,7 +21,6 @@ const Overview = ({ params }) => {
   } = useContext(Context);
   const [data, setData] = useState();
   const [addDataSouces, setAddDataSouces] = useState(false);
-  const [addTemplates, setAddTemplates] = useState(false);
   const { name } = params;
 
   useEffect(() => {
@@ -43,10 +41,6 @@ const Overview = ({ params }) => {
         showSubscribe={addDataSouces}
         setShowSubscribe={setAddDataSouces}
       />
-      <AddTemplates
-        showSubscribe={addTemplates}
-        setShowSubscribe={setAddTemplates}
-      />
       <div className="w-[85%] bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
@@ -57,11 +51,11 @@ const Overview = ({ params }) => {
             <AgencyDetails data={data} />
             <div className="w-[69%]">
               <AgencyDetailsTopbar name={name} />
-              <div className="border border-gray-500/5 h-[83vh] w-full rounded-lg p-3 min-[1600px]:p-4">
+              <div className="border border-gray-500/5 min-[1600px]:h-[83vh] h-[80vh] w-full rounded-lg p-3 min-[1600px]:p-4">
                 <UnpublishedReports />
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[51vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 min-[1600px]:h-[51vh] h-[48.5vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="min-[1600px]:text-xl">
+                    <h4 className="min-[1600px]:text-xl text-sm">
                       Published Reports{" "}
                       <Info
                         placement={"bottom"}
@@ -75,7 +69,7 @@ const Overview = ({ params }) => {
                       <FaPlus className="text-sm" />
                     </button> */}
                   </div>
-                  <div className="gradient-line my-4"></div>
+                  <div className="gradient-line min-[1600px]:my-4 my-3"></div>
                   {publishedReports?.length > 0 ? (
                     <div className="grid grid-cols-3 gap-x-4 mt-2 relative">
                       {publishedReports?.map((data, i) => {

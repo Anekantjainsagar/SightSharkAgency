@@ -24,7 +24,7 @@ const TemplateBlock = ({ data }) => {
           className="cursor-pointer h-[16vh] object-cover rounded-xl"
         />
       )}
-      <p className="text-center text-sm my-1 mx-auto">
+      <p className="text-center min-[1600px]:text-sm text-xs my-1 mx-auto">
         {data?.template_name?.replaceAll("_", " ")}
       </p>
     </div>

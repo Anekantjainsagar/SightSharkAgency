@@ -119,7 +119,7 @@ const Overview = () => {
                   return e?.img && e?.value?.toString() ? (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-4 py-6 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
+                      className="flex items-center justify-between px-4 py-4 min-[1600px]:py-6 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
                     >
                       <div>
                         <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
@@ -158,7 +158,7 @@ const Overview = () => {
                   (e, i) => {
                     return (
                       <h3
-                        className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                        className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
                           currentlyVisible == e
                             ? "text-white font-medium"
                             : "text-gray-500"
@@ -175,14 +175,14 @@ const Overview = () => {
                 )}
               </div>
               <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="h-[41vh]">
+              <div className="min-[1600px]:h-[41vh] h-[40vh]">
                 {currentlyVisible === "Data Sources" ? (
                   <div className="h-full rounded-lg">
                     <div className="flex items-center gap-x-8 mb-4">
                       {["My Data Sources", "All Data Sources"]?.map((e, i) => {
                         return (
                           <h3
-                            className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                            className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
                               dataSourcesShow == e
                                 ? "text-white font-medium"
                                 : "text-gray-500"
@@ -240,7 +240,7 @@ const Overview = () => {
                       {["Platforms", "Dashboard Templates"]?.map((e, i) => {
                         return (
                           <h3
-                            className={`text-lg min-[1600px]:text-[20px] cursor-pointer ${
+                            className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
                               selectReporting == e
                                 ? "text-white font-medium"
                                 : "text-gray-500"
@@ -290,7 +290,7 @@ const Overview = () => {
                                   alt={e?.template_image?.src}
                                   width={1000}
                                   height={1000}
-                                  className="h-[29vh] object-cover rounded-lg"
+                                  className="min-[1600px]:h-[29vh] h-[26vh] object-cover rounded-lg"
                                 />
                                 <p className="mt-2.5">{e?.template_name}</p>
                               </div>
