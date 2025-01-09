@@ -22,7 +22,7 @@
 }
 
 .bigFont {
-  @apply text-[28px] min-[1600px]:text-[36px];
+  @apply text-2xl md:text-[28px] min-[1600px]:text-[36px];
 }
 
 .maintext12 {
@@ -30,15 +30,15 @@
 }
 
 .maintext14 {
-  @apply text-[12px] min-[1600px]:text-[14px];
+  @apply text-xs md:text-[12px] min-[1600px]:text-sm;
 }
 
 .mainText18 {
-  @apply text-sm min-[1600px]:text-[18px];
+  @apply text-[12px] md:text-sm min-[1600px]:text-[18px];
 }
 
 .mainText20 {
-  @apply text-[18px] min-[1600px]:text-[20px];
+  @apply text-base md:text-[18px] min-[1600px]:text-[20px];
 }
 
 ::-webkit-calendar-picker-indicator {

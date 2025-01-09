@@ -34,6 +34,7 @@ const State = (props) => {
   const [lookerStudioSecret, setLookerStudioSecret] = useState(false);
   const [agencyReports, setAgencyReports] = useState([]);
   const [publishedReports, setPublishedReports] = useState([]);
+  const [showLeftMenu, setShowLeftMenu] = useState(false);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -606,12 +607,14 @@ const State = (props) => {
         lookerStudioSecret,
         publishedReports,
         getPublishedReports,
+        setShowLeftMenu,
+        showLeftMenu,
       }}
     >
       {props.children}
-      <div className="absolute md:hidden w-[100vw] h-[100vh] bg-main left-0 top-0 z-50 flex items-center justify-center text-2xl text-white text-center">
+      {/* <div className="absolute md:hidden w-[100vw] h-[100vh] bg-main left-0 top-0 z-50 flex items-center justify-center text-2xl text-white text-center">
         Coming Soon
-      </div>
+      </div> */}
     </Context.Provider>
   );
 };

@@ -104,9 +104,9 @@ const App = () => {
         showSubscribe={recoverPassword}
         setShowSubscribe={setRecoverPassword}
       />
-      <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
-        <div className="text-white flex flex-col items-center w-7/12 px-5">
-          <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-8 min-[1600px]:mb-20">
+      <div className="md:w-7/12 w-full p-[2vw] flex flex-col items-center justify-center h-full">
+        <div className="text-white flex flex-col items-center md:w-7/12 w-full md:px-5">
+          <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-10 md:mb-8 min-[1600px]:mb-20">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -121,7 +121,7 @@ const App = () => {
           <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
             Welcome Back
           </h1>
-          <p className="mainText18 text-white/80 mt-2">Login to your account</p>
+          <p className="mainText18 text-white/70 md:text-white/80 mt-1 md:mt-2">Login to your account</p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label

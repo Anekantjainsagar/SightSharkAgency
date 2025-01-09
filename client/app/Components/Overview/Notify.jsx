@@ -3,8 +3,8 @@ import React from "react";
 
 const Notify = ({ status, data }) => {
   return (
-    <div className="flex items-center justify-between py-1.5 min-[1600px]:py-2">
-      <div className="flex items-center">
+    <div className="flex md:flex-row flex-col md:mb-0 mb-3 w-full items-start md:items-center justify-between py-1.5 min-[1600px]:py-2">
+      <div className="flex items-start md:items-center">
         <Image
           src={
             status ? "/Overview/Notify/true.png" : "/Overview/Notify/false.png"
@@ -18,7 +18,7 @@ const Notify = ({ status, data }) => {
           <span className="font-normal mainText14">{data?.message}</span>
         </p>
       </div>
-      <p className="text-[13px] min-[1600px]:text-base">
+      <p className="text-[11px] md:mt-0 mt-1 md:text-[13px] md:text-start text-end w-full min-[1600px]:text-base">
         {new Date(data?.created_at).toString().slice(4, 21)}
       </p>
     </div>

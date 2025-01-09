@@ -11,20 +11,26 @@ import axios from "axios";
 import Modal from "react-modal";
 import { BACKEND_URI } from "../utils/url";
 
-const customStyles = {
-  overlay: { zIndex: 50 },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    width: "65vw",
-    border: "none",
-  },
+const getCustomStyles = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  return {
+    overlay: { zIndex: 50 },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      width: isMobile ? "90vw" : "65vw",
+      border: "none",
+    },
+  };
 };
+
+const customStyles = getCustomStyles();
 
 function formatName(input) {
   return input
@@ -202,11 +208,11 @@ const Block = ({
   return (
     <div
       ref={dropdownRef}
-      className={`flex items-start gap-x-2 shadow-md ${
+      className={`flex md:flex-row flex-col items-start gap-x-2 shadow-md ${
         isConfigured || name == "Looker Studio" || name == "Big Query"
           ? "shadow-green-600/40"
           : "shadow-gray-500/10"
-      } px-5 py-7 bg-[#171C2A]/50 rounded-xl relative`}
+      } px-3 md:px-5 py-3 md:py-7 bg-[#171C2A]/50 rounded-xl relative`}
     >
       {name == "Looker Studio" || name == "Big Query" ? (
         <Image
@@ -214,10 +220,10 @@ const Block = ({
           alt={name + " Logo"}
           width={1000}
           height={1000}
-          className="aspect-square object-contain w-12 min-[1600px]:w-14"
+          className="aspect-square object-contain w-full md:w-12 min-[1600px]:w-14"
         />
       ) : (
-        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-12 min-[1600px]:w-14 aspect-square p-2 mr-0 min-[1600px]:mr-0">
+        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-full md:w-12 min-[1600px]:w-14 aspect-square p-2 mr-0 min-[1600px]:mr-0">
           <Image
             src={img}
             alt={name + " Logo"}
@@ -227,8 +233,12 @@ const Block = ({
           />
         </div>
       )}
-      <div className="ml-2">
-        <p className="text-base min-[1600px]:text-lg cursor-pointer">{name}</p>
+      <div className="md:ml-2 md:mt-0 mt-2">
+        <p
+          className={`text-sm md:text-base min-[1600px]:text-lg cursor-pointer`}
+        >
+          {name}
+        </p>
         {time && isConfigured && (
           <p className="text-[12px] mt-0.5 text-gray-500 min-[1600px]:text-sm cursor-pointer">
             Last Refresh
@@ -252,9 +262,9 @@ const Block = ({
       )}
       {clicked && (
         <div
-          className={`w-[9vw] absolute ${
-            idx % 4 !== 0 ? "-right-[7.5vw]" : "right-2"
-          } z-50 top-10 shadow-sm text-sm shadow-gray-200/30 bg-main rounded-md`}
+          className={`w-fit md:w-[9vw] absolute ${
+            idx % 4 !== 0 ? "right-2 md:-right-[7.5vw]" : "right-2"
+          } z-50 top-10 shadow-sm text-xs md:text-sm shadow-gray-200/30 bg-main rounded-md`}
         >
           {(values || dropDownValues)?.map((e, i) => (
             <p
@@ -266,7 +276,7 @@ const Block = ({
                   e?.onClick();
                 }
               }}
-              className="py-3 cursor-pointer px-3 hover:bg-gray-50/20 rounded-md"
+              className="py-2 md:py-3 cursor-pointer px-2 md:px-3 hover:bg-gray-50/20 rounded-md"
             >
               {e?.title}
             </p>
@@ -285,11 +295,13 @@ const Block = ({
             onClick={closeModal}
             className="absolute top-2 right-2 px-2 cursor-pointer"
           />
-          <div className="mb-12">
-            <p className="text-center text-3xl mb-5">{"Platform Setup"}</p>
+          <div className="md:mb-12">
+            <p className="text-center text-2xl md:text-3xl mb-5">
+              {"Platform Setup"}
+            </p>
           </div>
           <div className="h-[45vh] min-[1600px]:h-[40vh]">
-            <div className="px-[4vw] h-[45vh] min-[1600px]:h-[40vh] pb-5 overflow-y-auto small-scroller w-full">
+            <div className="px-[4vw] h-full pb-5 overflow-y-auto small-scroller w-full">
               <Page4
                 credentialsState={credentialsState}
                 setCredentialsState={setCredentialsState}
@@ -303,7 +315,7 @@ const Block = ({
               onClick={() => {
                 addClientCredentials();
               }}
-              className={`text-white text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
+              className={`text-white text-sm md:text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
             >
               {"Submit"}
             </button>
@@ -418,13 +430,11 @@ const Page4 = ({
                     alt={e?.platform}
                     width={1000}
                     height={1000}
-                    className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
-                      state.isEnter ? "invisible" : "visible"
-                    }`}
+                    className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain`}
                   />
                   <label
                     htmlFor={e?.platform}
-                    className="text-[13px] min-[1600px]:text-base cursor-pointer"
+                    className="text-[13px] ml-2 min-[1600px]:text-base cursor-pointer"
                   >
                     {formatName(e?.platform)}
                   </label>
@@ -434,10 +444,10 @@ const Page4 = ({
           >
             <div
               key={i}
-              className="gap-2 px-3 py-6 flex w-full border-r-2 border-l-2 border-b-2 border-gray-300/30 h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+              className="gap-2 px-3 py-6 flex md:flex-row flex-col w-full border-r-2 border-l-2 border-b-2 border-gray-300/30 h-full justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
-                className={`flex items-center flex-col gap-4 justify-center basis-[30%]`}
+                className={`flex items-center flex-col gap-4 justify-center md:basis-[30%]`}
               >
                 <Image
                   src={e?.img_link}
@@ -454,7 +464,7 @@ const Page4 = ({
                 </label>
               </div>
               {/* <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div> */}
-              <div className="mt-3 flex-1 px-6">
+              <div className="mt-3 flex-1 md:flex-row flex-col md:px-6 w-full">
                 {/* Show inputs only for the current platform */}
 
                 {Object.keys(e?.creds_structure?.credentials || {}).map(
@@ -464,11 +474,11 @@ const Page4 = ({
                       return (
                         <div
                           key={key}
-                          className="flex flex-row justify-between items-center"
+                          className="flex md:flex-row flex-col justify-between items-start md:items-center md:mb-0 mb-2"
                         >
                           <label
                             htmlFor={e?.platform}
-                            className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                            className="text-sm md:text-[15px] min-[1600px]:text-[1rem] cursor-pointer md:mb-0 mb-2"
                           >
                             {formatName(key)}
                           </label>
@@ -488,7 +498,7 @@ const Page4 = ({
                                 true
                               )
                             }
-                            className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                          className="bg-transparent border border-gray-200/20 md:w-fit w-full px-4 py-1.5 outline-none rounded-lg text-sm md:text-base mr-4 mb-3"
                           />
                         </div>
                       );
@@ -496,11 +506,11 @@ const Page4 = ({
                       return (
                         <div
                           key={key}
-                          className="flex flex-row justify-between items-center"
+                          className="flex md:flex-row flex-col w-full justify-between items-start md:items-center"
                         >
                           <label
                             htmlFor={e?.platform}
-                            className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                            className="text-sm md:text-[15px] min-[1600px]:text-[1rem] cursor-pointer md:mb-0 mb-2"
                           >
                             {formatName(key)}
                           </label>
@@ -514,7 +524,7 @@ const Page4 = ({
                               </p>
                             )} */}{" "}
                               <label
-                                className={`border border-gray-300/20 py-1 px-5 rounded-md cursor-pointer`}
+                                className={`border border-gray-300/20 py-1 w-full px-5 rounded-md cursor-pointer`}
                               >
                                 {/* Show file name or "Replace file" */}
                                 {fileData ? fileData.name : "Replace file"}
@@ -561,7 +571,7 @@ const Page4 = ({
                                 }
                                 // ref={fileInputRef}
                                 // value="" // File inputs generally shouldn't have a controlled `value`.
-                                className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
+                                className="bg-transparent border w-full border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
                               />
                             </div>
                           )}

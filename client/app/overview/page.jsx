@@ -3,7 +3,7 @@ import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import Image from "next/image";
 import Context from "../Context/Context";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
 import { IoMdCopy } from "react-icons/io";
 import toast from "react-hot-toast";
@@ -42,37 +42,37 @@ const Overview = () => {
   return (
     <div className="flex items-start h-[100vh]">
       <Leftbar />
-      <div className="w-[85%] bg-main h-full relative">
+      <div className="w-full md:w-[85%] bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full py-2 px-6 min-[1600px]:py-6">
-            <div className="text-white w-full flex items-center justify-between rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5">
-              <div className="w-fit flex items-center gap-x-6">
+          <div className="text-white w-full md:py-2 py-1 md:px-6 min-[1600px]:py-6">
+            <div className="text-white w-full flex md:flex-row flex-col items-center justify-between rounded-xl p-3 md:p-4 bg-[#171C2A]/20 border border-gray-500/5">
+              <div className="md:w-fit w-full flex items-center gap-x-6">
                 <Image
                   src={actualUser?.profile_picture}
                   alt={actualUser?.agency_name}
                   width={1000}
                   height={1000}
-                  className="w-[10vw] h-[10vw] rounded-full"
+                  className="md:w-[10vw] md:h-[10vw] w-[33vw] h-[33vw] border border-gray-500/10 rounded-full"
                 />
                 <div className="">
-                  <h5 className="text-3xl font-semibold">
+                  <h5 className="md:text-3xl text-2xl font-semibold">
                     {actualUser?.agency_name}
                   </h5>
-                  <div className="flex mt-4 items-center gap-x-4">
+                  <div className="flex mt-4 items-center gap-x-3 md:gap-x-4">
                     <button
                       onClick={() => {
                         window.open(actualUser?.client_portal, "__blank");
                       }}
-                      className="bg-newBlue px-6 py-2.5 min-[1600px]:py-3 font-medium rounded-xl flex items-center text-sm min-[1600px]:text-base"
+                      className="bg-newBlue md:px-6 px-5 py-2 md:py-2.5 min-[1600px]:py-3 font-medium rounded-xl flex items-center text-sm md:text-sm min-[1600px]:text-base"
                     >
                       Client Portal
                     </button>
                     <IoMdCopy
-                      className="text-3xl text-white cursor-pointer"
+                      className="md:text-3xl text-2xl text-white cursor-pointer"
                       onClick={() => {
                         navigator.clipboard.writeText(
                           actualUser?.client_portal
@@ -84,7 +84,7 @@ const Overview = () => {
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 w-[43%] gap-4">
+              <div className="grid grid-cols-2 md:w-[43%] gap-3 md:gap-4 md:mt-0 mt-4">
                 {[
                   {
                     name: "Total Clients Added",
@@ -119,13 +119,13 @@ const Overview = () => {
                   return e?.img && e?.value?.toString() ? (
                     <div
                       key={i}
-                      className="flex items-center justify-between px-4 py-4 min-[1600px]:py-6 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
+                      className="flex items-center justify-between px-3 md:px-4 py-3 md:py-4 min-[1600px]:py-6 rounded-xl border border-gray-500/5 bg-[#171C2A]/50"
                     >
                       <div>
-                        <p className="text-[12px] min-[1600px]:text-[14px] text-[#CECFD2]">
+                        <p className="text-xs min-[1600px]:text-sm text-[#CECFD2]">
                           {e?.name}
                         </p>
-                        <p className="text-[20px] min-[1600px]:text-[26px] font-semibold mt-1">
+                        <p className="text-base md:text-[20px] min-[1600px]:text-[26px] font-semibold mt-1 md:mt-2">
                           {e?.value}
                         </p>
                       </div>
@@ -134,7 +134,7 @@ const Overview = () => {
                         alt={e.img?.src}
                         width={1000}
                         height={1000}
-                        className="w-[50px] min-[1600px]:w-[60px] aspect-square"
+                        className="w-[40px] md:w-[50px] min-[1600px]:w-[60px] aspect-square"
                       />
                     </div>
                   ) : (
@@ -152,13 +152,13 @@ const Overview = () => {
                 })}
               </div>
             </div>
-            <div className="text-white w-full rounded-xl p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
-              <div className="flex items-center gap-x-8">
+            <div className="text-white w-full rounded-xl p-3 md:p-4 bg-[#171C2A]/20 border border-gray-500/5 mt-4 min-[1600px]:mt-6">
+              <div className="flex items-center gap-x-4 md:gap-x-8">
                 {["Data Sources", "Data Destinations", "Reporting"]?.map(
                   (e, i) => {
                     return (
                       <h3
-                        className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
+                        className={`text-sm md:text-base min-[1600px]:text-[20px] cursor-pointer ${
                           currentlyVisible == e
                             ? "text-white font-medium"
                             : "text-gray-500"
@@ -174,15 +174,15 @@ const Overview = () => {
                   }
                 )}
               </div>
-              <div className="gradient-line my-2 min-[1600px]:my-4"></div>
-              <div className="min-[1600px]:h-[41vh] h-[40vh]">
+              <div className="gradient-line my-2.5 md:my-2 min-[1600px]:my-4"></div>
+              <div className="min-[1600px]:h-[41vh] h-[37vh] md:h-[40vh]">
                 {currentlyVisible === "Data Sources" ? (
                   <div className="h-full rounded-lg">
-                    <div className="flex items-center gap-x-8 mb-4">
+                    <div className="flex items-center gap-x-4 md:gap-x-8 mb-4">
                       {["My Data Sources", "All Data Sources"]?.map((e, i) => {
                         return (
                           <h3
-                            className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
+                            className={`text-sm md:text-base min-[1600px]:text-[20px] cursor-pointer ${
                               dataSourcesShow == e
                                 ? "text-white font-medium"
                                 : "text-gray-500"
@@ -198,8 +198,8 @@ const Overview = () => {
                       })}
                     </div>
                     {dataSourcesShow == "My Data Sources" ? (
-                      <div className="h-full overflow-y-auto small-scroller rounded-lg">
-                        <div className="grid grid-cols-4 gap-4">
+                      <div className="h-[87%] overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                           {platformsData?.platforms?.map((e, i) => {
                             return (
                               <Block
@@ -216,7 +216,7 @@ const Overview = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className="h-fit overflow-y-auto small-scroller grid grid-cols-4 gap-4 rounded-lg">
+                      <div className="h-[87%] overflow-y-auto small-scroller grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 rounded-lg">
                         {platformsData?.platforms?.map((e, i) => {
                           return (
                             <Block
@@ -236,11 +236,11 @@ const Overview = () => {
                   </div>
                 ) : currentlyVisible === "Reporting" ? (
                   <div className="h-full rounded-lg">
-                    <div className="flex items-center gap-x-8 mb-4">
+                    <div className="flex items-center gap-x-4 md:gap-x-8 mb-4">
                       {["Platforms", "Dashboard Templates"]?.map((e, i) => {
                         return (
                           <h3
-                            className={`text-base min-[1600px]:text-[20px] cursor-pointer ${
+                            className={`text-sm md:text-base min-[1600px]:text-[20px] cursor-pointer ${
                               selectReporting == e
                                 ? "text-white font-medium"
                                 : "text-gray-500"
@@ -257,7 +257,7 @@ const Overview = () => {
                     </div>
                     {selectReporting == "Platforms" ? (
                       <div className="h-full overflow-y-auto small-scroller rounded-lg">
-                        <div className="grid grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                           <Block
                             name="Looker Studio"
                             img="/looker-icon-svgrepo-com.svg"
@@ -273,8 +273,8 @@ const Overview = () => {
                         </div>{" "}
                       </div>
                     ) : (
-                      <div className="h-full w-full overflow-y-auto small-scroller rounded-lg">
-                        <div className="grid grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
+                      <div className="h-[87%] w-full overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid md:grid-cols-3 gap-x-5 min-[1600px]:gap-x-4 mt-2">
                           {mainTemplates?.map((e, i) => {
                             return (
                               <div
@@ -290,7 +290,7 @@ const Overview = () => {
                                   alt={e?.template_image?.src}
                                   width={1000}
                                   height={1000}
-                                  className="min-[1600px]:h-[29vh] h-[26vh] object-cover rounded-lg"
+                                  className="min-[1600px]:h-[29vh] md:h-[26vh] h-[23vh] object-cover rounded-lg"
                                 />
                                 <p className="mt-2.5">{e?.template_name}</p>
                               </div>
@@ -301,7 +301,7 @@ const Overview = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-4 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     <Block name="Big Query" img="/big query.png" />
                   </div>
                 )}

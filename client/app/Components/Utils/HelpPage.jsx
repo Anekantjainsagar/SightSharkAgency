@@ -31,7 +31,7 @@ const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-[#0C111D] py-6 border border-gray-500/40 px-4 text-white flex flex-col items-center justify-center w-[22vw] min-[1600px]:w-[25vw]">
+        <div className="relative rounded-lg bg-[#0C111D] py-6 border border-gray-500/40 px-4 text-white flex flex-col items-center justify-center w-[80vw] md:w-[22vw] min-[1600px]:w-[25vw]">
           <AiOutlineClose
             className="text-2xl absolute top-4 right-4 cursor-pointer"
             onClick={() => {

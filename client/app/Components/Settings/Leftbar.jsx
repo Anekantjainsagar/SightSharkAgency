@@ -81,9 +81,9 @@ const SettingsLeftbar = () => {
   ];
 
   return (
-    <div className="w-4/12 h-full flex flex-col items-start border border-gray-500/5 rounded-lg px-6 py-4 text-white">
+    <div className="md:w-4/12 h-[32%] md:h-full flex flex-col items-start border border-gray-500/5 rounded-lg px-3 md:px-6 py-2 md:py-4 text-white">
       <h4 className="mainText20">Settings</h4>
-      <div className="mt-4">
+      <div className="mt-2 md:mt-4">
         {items?.map((e, i) => {
           return <Block e={e} key={i} idx={i} />;
         })}
@@ -105,11 +105,11 @@ const Block = ({ e }) => {
         history.push(e?.route);
       }}
     >
-      <div className="w-8 min-[1600px]:mr-4 mr-2">{e?.icon[0]}</div>
+      <div className="w-10 md:w-8 min-[1600px]:mr-4 mr-2">{e?.icon[0]}</div>
       <div>
         <h5 className={`mainText18`}>{e?.title}</h5>
         <p
-          className={`text-gray-400 min-[1600px]:text-base text-[13px] mt-0.5 min-[1600px]:mt-1.5`}
+          className={`text-gray-400 min-[1600px]:text-base text-[12px] md:text-[13px] mt-0.5 min-[1600px]:mt-1.5`}
         >
           {e?.about}
         </p>
