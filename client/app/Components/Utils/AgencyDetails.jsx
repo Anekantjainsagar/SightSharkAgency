@@ -4,8 +4,8 @@ import DeleteAgency from "../agencies/DeleteAgency";
 import Context from "@/app/Context/Context";
 
 const AgencyDetailsBlock = ({ data }) => {
-  
-  const { selectedAgencies, setSelectedAgencies, setClientId } = useContext(Context);
+  const { selectedAgencies, setSelectedAgencies, setClientId } =
+    useContext(Context);
   const history = useRouter();
   const [deleteAgency, setDeleteAgency] = useState(false);
   let name = data?.client_name?.replaceAll(" ", "-");
@@ -21,9 +21,9 @@ const AgencyDetailsBlock = ({ data }) => {
       <div
         onClick={() => {
           history.push(`/clients/${data?.client_name?.replaceAll(" ", "-")}`);
-          setClientId(data?.client_id)
+          setClientId(data?.client_id);
         }}
-        className="py-4 px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-[15px]"
+        className="py-4 px-4 md:px-7 border-gray-200/5 border-y grid agencyBlockGrid items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-[15px]"
       >
         <div
           className="inline-flex items-start"
@@ -74,13 +74,20 @@ const AgencyDetailsBlock = ({ data }) => {
             className={`status-${data?.status?.toLowerCase()} w-fit p-2 border-2 rounded-2xl`}
           ></div>
         </div>
-        <p className="flex items-center justify-center">
+        <p className="md:flex hidden items-center justify-center">
           {data?.key_contact_name}
         </p>
-        <p className="break-words w-full text-center">{data?.email_address}</p>
-        <p className="text-center">
+        <p className="break-words w-full text-center md:block hidden">
+          {data?.email_address}
+        </p>
+        <p className="text-center md:block hidden">
           {data?.created_at
             ? new Date(data?.created_at).toString()?.slice(4, 21)
+            : ""}
+        </p>
+        <p className="text-center md:hidden">
+          {data?.created_at
+            ? new Date(data?.created_at).toString()?.slice(4, 16)
             : ""}
         </p>
         <div className="flex items-center justify-end">

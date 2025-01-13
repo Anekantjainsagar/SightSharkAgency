@@ -13,20 +13,25 @@ import axios from "axios";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { Switch } from "antd";
 
-const customStyles = {
-  overlay: { zIndex: 50 },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    width: "65vw",
-    border: "none",
-  },
+const getCustomStyles = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  return {
+    overlay: { zIndex: 50 },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      width: isMobile ? "98vw" : "65vw",
+      border: "none",
+    },
+  };
 };
+const customStyles = getCustomStyles();
 
 let nav_data = ["Data Sources", "Data Sources Ids"];
 
@@ -172,8 +177,10 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                           ? "bg-newBlue"
                           : "border border-gray-500/20 bg-[#343745]"
                       } ${
-                        i != arr.length - 1 ? "w-[3vw]" : "w-[2.5vw]"
-                      } aspect-square rounded-full flex items-center justify-center text-[24px]`}
+                        i != arr.length - 1
+                          ? "w-[15vw] md:w-[3vw]"
+                          : "w-[10.5vw] md:w-[2.5vw]"
+                      } aspect-square rounded-full flex items-center justify-center text-xl md:text-[24px]`}
                     >
                       {page > i + 1 ? <IoMdCheckmark /> : i + 1}
                     </div>
@@ -188,7 +195,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
-            <div className="grid grid-cols-2 text-[13px] min-[1600px]:text-base justify-between mt-2 px-[10vw]">
+            <div className="grid grid-cols-2 text-sm md:text-[13px] min-[1600px]:text-base justify-between mt-2 px-[8vw] md:px-[10vw]">
               {nav_data.map((e, i) => {
                 return (
                   <p className="text-center" key={i}>
@@ -199,10 +206,9 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
             </div>
           </div>
           {page == 1 ? (
-            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[38vh] pb-5 overflow-y-auto small-scroller w-full">
-              <div className="relative flex items-center w-[350px] min-[1600px]:w-[456px]">
+            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[36vh] md:h-[38vh] md:pb-5 overflow-y-auto small-scroller w-full">
+              <div className="relative flex items-center w-[180px] md:w-[350px] min-[1600px]:w-[456px]">
                 <FaSearch className="absolute left-4 z-40 text-white" />{" "}
-                {/* Search Icon */}
                 <input
                   type="search"
                   placeholder="Search"
@@ -213,7 +219,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                   className="outline-none text-[13px] min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
                 />
               </div>
-              <div className="grid grid-cols-3 gap-3 mt-5">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
                 {mainDataSource
                   ?.filter((e) => {
                     if (search) {
@@ -248,7 +254,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
               />
             </div>
           )}
-          <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-6 mt-10 mainText20">
+          <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-3 md:py-6 mt-5 md:mt-10 mainText20">
             <button
               className={`text-white text-[13px] min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
                 page == 1
@@ -273,7 +279,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
                   // setPage(page + 1);
                 }
               }}
-              className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
+              className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[120px] md:w-[150px] min-[1600px]:w-[170px] h-9 md:h-10 min-[1600px]:h-12 rounded-lg`}
             >
               {page == maxPage ? "Submit" : "Next"}
             </button>
@@ -431,20 +437,14 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
               initialEntered={i === 0}
               key={i}
               header={({ state }) => (
-                <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
-                  <div
-                    className={`flex items-center ${
-                      state.isEnter ? "visible" : "visible"
-                    }`}
-                  >
+                <div className="w-[100%] flex flex-row justify-between items-center border-2 border-gray-300/10 px-3 p-3 rounded-tl-lg mb-4 rounded-tr-lg">
+                  <div className={`flex items-center`}>
                     <Image
                       src={e?.img_link}
                       alt={e?.platform}
                       width={1000}
                       height={1000}
-                      className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain ${
-                        state.isEnter ? "invisible" : "visible"
-                      }`}
+                      className={`min-[1600px]:w-8 min-[1600px]:h-8 w-6 h-6 mr-2 aspect-square object-contain`}
                     />
                     <label
                       htmlFor={e?.platform}
@@ -461,10 +461,10 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
             >
               <div
                 key={i}
-                className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/30 px-3 pt-3 flex w-full h-full flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+                className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/10 px-3 md:pt-0 pt-3 flex w-full h-full flex-col md:flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
               >
                 <div
-                  className={`flex items-center h-full flex-col gap-4 justify-center basis-[30%]`}
+                  className={`flex items-center h-full flex-col min-[1600px]:gap-y-4 gap-y-2 justify-center basis-[30%]`}
                 >
                   <Image
                     src={e?.img_link}
@@ -475,13 +475,13 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                   />
                   <label
                     htmlFor={e?.platform}
-                    className="text-[15px] min-[1600px]:text-[1.25rem] capitalize cursor-pointer"
+                    className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                   >
                     {formatName(e?.platform)}
                   </label>
                 </div>
-                <div className="border-[0.5px]  border-gray-300/30 h-[200px]"></div>
-                <div className="flex-1 flex min-h-[200px] flex-col justify-center px-6">
+                <div className="border-[0.5px] md:w-fit w-full border-gray-300/10 h-[1px] md:h-[200px] md:mt-0 mt-3"></div>
+                <div className="flex-1 flex w-full justify-center min-h-[150px] md:min-h-[200px] flex-col md:px-6">
                   {/* Show inputs only for the current platform */}
                   {false && (
                     <div className="flex flex-row justify-between border-b-2 pb-2 border-gray-300/30 items-center">
@@ -525,10 +525,10 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     </div>
                   )}
                   {
-                    <div className="flex mt-3 flex-row gap-2 justify-between capitalize items-center">
+                    <div className="flex flex-row gap-2 justify-between capitalize items-center mb-3">
                       <label
                         htmlFor={e?.platform}
-                        className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                        className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                       >
                         {formatName("account_ID")}
                       </label>
@@ -547,7 +547,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                             event.target.value
                           )
                         }
-                        className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                        className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
                       />
                     </div>
                   }
@@ -559,7 +559,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                       <div className="flex flex-row justify-between items-center">
                         <label
                           htmlFor={e?.platform}
-                          className="text-[15px] min-[1600px]:text-[1rem] capitalize cursor-pointer"
+                          className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                         >
                           {formatName("account_filter")}
                         </label>
@@ -578,7 +578,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                               event.target.value
                             )
                           }
-                          className="bg-transparent border border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg mr-4 mb-3"
+                          className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 capitalize outline-none rounded-lg"
                         />
                       </div>
                     )}
@@ -591,7 +591,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                         >
                           <label
                             htmlFor={e?.platform}
-                            className="text-[15px] min-[1600px]:text-[1rem] cursor-pointer"
+                            className="text-[13px] min-[1600px]:text-base cursor-pointer"
                           >
                             {formatName(key)}
                           </label>
@@ -616,7 +616,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                                 true
                               )
                             }
-                            className="bg-transparent border border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                            className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
                           />
                         </div>
                       )

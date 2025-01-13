@@ -6,7 +6,7 @@ const FilterData = () => {
   const { agencies } = useContext(Context);
 
   return (
-    <div className="flex items-center gap-x-4">
+    <div className="flex items-center md:justify-start justify-end md:w-fit w-full md:gap-x-4 md:mt-0 mt-2">
       <div className="flex">
         {[
           {
@@ -22,10 +22,10 @@ const FilterData = () => {
           return (
             <div
               key={i}
-            className="relative min-[1600px]:w-[10.5vw] w-[12vw] border border-gray-400/20 text-gray-400 ml-4 rounded-md"
+              className="relative min-[1600px]:w-[10.5vw] md:w-[12vw] w-fit border border-gray-400/20 text-gray-400 ml-2 md:ml-4 rounded-md"
             >
               <select
-                className="bg-transparent px-4 py-2.5 min-[1600px]:py-3 outline-none appearance-none w-full min-[1600px]:text-base text-sm"
+                className="bg-transparent px-2.5 md:px-4 py-1 md:py-2.5 min-[1600px]:py-3 outline-none appearance-none w-full min-[1600px]:text-base text-sm"
                 // value={selectedOption}
                 // onChange={(e) => setSelectedOption(e.target.value)}
               >
@@ -38,7 +38,7 @@ const FilterData = () => {
                     );
                   })}{" "}
               </select>
-              <span className="absolute right-3 top-1/2 min-[1600px]:text-2xl text-xl -translate-y-1/2 pointer-events-none">
+              <span className="absolute md:block hidden right-3 top-1/2 min-[1600px]:text-2xl text-xl -translate-y-1/2 pointer-events-none">
                 <MdKeyboardArrowDown />
               </span>
             </div>

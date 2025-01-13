@@ -11,20 +11,25 @@ import Context from "@/app/Context/Context";
 import { LuEye, LuEyeOff } from "react-icons/lu";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-const customStyles = {
-  overlay: { zIndex: 50 },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    width: "65vw",
-    border: "none",
-  },
+const getCustomStyles = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  return {
+    overlay: { zIndex: 50 },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      width: isMobile ? "100vw" : "65vw",
+      border: "none",
+    },
+  };
 };
+const customStyles = getCustomStyles();
 
 const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
   let maxPage = 1;
@@ -165,7 +170,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-main pt-10 text-white">
+        <div className="relative rounded-lg bg-main pt-8 md:pt-10 text-white">
           <AiOutlineClose
             size={40}
             onClick={closeModal}
@@ -174,7 +179,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
           <div className="mb-5 text-center">
             <h1 className="mainLogoSize font-semibold">User Details</h1>
           </div>
-          <div className="h-fit px-[8vw] w-full">
+          <div className="h-fit px-4 md:px-[8vw] w-full">
             <div
               className={`flex items-center justify-center mb-6 ${
                 isDragging
@@ -205,7 +210,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   alt="Agency Img"
                   width={1000}
                   height={1000}
-                  className="w-[4vw] min-[1600px]:w-[4vw] h-[4vw] min-[1600px]:h-[4vw] object-cover rounded-full"
+                  className="w-[16vw] md:w-[4vw] min-[1600px]:w-[4vw] h-[16vw] md:h-[4vw] min-[1600px]:h-[4vw] object-cover rounded-full"
                 />
               </div>
               {isDragging && (
@@ -214,8 +219,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                 </p>
               )}
             </div>
-
-            <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+            <div className="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-3 md:gap-y-4">
               <div className="flex flex-col">
                 <label
                   htmlFor="name"
@@ -232,7 +236,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter First Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-9 min-[1600px]:h-[45px] px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 h-9 min-[1600px]:h-[45px] px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
@@ -251,7 +255,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Last Name"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
@@ -270,7 +274,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Email"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>{" "}
               <div className="flex flex-col">
@@ -286,7 +290,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   <select
                     name="access"
                     id="access"
-                    className="glass outline-none w-full border border-gray-500/5 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md appearance-none pr-10"
+                    className="bg-[#898989]/15 outline-none w-full border border-gray-500/5 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md appearance-none pr-10"
                     value={data?.access}
                     onChange={(e) => {
                       setData({ ...data, access: e.target.value });
@@ -300,7 +304,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   </select>
 
                   {/* Custom dropdown icon */}
-                  <span className="absolute z-50 right-3 top-1/2 text-2xl -translate-y-1/2 pointer-events-none">
+                  <span className="absolute z-50 right-1 md:right-3 top-1/2 text-lg md:text-2xl -translate-y-1/2 pointer-events-none">
                     <MdKeyboardArrowDown />
                   </span>
                 </div>
@@ -322,10 +326,10 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                       setData({ ...data, password: e.target.value });
                     }}
                     placeholder="Enter Password"
-                    className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 min-[1600px]:text-base text-[13px] px-4 py-2 rounded-md"
+                    className="bg-[#898989]/15 w-full outline-none border border-gray-500/20 min-[1600px]:text-base text-[13px] px-3 md:px-4 py-2 rounded-md"
                   />
                   <div
-                    className="absolute top-1/2 -translate-y-1/2 text-white/80 right-5 text-lg min-[1600px]:text-xl cursor-pointer"
+                    className="absolute top-1/2 -translate-y-1/2 text-white/80 right-3 md:right-5 text-lg min-[1600px]:text-xl cursor-pointer"
                     onClick={(e) => {
                       e.preventDefault();
                       setShowPassword(!showPassword);
@@ -350,7 +354,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Phone"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>{" "}
               <div className="flex flex-col">
@@ -368,7 +372,7 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Postal Code"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
               <div className="flex flex-col">
@@ -386,12 +390,12 @@ const AddUsers = ({ showSubscribe, setShowSubscribe }) => {
                   }}
                   type="text"
                   placeholder="Enter Country"
-                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
+                  className="bg-[#898989]/15 outline-none border border-gray-500/20 px-3 md:px-4 py-2 min-[1600px]:text-base text-[13px] rounded-md"
                 />
               </div>
             </div>
           </div>
-          <div className="px-[5vw] w-full flex items-center justify-end py-5 text-sm min-[1600px]:text-base">
+          <div className="px-4 md:px-[5vw] w-full flex items-center justify-end py-4 md:py-5 text-sm min-[1600px]:text-base">
             <button
               onClick={() => {
                 if (page == maxPage) {

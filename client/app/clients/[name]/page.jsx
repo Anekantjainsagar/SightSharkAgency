@@ -41,19 +41,19 @@ const Overview = ({ params }) => {
         showSubscribe={addDataSouces}
         setShowSubscribe={setAddDataSouces}
       />
-      <div className="w-[85%] bg-main h-full relative">
+      <div className="md:w-[85%] w-full bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg flex flex-row-reverse items-start justify-between px-6">
+          <div className="text-white w-full rounded-lg flex flex-col md:flex-row-reverse items-start justify-between md:px-6">
             <AgencyDetails data={data} />
-            <div className="w-[69%]">
+            <div className="w-full md:w-[69%] md:mt-0 mt-6">
               <AgencyDetailsTopbar name={name} />
-              <div className="border border-gray-500/5 min-[1600px]:h-[83vh] h-[80vh] w-full rounded-lg p-3 min-[1600px]:p-4">
+              <div className="border border-gray-500/5 min-[1600px]:h-[83vh] md:h-[80vh] h-fit w-full rounded-lg p-3 min-[1600px]:p-4 md:mb-0 mb-4">
                 <UnpublishedReports />
-                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 min-[1600px]:h-[51vh] h-[48.5vh] rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+                <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 min-[1600px]:h-[51vh] md:h-[48.5vh] h-[31vh] rounded-2xl border border-gray-500/5">
                   <div className="flex items-center justify-between">
                     <h4 className="min-[1600px]:text-xl text-sm">
                       Published Reports{" "}
@@ -71,7 +71,7 @@ const Overview = ({ params }) => {
                   </div>
                   <div className="gradient-line min-[1600px]:my-4 my-3"></div>
                   {publishedReports?.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-x-4 mt-2 relative">
+                    <div className="grid md:grid-cols-3 gap-x-4 mt-2 relative">
                       {publishedReports?.map((data, i) => {
                         return (
                           <TemplateBlock
@@ -90,52 +90,6 @@ const Overview = ({ params }) => {
                     <div className="mt-2 text-center">No Published Reports</div>
                   )}
                 </div>
-                {/* <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 rounded-2xl border border-gray-500/5 my-3 min-[1600px]:my-4 overflow-y-auto small-scroller h-[26vh]">
-                  <div className="flex items-center justify-between w-full">
-                    <h4 className="min-[1600px]:text-xl">Recent Activity </h4>
-                    <p
-                      className="text-white text-sm min-[1600px]:text-base flex items-center cursor-pointer"
-                      onClick={() =>
-                        history.push(`/clients/${name}/recent-activities`)
-                      }
-                    >
-                      View All
-                      <HiOutlineArrowNarrowRight className="text-base ml-2" />
-                    </p>
-                  </div>
-                  <div className="gradient-line my-3.5"></div>
-                  <div>
-                    <div className="">
-                      <span className="bg-[#5F5F5F]/10 px-4 py-1 w-fit rounded border border-gray-500/5 text-sm min-[1600px]:text-base">
-                        14 August 2024
-                      </span>
-                      <div className="mt-4">
-                        {[1, 2, 3]?.map((e, i) => {
-                          return (
-                            <div
-                              key={i}
-                              className={`flex items-center justify-between mb-3.5 mr-2`}
-                            >
-                              <div className="flex items-center gap-x-3 ml-12">
-                                <Circle0 />
-                                <h6 className="text-[13px] min-[1600px]:text-base">
-                                  <span className="font-semibold">
-                                    ProWiz Analytics
-                                  </span>{" "}
-                                  - Assigned “SightShark” Google Ads, Meta Ads
-                                  and LinkedIn Ads data sources
-                                </h6>
-                              </div>
-                              <p className="text-[13px] min-[1600px]:text-base">
-                                02:30 PM
-                              </p>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>

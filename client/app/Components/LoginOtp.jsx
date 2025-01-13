@@ -77,7 +77,7 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-[#0C111D] py-6 border border-gray-500/40 px-4 text-white flex flex-col items-center justify-center w-[30vw] min-[1600px]:w-[25vw]">
+        <div className="relative rounded-lg bg-[#0C111D] py-5 md:py-6 border border-gray-500/40 px-4 text-white flex flex-col items-center justify-center w-[90vw] md:w-[30vw] min-[1600px]:w-[25vw]">
           <AiOutlineClose
             className="text-2xl absolute top-4 right-4 cursor-pointer"
             onClick={() => {
@@ -85,10 +85,10 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
             }}
           />
           <div className="flex flex-col items-center">
-            <h4 className="mainText20 w-11/12 text-center mb-1 mt-5">
+            <h4 className="text-lg min-[1600px]:text-xl w-11/12 text-center mb-1 mt-5">
               Enter OTP for Verification
             </h4>
-            <p className="w-11/12 mx-auto text-center mb-5">
+            <p className="w-11/12 mx-auto text-center text-sm md:text-base mb-5 md:text-white text-gray-200">
               Please enter the OTP (One-Time Password) sent to your registered
               email address.
             </p>
@@ -97,7 +97,7 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
               onChange={(val) => {
                 setOtpVal(val);
               }}
-              className="w-full border-3 px-3 text-2xl py-1.5 outline-none rounded-md mb-4"
+              className="w-full border-3 px-3 text-lg md:text-2xl py-1.5 outline-none rounded-md mb-4"
               numInputs={6}
               renderSeparator={<span></span>}
               renderInput={(props) => <input {...props} />}
@@ -105,23 +105,36 @@ const LoginOtp = ({ showSubscribe, setShowSubscribe, email }) => {
               isInputNum={true}
               shouldAutoFocus={true}
               inputType="number"
-              inputStyle={{
-                border: "1px solid transparent",
-                borderRadius: "8px",
-                width: "54px",
-                height: "54px",
-                fontSize: "20px",
-                color: "#000",
-                caretColor: "blue",
-                marginRight: "5px",
-              }}
+              inputStyle={
+                typeof window != "undefined" && window.innerWidth < 600
+                  ? {
+                      border: "1px solid transparent",
+                      borderRadius: "8px",
+                      width: "40px",
+                      height: "40px",
+                      fontSize: "16px",
+                      color: "#000",
+                      caretColor: "blue",
+                      marginRight: "5px",
+                    }
+                  : {
+                      border: "1px solid transparent",
+                      borderRadius: "8px",
+                      width: "54px",
+                      height: "54px",
+                      fontSize: "20px",
+                      color: "#000",
+                      caretColor: "blue",
+                      marginRight: "5px",
+                    }
+              }
               focusStyle={{
                 border: "1px solid #aeafb0",
                 outline: "none",
               }}
             />
             <div className="flex items-center justify-start w-full mt-4">
-              <p>
+              <p className="text-sm md:text-base">
                 Didn&apos;t receive the code?{" "}
                 <span className="text-newBlue cursor-pointer">Resend Code</span>
               </p>

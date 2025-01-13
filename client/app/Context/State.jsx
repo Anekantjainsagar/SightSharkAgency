@@ -35,6 +35,8 @@ const State = (props) => {
   const [agencyReports, setAgencyReports] = useState([]);
   const [publishedReports, setPublishedReports] = useState([]);
   const [showLeftMenu, setShowLeftMenu] = useState(false);
+  const [allDataSources, setAllDataSources] = useState([]);
+  const [archivedReports, setArchivedReports] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -386,6 +388,37 @@ const State = (props) => {
     }
   };
 
+  const getAllDataSources = () => {
+    let cookie = getCookie("token");
+    setAllDataSources([]);
+    if (cookie?.length > 5) {
+      try {
+        axios
+          .post(
+            `${BACKEND_URI}/client/get-client-credentials`,
+            {
+              have_access: false,
+            },
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          )
+          .then(async (res) => {
+            setAllDataSources(res.data.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const getCredentialsForClient = (id) => {
     let cookie = getCookie("token");
     setClientCreds([]);
@@ -500,7 +533,9 @@ const State = (props) => {
     if (cookie) {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BACKEND_URI}/agency/reports?client_id=""`,
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URI
+          }/agency/reports?client_id=${""}`,
           {
             headers: {
               Authorization: `Bearer ${cookie}`,
@@ -508,6 +543,27 @@ const State = (props) => {
           }
         );
         setAgencyReports(response.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const getArchivedAgencyReports = async () => {
+    let cookie = getCookie("token");
+    if (cookie) {
+      try {
+        const response = await axios.get(
+          `${
+            process.env.NEXT_PUBLIC_BACKEND_URI
+          }/archive/archive-reports/search?report_name=${""}`,
+          {
+            headers: {
+              Authorization: `Bearer ${cookie}`,
+            },
+          }
+        );
+        setArchivedReports(response.data.data);
       } catch (err) {
         console.log(err);
       }
@@ -532,6 +588,8 @@ const State = (props) => {
     getUserAgency();
     getLookerStudioData();
     getAgencyReports();
+    getArchivedAgencyReports();
+    getAllDataSources();
   }, [userData]);
 
   useEffect(() => {
@@ -609,6 +667,9 @@ const State = (props) => {
         getPublishedReports,
         setShowLeftMenu,
         showLeftMenu,
+        allDataSources,
+        archivedReports,
+        getArchivedAgencyReports,
       }}
     >
       {props.children}

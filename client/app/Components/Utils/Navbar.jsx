@@ -20,7 +20,7 @@ const Navbar = () => {
 
   return (
     <div className="text-white md:py-6 py-4 flex items-center justify-between w-full md:px-6">
-      <h3 className="bigFont font-semibold md:w-fit w-6/12">
+      <h3 className="text-xl md:text-[28px] min-[1600px]:text-[36px] font-semibold md:w-fit w-6/12">
         Hello {userData?.first_name},
       </h3>
       <div className="flex items-center justify-end">

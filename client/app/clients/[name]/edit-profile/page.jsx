@@ -115,24 +115,24 @@ const Overview = ({ params }) => {
         name={data?.name}
         id={original_data?.client_id}
       />
-      <div className="w-[85%] bg-main h-full relative">
+      <div className="w-full md:w-[85%] bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3/6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg flex flex-row-reverse items-start justify-between px-6">
+          <div className="text-white w-full rounded-lg flex flex-col md:flex-row-reverse items-start justify-between md:px-6">
             <AgencyDetails data={original_data} />
-            <div className="w-[69%] min-[1600px]:h-[82vh] h-fit">
+            <div className="md:w-[69%] min-[1600px]:h-[82vh] h-fit md:mt-0 mt-6">
               <AgencyDetailsTopbar name={name} />
-              <div className="border border-gray-500/5 min-[1600px]:h-[82vh] h-[80vh] w-full rounded-lg p-3 min-[1600px]:p-4 flex flex-col justify-between">
+              <div className="border border-gray-500/5 min-[1600px]:h-[82vh] md:h-[80vh] h-[45vh] w-full rounded-lg p-3 min-[1600px]:p-4 flex flex-col justify-between md:mb-0 mb-4">
                 <div className="h-[90%]">
                   <div className="flex items-center">
                     {databar.map((e, i) => {
                       return (
                         <h4
                           key={i}
-                          className={`min-[1600px]:text-lg text-[15px] cursor-pointer mr-5 ${
+                          className={`min-[1600px]:text-lg text-[13px] md:text-[15px] cursor-pointer mr-2.5 md:mr-5 ${
                             selected === e ? "text-blue-600" : "text-gray-300"
                           }`}
                           onClick={() => {
@@ -147,7 +147,7 @@ const Overview = ({ params }) => {
                   <div className="gradient-line min-[1600px]:my-4 my-2"></div>
                   {selected == databar[0] ? (
                     <div className="flex items-start justify-between mt-4 px-3">
-                      <div className="flex items-center w-1/12">
+                      <div className="flex items-center w-[22%] md:w-1/12">
                         <div className="relative flex items-center justify-center">
                           <div
                             onClick={() => {
@@ -172,7 +172,7 @@ const Overview = ({ params }) => {
                           />
                         </div>
                       </div>
-                      <div className="grid grid-cols-2 gap-x-8 min-[1600px]:gap-y-6 gap-y-4 w-11/12 pl-[2vw]">
+                      <div className="grid grid-cols-2 gap-x-4 md:gap-x-8 min-[1600px]:gap-y-6 md:gap-y-4 gap-y-3 w-[78%] md:w-11/12 ml-3 md:pl-[2vw]">
                         <div className="flex flex-col">
                           <label
                             htmlFor="name"
@@ -318,7 +318,7 @@ const Overview = ({ params }) => {
                     </div>
                   ) : selected == databar[1] ? (
                     <div className="flex items-start justify-between mt-4 px-3">
-                      <div className="grid grid-cols-2 gap-x-8 gap-y-6 w-full">
+                      <div className="grid grid-cols-2 gap-x-4 md:gap-x-8 gap-y-3 md:gap-y-6 w-full">
                         <div className="flex flex-col">
                           <label
                             htmlFor="namekey"
@@ -420,7 +420,7 @@ const Overview = ({ params }) => {
                     </div>
                   ) : (
                     <div className="flex items-start justify-between mt-4 px-3">
-                      <div className="grid grid-cols-4 gap-x-4 gap-y-6 w-full">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 w-full">
                         {selectedClientDetails?.platforms_images?.map(
                           (e, i) => {
                             return (
@@ -438,7 +438,7 @@ const Overview = ({ params }) => {
                 </div>
                 <div className="flex h-[10%] items-center justify-between min-[1600px]:mt-0 mt-6">
                   <button
-                    className={`bg-red-600 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl flex items-center ml-4`}
+                    className={`bg-red-600 min-[1600px]:font-semibold min-[1600px]:px-8 md:px-5 px-3 py-2 min-[1600px]:text-base text-[13px] rounded-md md:rounded-xl flex items-center`}
                     onClick={() => {
                       setDeleteAgency(!deleteAgency);
                     }}
@@ -448,7 +448,7 @@ const Overview = ({ params }) => {
                   </button>
                   <div>
                     <button
-                      className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl ml-4`}
+                      className={`bg-[#898989]/15 min-[1600px]:font-semibold min-[1600px]:px-8 md:px-5 px-3 py-2 min-[1600px]:text-base text-[13px] rounded-md md:rounded-xl ml-4`}
                       onClick={() => {
                         updateDataTemp();
                         toast.success("Changes Discarded");
@@ -457,7 +457,7 @@ const Overview = ({ params }) => {
                       Discard
                     </button>
                     <button
-                      className={`bg-newBlue min-[1600px]:font-semibold min-[1600px]:px-8 px-5 py-2 min-[1600px]:text-base text-[13px] rounded-xl min-[1600px]:rounded-xl ml-4`}
+                      className={`bg-newBlue min-[1600px]:font-semibold min-[1600px]:px-8 px-3 md:px-5 py-2 min-[1600px]:text-base text-[13px] rounded-md md:rounded-xl ml-3 md:ml-4`}
                       onClick={() => {
                         if (
                           data?.name &&
@@ -574,7 +574,7 @@ const DataSourceBox = ({ e, original_data }) => {
 
   return (
     <div className="flex flex-col items-center justify-between h-fit relative border rounded-2xl border-gray-300/30 bg-[#171C2A]/50 p-2">
-      <div className="flex items-center flex-col gap-y-1 min-[1600px]:gap-y-2 h-[8vw] w-[6vw] justify-center">
+      <div className="flex items-center flex-col gap-y-1 min-[1600px]:gap-y-2 h-fit md:h-[8vw] md:mb-0 mb-2.5 md:w-[6vw] justify-center">
         <Image
           src={e?.logo}
           alt={e?.platform}
@@ -648,7 +648,7 @@ const DataSourceBox = ({ e, original_data }) => {
           </div>
         )}
       </div>
-      <div className="flex items-center w-full px-2 justify-between gap-x-2 relative">
+      <div className="flex items-center w-full md:px-2 justify-between gap-x-2 relative">
         {isEditable ? (
           <div className="flex items-center w-full justify-between min-[1600px]:gap-x-2 gap-x-1">
             <input

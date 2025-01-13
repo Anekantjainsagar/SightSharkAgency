@@ -7,7 +7,7 @@ const UnpublishedReports = () => {
   const { rawReportsClient } = useContext(Context);
 
   return (
-    <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[26.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
+    <div className="bg-[#171C2A]/40 p-3 min-[1600px]:p-4 h-[38vh] md:h-[26.5vh] overflow-y-auto small-scroller rounded-2xl border border-gray-500/5 mb-3 min-[1600px]:mb-4">
       <h4 className="min-[1600px]:text-xl text-sm">
         Unpublished Reports ({rawReportsClient ? rawReportsClient?.length : 0})
         <Info
@@ -19,7 +19,7 @@ const UnpublishedReports = () => {
       {rawReportsClient?.length > 0 ? (
         <div className="mt-1 px-1">
           <div
-            className="grid bg-[#030021]/40 py-2 rounded-t-xl border-x border-x-gray-200/10 border-t border-t-gray-200/10"
+            className="grid bg-[#030021]/40 py-2 md:px-0 px-2 rounded-t-xl items-center border-x border-x-gray-200/10 border-t border-t-gray-200/10"
             style={{ gridTemplateColumns: "25% 25% 25% 25%" }}
           >
             {[
@@ -40,7 +40,7 @@ const UnpublishedReports = () => {
               return (
                 <div
                   key={idx}
-                  className={`grid py-2 rounded-t-xl items-center border-b border-b-gray-200/10 ${
+                  className={`grid py-2 rounded-t-xl items-center border-b md:px-0 px-2 border-b-gray-200/10 ${
                     idx === arr.length - 1 && "rounded-b-xl"
                   }`}
                   style={{ gridTemplateColumns: "25% 25% 25% 25%" }}

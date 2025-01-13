@@ -401,7 +401,7 @@ const Leftbar = () => {
     <div
       className={`bg-main md:block ${
         showLeftMenu ? "block" : "hidden"
-      } md:relative absolute w-[60%] md:w-[15%] text-white h-full border-r border-r-white/20`}
+      } md:relative absolute w-[55%] md:w-[15%] text-white h-full border-r border-r-white/20`}
     >
       <HelpPage showSubscribe={show} setShowSubscribe={setShow} />
       <div className="w-[120px] h-[100px] rounded-full bg-[#1664FF]/40 absolute left-[-2vw] top-[15vh]"></div>

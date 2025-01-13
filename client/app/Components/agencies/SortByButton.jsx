@@ -36,28 +36,17 @@ const SortByButton = ({ sort_by_options }) => {
   return (
     <button
       ref={sortRef}
-      className="glass relative px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 text-[13px] min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+      className="bg-white/10 relative px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl ml-2 md:ml-4 text-[12px] md:text-[13px] min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
       onClick={() => setShowSortBy(!showSortBy)}
     >
-      {/* <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M5.83333 3.33337V16.6667M5.83333 16.6667L2.5 13.3334M5.83333 16.6667L9.16667 13.3334M14.1667 16.6667V3.33337M14.1667 3.33337L10.8333 6.66671M14.1667 3.33337L17.5 6.66671"
-          stroke="#ECECED"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg> */}
-      {!lastClicked[recentClick] ? <FaSortAmountDown /> : <FaSortAmountUp />}
+      {!lastClicked[recentClick] ? (
+        <FaSortAmountDown className="text-xs md:text-sm" />
+      ) : (
+        <FaSortAmountUp className="text-xs md:text-sm" />
+      )}
       Sort By
       {showSortBy && (
-        <div className="absolute right-0 top-[56px] rounded-xl w-[12vw] bg-main z-50 small-scroller h-[15vh] overflow-y-auto">
+        <div className="absolute right-0 top-[40px] border border-gray-50/10 md:top-[56px] rounded-lg md:rounded-xl w-[23vw] md:w-[12vw] bg-main z-50 small-scroller h-[10vh] md:h-[15vh] overflow-y-auto">
           {sort_by_options?.map((e, i) => (
             <p
               key={i}
@@ -91,7 +80,7 @@ const SortByButton = ({ sort_by_options }) => {
                 setRecentClick(e);
                 setShowSortBy(false);
               }}
-              className="text-gray-200 py-2 min-[1600px]:py-2.5 flex justify-center hover:text-gray-300 rounded-xl transition-all hover:bg-gray-700/40"
+              className="text-gray-200 py-1.5 md:py-2 min-[1600px]:py-2.5 flex justify-center hover:text-gray-300 rounded-lg md:rounded-xl transition-all hover:bg-gray-700/40"
             >
               {e[0]?.toUpperCase() + e?.slice(1)?.replaceAll("_", " ")}
             </p>

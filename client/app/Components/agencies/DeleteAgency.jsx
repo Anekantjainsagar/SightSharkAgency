@@ -7,20 +7,26 @@ import { BACKEND_URI } from "@/app/utils/url";
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 
-const customStyles = {
-  overlay: { zIndex: 50 },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    width: "30vw",
-    border: "none",
-  },
+const getCustomStyles = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  return {
+    overlay: { zIndex: 50 },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      width: isMobile ? "100vw" : "30vw",
+      border: "none",
+      overflow: "hidden",
+    },
+  };
 };
+const customStyles = getCustomStyles();
 
 const DeleteAgency = ({ showSubscribe, setShowSubscribe, name, id }) => {
   const history = useRouter();

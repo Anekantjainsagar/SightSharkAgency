@@ -75,21 +75,21 @@ export default function ResetPassword() {
 
   return (
     <div className="bg-[#091022] w-full flex items-start justify-between h-[100vh]">
-      <div className="w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
-        <div className="text-white flex flex-col items-center w-7/12 px-5">
+      <div className="w-full md:w-7/12 p-[2vw] flex flex-col items-center justify-center h-full">
+        <div className="text-white flex flex-col items-center w-full md:w-7/12 px-5">
           <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-8 min-[1600px]:mb-20">
             <Image
               src="/logo.png"
               alt="Logo"
               width={1000}
               height={1000}
-              className="w-12 min-[1600px]:w-[70px]"
+              className="w-10 md:w-12 min-[1600px]:w-[70px]"
             />
-            <h4 className="text-4xl min-[1600px]:text-[38.5px] uppercase">
+            <h4 className="text-3xl md:text-4xl min-[1600px]:text-[38.5px] uppercase">
               SIGHTSHARK
             </h4>
           </div>
-          <h1 className="text-3xl mb-4 min-[1600px]:text-[35px] font-medium">
+          <h1 className="text-2xl md:text-3xl mb-4 min-[1600px]:text-[35px] font-medium">
             Create New Password
           </h1>
           {/* <p className="mainText18 text-white/80 mt-2">Enter new Password</p> */}
@@ -188,7 +188,7 @@ export default function ResetPassword() {
             onClick={() => {
               onChangePassword();
             }}
-            className="w-11/12 py-3 bg-newBlue rounded-[10px] mainText18"
+            className="w-11/12 py-3 md:mt-0 mt-4 bg-newBlue rounded-[10px] text-base md:text-sm min-[1600px]:text-[18px]"
           >
             Change Password
           </button>

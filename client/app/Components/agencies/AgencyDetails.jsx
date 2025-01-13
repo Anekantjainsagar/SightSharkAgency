@@ -16,7 +16,7 @@ const AgencyDetails = ({ data }) => {
   const [addDataSouces, setAddDataSouces] = useState(false);
 
   return (
-    <div className="border border-gray-500/15 h-fit min-[1600px]:p-4 p-3 w-[30%] rounded-lg flex flex-col items-center">
+    <div className="border border-gray-500/15 h-fit min-[1600px]:p-4 p-3 w-full md:w-[30%] rounded-lg flex flex-col items-center">
       <AddDataSouces
         data={data}
         showSubscribe={addDataSouces}

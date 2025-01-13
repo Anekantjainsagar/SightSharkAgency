@@ -132,7 +132,7 @@ const Settings = () => {
           <Navbar />
           <div className="md:h-[85vh] h-[90vh] w-full flex md:flex-row flex-col gap-x-5 justify-between items-start text-white md:px-6">
             <SettingsLeftbar />
-            <div className="md:w-8/12 h-[66%] overflow-y-auto small-scroller md:h-fit justify-between flex flex-col items-start border border-gray-500/5 rounded-lg px-3 md:px-6 py-2 md:py-4 text-white">
+            <div className="md:w-8/12 w-full h-[66%] overflow-y-auto small-scroller md:h-fit justify-between flex flex-col items-start border border-gray-500/5 rounded-lg px-3 md:px-6 py-2 md:py-4 text-white">
               <div className="w-full">
                 <h4 className="mainText20 font-semibold">Security</h4>
                 <div className="mt-3 md:mt-5">

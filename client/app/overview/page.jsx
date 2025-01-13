@@ -11,7 +11,7 @@ import Block from "./Block";
 
 function formatName(input) {
   return input
-    .split("_")
+    ?.split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
@@ -27,6 +27,8 @@ const Overview = () => {
     actualUser,
     setLinkToEmbed,
     lookerStudioSecret,
+    userData,
+    allDataSources,
   } = useContext(Context);
 
   function calculateRemainingDays(startDate, monthsToAdd) {
@@ -199,7 +201,7 @@ const Overview = () => {
                     </div>
                     {dataSourcesShow == "My Data Sources" ? (
                       <div className="h-[87%] overflow-y-auto small-scroller rounded-lg">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                        <div className="grid md:grid-cols-4 gap-3 md:gap-4">
                           {platformsData?.platforms?.map((e, i) => {
                             return (
                               <Block
@@ -216,21 +218,23 @@ const Overview = () => {
                         </div>
                       </div>
                     ) : (
-                      <div className="h-[87%] overflow-y-auto small-scroller grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 rounded-lg">
-                        {platformsData?.platforms?.map((e, i) => {
-                          return (
-                            <Block
-                              name={formatName(e?.platform)}
-                              original_name={e?.platform}
-                              img={e?.logo}
-                              time={e?.last_run}
-                              isDataSource={true}
-                              isNew={true}
-                              key={i}
-                              idx={i + 1}
-                            />
-                          );
-                        })}
+                      <div className="h-[87%] overflow-y-auto small-scroller rounded-lg">
+                        <div className="grid md:grid-cols-4 gap-3 md:gap-4">
+                          {allDataSources?.map((e, i) => {
+                            return (
+                              <Block
+                                name={formatName(e?.platform)}
+                                original_name={e?.platform}
+                                img={e?.logo}
+                                time={e?.last_run}
+                                isDataSource={true}
+                                isNew={true}
+                                key={i}
+                                idx={i + 1}
+                              />
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -257,18 +261,22 @@ const Overview = () => {
                     </div>
                     {selectReporting == "Platforms" ? (
                       <div className="h-full overflow-y-auto small-scroller rounded-lg">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                        <div className="grid md:grid-cols-4 gap-3 md:gap-4">
                           <Block
                             name="Looker Studio"
                             img="/looker-icon-svgrepo-com.svg"
-                            values={[
-                              {
-                                title: !lookerStudioSecret
-                                  ? "Connect"
-                                  : "Reconnect",
-                                link: `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`,
-                              },
-                            ]}
+                            values={
+                              userData?.role === "superadmin"
+                                ? [
+                                    {
+                                      title: !lookerStudioSecret
+                                        ? "Connect"
+                                        : "Reconnect",
+                                      link: `${process.env.NEXT_PUBLIC_ADMIN_BACKEND_URI}/looker/login`,
+                                    },
+                                  ]
+                                : []
+                            }
                           />
                         </div>{" "}
                       </div>
@@ -301,7 +309,7 @@ const Overview = () => {
                     )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                  <div className="grid md:grid-cols-4 gap-3 md:gap-4">
                     <Block name="Big Query" img="/big query.png" />
                   </div>
                 )}

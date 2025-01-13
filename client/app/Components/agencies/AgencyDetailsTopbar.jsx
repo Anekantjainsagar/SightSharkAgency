@@ -7,7 +7,7 @@ const AgencyDetailsTopbar = ({ name }) => {
   const pathname = usePathname();
 
   return (
-    <div className="h-[5vh] flex items-start">
+    <div className="h-[5vh] flex items-start justify-end md:justify-start md:mb-0 mb-2">
       {[
         { title: "About", route: `/clients/${name}` },
         {

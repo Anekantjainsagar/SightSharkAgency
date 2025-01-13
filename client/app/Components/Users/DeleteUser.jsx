@@ -6,20 +6,25 @@ import { getCookie } from "cookies-next";
 import { BACKEND_URI } from "@/app/utils/url";
 import Context from "@/app/Context/Context";
 
-const customStyles = {
-  overlay: { zIndex: 50 },
-  content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "transparent",
-    width: "30vw",
-    border: "none",
-  },
+const getCustomStyles = () => {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
+
+  return {
+    overlay: { zIndex: 50 },
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      backgroundColor: "transparent",
+      width: isMobile ? "100vw" : "30vw",
+      border: "none",
+    },
+  };
 };
+const customStyles = getCustomStyles();
 
 const DeleteUser = ({ showSubscribe, setShowSubscribe, data }) => {
   const [val, setVal] = useState("");
@@ -74,7 +79,7 @@ const DeleteUser = ({ showSubscribe, setShowSubscribe, data }) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-[#0C111D] py-6 border border-gray-500/40 px-4 text-white flex flex-col items-center justify-center">
+        <div className="relative rounded-lg bg-[#0C111D] py-4 md:py-6 border border-gray-500/40 px-3 md:px-4 text-white flex flex-col items-center justify-center">
           <div className="bg-[#FEE4E2] w-16 aspect-square rounded-full flex items-center justify-center">
             <svg
               width="41"

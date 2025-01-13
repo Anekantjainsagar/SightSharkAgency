@@ -26,14 +26,14 @@ const UserDetailBlock = ({ data }) => {
         setShowSubscribe={setShowUpdatePopup}
         userData={userClickedData}
       />
-      <div className="py-4 px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-[13px] min-[1600px]:text-base">
+      <div className="py-4 px-4 md:px-7 border-gray-200/5 border-y grid userBlockGrid items-center cursor-pointer text-textGrey text-[13px] min-[1600px]:text-base">
         <div className="flex items-start min-[1600px]:ml-0 ml-2">
           {!data?.profile_picture ? (
             <Image
               src={"/Agency/Avatar.png"}
               width={1000}
               height={1000}
-              className="w-8 min-[1600px]:w-10 object-cover aspect-square rounded-full"
+              className="w-10 md:w-8 min-[1600px]:w-10 object-cover aspect-square rounded-full"
               alt="Key contact"
             />
           ) : (
@@ -41,7 +41,7 @@ const UserDetailBlock = ({ data }) => {
               src={data?.profile_picture}
               width={1000}
               height={1000}
-              className="w-8 min-[1600px]:w-10 aspect-square object-cover rounded-full"
+              className="w-10 md:w-8 min-[1600px]:w-10 aspect-square object-cover rounded-full"
               alt="Key contact"
             />
           )}
@@ -55,7 +55,7 @@ const UserDetailBlock = ({ data }) => {
         <h5 className="text-center">
           {data?.role[0].toUpperCase() + data?.role.slice(1)}
         </h5>
-        <div className="w-full flex items-center justify-center">
+        <div className="w-full items-center justify-center md:flex hidden">
           <div
             className={`status-user-${data?.status?.toLowerCase()} flex items-center gap-x-2 w-fit px-3 border-2 py-0.5 rounded-2xl`}
           >
@@ -65,10 +65,10 @@ const UserDetailBlock = ({ data }) => {
             {data?.status[0]?.toUpperCase() + data?.status.slice(1)}
           </div>
         </div>
-        <p className="text-center">
+        <p className="text-center md:block hidden">
           {new Date(data?.created_at).toString().slice(4, 21)}
         </p>
-        <p className="text-center">
+        <p className="text-center md:block hidden">
           {new Date(data?.last_online).toString().slice(4, 21)}
         </p>
         <div className="flex items-center justify-end">

@@ -26,38 +26,48 @@ const Overview = () => {
     <div className="flex items-start h-[100vh]">
       <Leftbar />
       <AddAgency showSubscribe={addAgency} setShowSubscribe={setAddAgency} />
-      <div className="w-[85%] bg-main h-full relative">
+      <div className="md:w-[85%] w-full bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3 /6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
           <Navbar />
-          <div className="text-white w-full rounded-lg py-2 px-6 min-[1600px]:py-6">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl min-[1600px]:text-[22px] font-semibold">
+          <div className="text-white w-full rounded-lg py-2 md:px-6 min-[1600px]:py-6">
+            <div className="flex md:flex-row flex-col items-start md:items-center justify-between">
+              <h3 className="text-lg md:text-xl min-[1600px]:text-[22px] font-semibold">
                 Clients{" "}
-                <span className="text-lg min-[1600px]:text-xl text-white/80">
+                <span className="text-base md:text-lg min-[1600px]:text-xl text-white/80">
                   ({agencies?.total_count})
                 </span>
               </h3>
-              <div className="flex items-center">
+              <div className="flex items-center md:justify-start justify-end md:w-fit w-full md:mt-0 mt-2">
                 <button
                   onClick={() => {
                     setAddAgency(!addAgency);
                   }}
-                  className="bg-newBlue px-6 py-2.5 min-[1600px]:py-3 rounded-xl ml-4 flex items-center gap-x-2 text-sm min-[1600px]:text-base"
+                  className="bg-newBlue px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl md:ml-4 flex items-center gap-x-1.5 md:gap-x-2 text-[12px] md:text-sm min-[1600px]:text-base"
                 >
-                  <FaPlus className="text-sm" /> Add Client
+                  <FaPlus className="text-[9px] md:text-sm" /> Add Client
                 </button>
                 {selectedAgencies?.length > 0 && (
                   <CSVLink filename={"clients.csv"} data={selectedAgencies}>
                     <button
                       onClick={() => {}}
-                      className="bg-white/10 backdrop-blur-sm px-6 py-2.5 rounded-xl ml-4 text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
+                      className="bg-white/10 backdrop-blur-sm px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl ml-2 md:ml-4 text-[12px] md:text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
                     >
                       <svg
-                        width="24"
-                        height="24"
+                        width={
+                          typeof window !== "undefined" &&
+                          window.innerWidth < 600
+                            ? "16"
+                            : "24"
+                        }
+                        height={
+                          typeof window !== "undefined" &&
+                          window.innerWidth < 600
+                            ? "16"
+                            : "24"
+                        }
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
@@ -81,8 +91,8 @@ const Overview = () => {
                 <SortByButton sort_by_options={sort_by_options} />
               </div>
             </div>
-            <div className="mt-5 border border-gray-200/5 rounded-2xl">
-              <div className="grid bg-[#030021]/40 py-4 px-7 agencyBlockGrid items-center rounded-2xl">
+            <div className="mt-4 md:mt-5 border border-gray-200/5 rounded-2xl">
+              <div className="grid bg-[#030021]/40 py-4 px-4 md:px-7 agencyBlockGrid items-center rounded-2xl">
                 <div className="inline-flex items-start">
                   <label className="relative flex items-center cursor-pointer">
                     <input
@@ -129,6 +139,8 @@ const Overview = () => {
                     <h5
                       key={i}
                       className={`text-[13px] min-[1600px]:text-sm ${
+                        (e == "Key Contact" || e === "Email") && "hidden"
+                      } ${
                         !e?.includes("Name")
                           ? "text-center"
                           : "min-[1600px]:ml-0 ml-2"
@@ -139,7 +151,7 @@ const Overview = () => {
                   );
                 })}
               </div>
-              <div className="h-[66vh] min-[1600px]:h-[69vh]">
+              <div className="h-[71vh] md:h-[66vh] min-[1600px]:h-[69vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   {agencies?.data?.map((e, i) => {
                     return <AgencyDetailsBlock key={i} data={e} />;
@@ -175,7 +187,7 @@ const Overview = () => {
                     ?.map((e, i) => {
                       return (
                         <div
-                          className={`w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
+                          className={`w-[35px] md:w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[35px] md:h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
                             agencies?.current_page == e
                               ? "bg-newBlue"
                               : "text-[#85888E]"

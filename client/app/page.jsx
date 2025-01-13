@@ -104,7 +104,7 @@ const App = () => {
         showSubscribe={recoverPassword}
         setShowSubscribe={setRecoverPassword}
       />
-      <div className="md:w-7/12 w-full p-[2vw] flex flex-col items-center justify-center h-full">
+      <div className="md:w-7/12 w-full p-[2vw] flex flex-col items-center justify-center h-full relative">
         <div className="text-white flex flex-col items-center md:w-7/12 w-full md:px-5">
           <div className="flex items-center gap-x-4 min-[1600px]:gap-x-6 mb-10 md:mb-8 min-[1600px]:mb-20">
             <Image

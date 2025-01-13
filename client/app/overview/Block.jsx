@@ -33,18 +33,22 @@ const getCustomStyles = () => {
 const customStyles = getCustomStyles();
 
 function formatName(input) {
-  return input
-    .toLowerCase()
-    .split("_")
-    .map((word) => {
-      // Check if the word contains "id" or "url"
-      if (word.includes("id") || word.includes("url") || word.includes("Id")) {
-        return word.toUpperCase();
-      }
-      // Otherwise, capitalize the first letter of the word
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(" ");
+  if (input) {
+    return input
+      .toLowerCase()
+      .split("_")
+      .map((word) => {
+        if (
+          word.includes("id") ||
+          word.includes("url") ||
+          word.includes("Id")
+        ) {
+          return word.toUpperCase();
+        }
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(" ");
+  }
 }
 
 const Block = ({
@@ -117,7 +121,9 @@ const Block = ({
         setDropDownValues([
           {
             title: "Request Data Source",
-            onClick: () => {},
+            onClick: () => {
+              requestDataSource();
+            },
           },
         ]);
       } else {
@@ -205,10 +211,39 @@ const Block = ({
     }
   };
 
+  const requestDataSource = () => {
+    let cookie = getCookie("token");
+
+    if (cookie?.length > 5) {
+      try {
+        axios
+          .get(
+            `${BACKEND_URI}/client/requset-datasource?platform_name=${original_name}`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${cookie}`,
+              },
+            }
+          )
+          .then((res) => {
+            toast.success(res.data.msg);
+            setClicked(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <div
       ref={dropdownRef}
-      className={`flex md:flex-row flex-col items-start gap-x-2 shadow-md ${
+      className={`flex flex-row items-start gap-x-2 shadow-md ${
         isConfigured || name == "Looker Studio" || name == "Big Query"
           ? "shadow-green-600/40"
           : "shadow-gray-500/10"
@@ -220,10 +255,10 @@ const Block = ({
           alt={name + " Logo"}
           width={1000}
           height={1000}
-          className="aspect-square object-contain w-full md:w-12 min-[1600px]:w-14"
+          className="aspect-square object-contain w-16 md:w-12 min-[1600px]:w-14"
         />
       ) : (
-        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-full md:w-12 min-[1600px]:w-14 aspect-square p-2 mr-0 min-[1600px]:mr-0">
+        <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/40 w-16 md:w-12 min-[1600px]:w-14 aspect-square p-2 mr-0 min-[1600px]:mr-0">
           <Image
             src={img}
             alt={name + " Logo"}
@@ -233,14 +268,14 @@ const Block = ({
           />
         </div>
       )}
-      <div className="md:ml-2 md:mt-0 mt-2">
+      <div className="ml-2">
         <p
           className={`text-sm md:text-base min-[1600px]:text-lg cursor-pointer`}
         >
           {name}
         </p>
         {time && isConfigured && (
-          <p className="text-[12px] mt-0.5 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+          <p className="text-[12px] mt-1 text-gray-500 min-[1600px]:text-sm cursor-pointer">
             Last Refresh
             <br />
             {new Date(time).toString().slice(4, 21)}
@@ -498,7 +533,7 @@ const Page4 = ({
                                 true
                               )
                             }
-                          className="bg-transparent border border-gray-200/20 md:w-fit w-full px-4 py-1.5 outline-none rounded-lg text-sm md:text-base mr-4 mb-3"
+                            className="bg-transparent border border-gray-200/20 md:w-fit w-full px-4 py-1.5 outline-none rounded-lg text-sm md:text-base mr-4 mb-3"
                           />
                         </div>
                       );
