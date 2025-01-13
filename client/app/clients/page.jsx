@@ -139,7 +139,7 @@ const Overview = () => {
                     <h5
                       key={i}
                       className={`text-[13px] min-[1600px]:text-sm ${
-                        (e == "Key Contact" || e === "Email") && "hidden"
+                        (e == "Key Contact" || e === "Email") && "md:block hidden"
                       } ${
                         !e?.includes("Name")
                           ? "text-center"

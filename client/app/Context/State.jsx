@@ -314,12 +314,20 @@ const State = (props) => {
             },
           })
           .then(async (res) => {
-            const transformedPlatforms = res?.data?.platforms?.map(
-              (platform) => {
-                const [name, img_link] = Object.entries(platform)[0];
-                return { name, img_link };
-              }
-            );
+             let transformedPlatforms = res.data.platforms.map((platform) => {
+               if (platform?.have_access) {
+                 const [name, img_link] = [
+                   platform.platform_name,
+                   platform.logo_link,
+                 ];
+                 return { name, img_link };
+               }
+             });
+             transformedPlatforms = transformedPlatforms?.filter((e) => {
+               if (e?.name) {
+                 return e;
+               }
+             });
 
             setMainDataSource(transformedPlatforms);
           })
