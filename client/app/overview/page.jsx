@@ -225,7 +225,10 @@ const Overview = () => {
                               <Block
                                 name={formatName(e?.platform)}
                                 original_name={e?.platform}
-                                img={e?.logo}
+                                img={
+                                  e?.logo_link ||
+                                  "https://storage.googleapis.com/sightshark-portal/platforms_logo/facebook_insight.svg"
+                                }
                                 time={e?.last_run}
                                 isDataSource={true}
                                 isNew={true}

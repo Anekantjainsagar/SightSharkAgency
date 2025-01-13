@@ -6,7 +6,6 @@ import AddAgency from "@/app/Components/agencies/AddAgency";
 import Context from "../Context/Context";
 import FilterData from "@/app/Components/agencies/FilterData";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 const Overview = () => {
   const [showReports, setShowReports] = useState("Recent Reports");
@@ -119,13 +118,13 @@ const Template = ({ data }) => {
   return (
     <div className="py-4 px-7 border-gray-200/5 border-y grid dashboardPage items-center cursor-pointer text-textGrey text-sm min-[1600px]:text-base">
       <div className="flex items-center">
-        <Image
+        {/* <Image
           src={data?.report_image}
           alt={data?.report_name}
           width={1000}
           height={1000}
           className="w-[3vw] mr-4 aspect-square object-cover border border-gray-400/10 rounded-full"
-        />
+        /> */}
         <div
           className="underline hover:text-blue-400 transition-all"
           onClick={() => {
