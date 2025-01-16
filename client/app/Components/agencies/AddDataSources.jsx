@@ -438,7 +438,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
               initialEntered={i === 0}
               key={i}
               header={({ state }) => (
-                <div className="w-[100%] flex flex-row justify-between items-center border-2 border-gray-300/10 px-3 p-3 rounded-tl-lg mb-4 rounded-tr-lg">
+                <div className="w-[100%] flex flex-row justify-between items-center border-2 border-gray-500/10 bg-[#171C2A]/50 px-3 p-3 rounded-tl-lg pb-4 rounded-tr-lg">
                   <div className={`flex items-center`}>
                     <Image
                       src={e?.img_link}
@@ -462,7 +462,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
             >
               <div
                 key={i}
-                className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-300/10 px-3 md:pt-0 pt-3 flex w-full h-full flex-col md:flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
+                className="border-b-2 border-l-2 border-r-2 gap-2 border-gray-500/10 bg-[#171C2A]/50 px-3 md:pt-0 pt-3 flex w-full h-full flex-col md:flex-row justify-between items-center rounded-bl-lg rounded-br-lg"
               >
                 <div
                   className={`flex items-center h-full flex-col min-[1600px]:gap-y-4 gap-y-2 justify-center basis-[30%]`}
@@ -481,7 +481,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                     {formatName(e?.platform)}
                   </label>
                 </div>
-                <div className="border-[0.5px] md:w-fit w-full border-gray-300/10 h-[1px] md:h-[200px] md:mt-0 mt-3"></div>
+                <div className="border-[0.5px] md:w-fit w-full border-gray-500/10 h-[1px] md:h-[200px] md:mt-0 mt-3"></div>
                 <div className="flex-1 flex w-full justify-center min-h-[150px] md:min-h-[200px] flex-col md:px-6">
                   {/* Show inputs only for the current platform */}
                   {false && (

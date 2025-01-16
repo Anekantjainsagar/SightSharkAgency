@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Leftbar from "@/app/Components/Utils/Leftbar";
 import Navbar from "@/app/Components/Utils/Navbar";
 import AgencyDetailsBlock from "@/app/Components/Utils/AgencyDetails";
@@ -16,11 +16,48 @@ import {
 } from "react-icons/md";
 
 let sort_by_options = ["created_at", "client_name", "status"];
+const excludedKeys = [
+  "client_id",
+  "created_at",
+  "updated_at",
+  "deployment_date",
+  "client_name",
+  "parent_name",
+  "website",
+  "location",
+  "time_zone",
+  "status",
+  "report_start_date",
+  "platform_name",
+  "template_name",
+  "template_link",
+  "key_contact_name",
+  "key_contact_designation",
+  "key_contact_email_address",
+  "key_contact_phone",
+];
 
 const Overview = () => {
   const { agencies, getAgencies, setSelectedAgencies, selectedAgencies } =
     useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
+  const [dataToExport, setDataToExport] = useState([]);
+
+  useEffect(() => {
+    if (selectedAgencies?.length > 0) {
+      const filteredData = selectedAgencies.map((agency) => {
+        const orderedData = {};
+        excludedKeys.forEach((key) => {
+          if (agency[key] !== undefined) {
+            orderedData[key] = agency[key];
+          }
+        });
+        return orderedData;
+      });
+
+      setDataToExport(filteredData);
+    }
+  }, [selectedAgencies]);
 
   return (
     <div className="flex items-start h-[100vh]">
@@ -49,8 +86,8 @@ const Overview = () => {
                 >
                   <FaPlus className="text-[9px] md:text-sm" /> Add Client
                 </button>
-                {selectedAgencies?.length > 0 && (
-                  <CSVLink filename={"clients.csv"} data={selectedAgencies}>
+                {dataToExport?.length > 0 && (
+                  <CSVLink filename={"clients.csv"} data={dataToExport}>
                     <button
                       onClick={() => {}}
                       className="bg-white/10 backdrop-blur-sm px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl ml-2 md:ml-4 text-[12px] md:text-sm min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"
@@ -139,7 +176,8 @@ const Overview = () => {
                     <h5
                       key={i}
                       className={`text-[13px] min-[1600px]:text-sm ${
-                        (e == "Key Contact" || e === "Email") && "md:block hidden"
+                        (e == "Key Contact" || e === "Email") &&
+                        "md:block hidden"
                       } ${
                         !e?.includes("Name")
                           ? "text-center"

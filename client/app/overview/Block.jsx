@@ -293,7 +293,7 @@ const Block = ({
         )}{" "}
         {name == "Big Query" && (
           <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
-            All your data is stored in the Google {name}
+            Connected! Now your data is stored in Google BigQuery
           </p>
         )}
         {name == "Looker Studio" && (
@@ -471,7 +471,7 @@ const Page4 = ({
             key={i}
             initialEntered={true}
             header={({ state }) => (
-              <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-300/30 px-3 p-3 rounded-tl-lg rounded-tr-lg">
+              <div className="w-[100%] mt-3 flex flex-row justify-between items-center border-2 border-gray-500/10 bg-[#171C2A]/50 px-3 p-3 rounded-tl-lg rounded-tr-lg">
                 <div
                   className={`flex items-center ${
                     state.isEnter ? "visible" : "visible"
@@ -496,7 +496,7 @@ const Page4 = ({
           >
             <div
               key={i}
-              className="gap-2 px-3 py-6 flex md:flex-row flex-col w-full border-r-2 border-l-2 border-b-2 border-gray-300/30 h-full justify-between items-center rounded-bl-lg rounded-br-lg"
+              className="gap-2 px-3 py-6 flex md:flex-row flex-col w-full border-r-2 border-l-2 border-b-2 border-gray-500/10 bg-[#171C2A]/50 h-full justify-between items-center rounded-bl-lg rounded-br-lg"
             >
               <div
                 className={`flex items-center flex-col gap-4 justify-center md:basis-[30%]`}
@@ -550,7 +550,7 @@ const Page4 = ({
                                 true
                               )
                             }
-                            className="bg-transparent border border-gray-200/20 md:w-fit w-full px-4 py-1.5 outline-none rounded-lg text-sm md:text-base mr-4 mb-3"
+                            className="bg-transparent border border-gray-500/30 md:w-fit w-full px-4 py-1.5 outline-none rounded-lg text-sm md:text-base mr-4 mb-3"
                           />
                         </div>
                       );
@@ -576,7 +576,7 @@ const Page4 = ({
                               </p>
                             )} */}{" "}
                               <label
-                                className={`border border-gray-300/20 py-1 w-full px-5 rounded-md cursor-pointer`}
+                                className={`border border-gray-500/30 py-1 w-full px-5 rounded-md cursor-pointer`}
                               >
                                 {/* Show file name or "Replace file" */}
                                 {fileData ? fileData.name : "Replace file"}
@@ -623,7 +623,7 @@ const Page4 = ({
                                 }
                                 // ref={fileInputRef}
                                 // value="" // File inputs generally shouldn't have a controlled `value`.
-                                className="bg-transparent border w-full border-gray-200/20 px-4 py-1.5 outline-none rounded-lg"
+                                className="bg-transparent border w-full border-gray-500/30 px-4 py-1.5 outline-none rounded-lg"
                               />
                             </div>
                           )}
