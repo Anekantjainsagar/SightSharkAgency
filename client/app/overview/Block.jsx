@@ -285,6 +285,23 @@ const Block = ({
           <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
             Connect your {name} account to fetch data
           </p>
+        )}{" "}
+        {isNew && (
+          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+            Request access to unlock insights of {name}
+          </p>
+        )}{" "}
+        {name == "Big Query" && (
+          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+            All your data is stored in the Google {name}
+          </p>
+        )}
+        {name == "Looker Studio" && (
+          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+            {values[0]?.title === "Connect"
+              ? "Connect to your Looker Studio account to generate dashboards"
+              : "Connected! Start building dashboards for your clients"}
+          </p>
         )}
       </div>
       {(dropDownValues?.length > 0 || values?.length > 0) && (

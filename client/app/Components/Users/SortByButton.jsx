@@ -47,7 +47,7 @@ const SortByButton = ({ sort_by_options }) => {
       )}
       Sort By
       {showSortBy && (
-        <div className="absolute right-0 top-[40px] border border-gray-50/10 md:top-[56px] rounded-lg md:rounded-xl w-[23vw] md:w-[12vw] bg-main z-50 small-scroller h-[15vh] overflow-y-auto">
+        <div className="absolute right-0 top-[40px] border border-gray-50/10 md:top-[56px] rounded-lg md:rounded-lg w-[23vw] md:w-[12vw] bg-main z-50 small-scroller overflow-y-auto">
           {sort_by_options?.map((e, i) => (
             <p
               key={i}
@@ -87,7 +87,7 @@ const SortByButton = ({ sort_by_options }) => {
                 setRecentClick(e);
                 setShowSortBy(false);
               }}
-              className="text-gray-200 py-1.5 md:py-2 min-[1600px]:py-2.5 flex justify-center hover:text-gray-300 rounded-lg md:rounded-xl transition-all hover:bg-gray-700/40"
+              className="text-gray-200 py-1.5 md:py-2 min-[1600px]:py-2.5 flex justify-center hover:text-gray-300 rounded-lg md:rounded-lg transition-all hover:bg-gray-700/40"
             >
               {e[0]?.toUpperCase() + e?.slice(1)?.replaceAll("_", " ")}
             </p>

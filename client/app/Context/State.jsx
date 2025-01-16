@@ -112,14 +112,14 @@ const State = (props) => {
     }
   }, [userData]);
 
-  const getCriticalNotifications = () => {
+  const getCriticalNotifications = (page = 1) => {
     const cookie = getCookie("token");
 
     if (cookie?.length > 5) {
       try {
         axios
           .get(
-            `${BACKEND_URI}/critical-notification/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
+            `${BACKEND_URI}/critical-notification/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}`,
             {
               headers: {
                 Authorization: `Bearer ${cookie}`,
@@ -159,14 +159,14 @@ const State = (props) => {
     }
   };
 
-  const getAlerts = () => {
+  const getAlerts = (page = 1) => {
     const cookie = getCookie("token");
 
     if (cookie?.length > 5) {
       try {
         axios
           .get(
-            `${BACKEND_URI}/alerts/?unseen_only=${false}&order_by=${"created_at"}&page=${1}&page_size=${50}`,
+            `${BACKEND_URI}/alerts/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}`,
             {
               headers: {
                 Authorization: `Bearer ${cookie}`,
@@ -220,7 +220,13 @@ const State = (props) => {
             },
           })
           .then((res) => {
-            setPlatformsData(res.data.data);
+            let data = res.data.data.platforms;
+            data = data?.filter((e) => {
+              if (e?.have_access) {
+                return e;
+              }
+            });
+            setPlatformsData({ platforms: data });
           })
           .catch((err) => {
             console.log(err);
@@ -314,20 +320,20 @@ const State = (props) => {
             },
           })
           .then(async (res) => {
-             let transformedPlatforms = res.data.platforms.map((platform) => {
-               if (platform?.have_access) {
-                 const [name, img_link] = [
-                   platform.platform_name,
-                   platform.logo_link,
-                 ];
-                 return { name, img_link };
-               }
-             });
-             transformedPlatforms = transformedPlatforms?.filter((e) => {
-               if (e?.name) {
-                 return e;
-               }
-             });
+            let transformedPlatforms = res.data.platforms.map((platform) => {
+              if (platform?.have_access) {
+                const [name, img_link] = [
+                  platform.platform_name,
+                  platform.logo_link,
+                ];
+                return { name, img_link };
+              }
+            });
+            transformedPlatforms = transformedPlatforms?.filter((e) => {
+              if (e?.name) {
+                return e;
+              }
+            });
 
             setMainDataSource(transformedPlatforms);
           })
@@ -416,7 +422,13 @@ const State = (props) => {
             }
           )
           .then(async (res) => {
-            setAllDataSources(res.data.data);
+            let data = res.data.data;
+            data = data?.filter((e) => {
+              if (!e?.have_access) {
+                return e;
+              }
+            });
+            setAllDataSources(data);
           })
           .catch((err) => {
             console.log(err);
@@ -678,6 +690,8 @@ const State = (props) => {
         allDataSources,
         archivedReports,
         getArchivedAgencyReports,
+        getCriticalNotifications,
+        getAlerts,
       }}
     >
       {props.children}

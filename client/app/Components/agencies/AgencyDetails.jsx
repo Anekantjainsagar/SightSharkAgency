@@ -31,7 +31,7 @@ const AgencyDetails = ({ data }) => {
             : "/Agency/individual/logo.png"
         }
         alt="Agency logo"
-        className="min-[1600px]:w-[60px] w-12 object-cover aspect-square border border-gray-200/30 rounded-full"
+        className="min-[1600px]:w-[61px] w-12 object-cover aspect-square border border-gray-200/30 rounded-full"
       />
       <h3 className="mainText20 mt-0.5">{data?.client_name}</h3>
       <div className="w-full min-[1600px]:mb-4 mb-3 mt-2">

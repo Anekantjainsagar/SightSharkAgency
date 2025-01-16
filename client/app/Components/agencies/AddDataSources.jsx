@@ -12,6 +12,7 @@ import { BACKEND_URI } from "@/app/utils/url";
 import axios from "axios";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 import { Switch } from "antd";
+import Info from "../Login/Info";
 
 const getCustomStyles = () => {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 600;
@@ -562,6 +563,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                           className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
                         >
                           {formatName("account_filter")}
+                          <Info text="If you're managing ads for multiple clients under the same account ID, enter the unique client identifier or keyword to filter and load client-specific data. If not, leave it blank." />
                         </label>
                         <input
                           type="text"
@@ -625,13 +627,13 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
               </div>
             </AccordionItem>
           ))}
-        {credentialsState?.filter((e) => {
+        {/* {credentialsState?.filter((e) => {
           return !selectedClientDetails?.platform_name?.includes(e?.platform);
         })?.length == 0 && (
           <div className="min-[1600px]:text-lg text-base flex items-center w-full justify-center text-gray-400 h-full">
             No Data Sources are Selected!
           </div>
-        )}
+        )} */}
       </Accordion>
     </div>
   );

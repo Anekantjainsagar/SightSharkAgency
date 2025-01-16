@@ -70,25 +70,29 @@ const Overview = ({ params }) => {
                     </button> */}
                   </div>
                   <div className="gradient-line min-[1600px]:my-4 my-3"></div>
-                  {publishedReports?.length > 0 ? (
-                    <div className="grid md:grid-cols-3 gap-x-4 mt-2 relative">
-                      {publishedReports?.map((data, i) => {
-                        return (
-                          <TemplateBlock
-                            key={i}
-                            data={{
-                              template_name: data?.report_name,
-                              template_link: data?.link,
-                              templat_image: data?.report_image,
-                            }}
-                            original_data={data}
-                          />
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <div className="mt-2 text-center">No Published Reports</div>
-                  )}
+                  <div className="h-[85%] overflow-y-auto small-scroller">
+                    {publishedReports?.length > 0 ? (
+                      <div className="grid md:grid-cols-3 gap-4 mt-2 relative pr-4">
+                        {publishedReports?.map((data, i) => {
+                          return (
+                            <TemplateBlock
+                              key={i}
+                              data={{
+                                template_name: data?.report_name,
+                                template_link: data?.link,
+                                templat_image: data?.report_image,
+                              }}
+                              original_data={data}
+                            />
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="mt-2 text-center">
+                        No Published Reports
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

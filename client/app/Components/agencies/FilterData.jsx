@@ -2,8 +2,8 @@ import Context from "@/app/Context/Context";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-const FilterData = () => {
-  const { agencies } = useContext(Context);
+const FilterData = ({ showReports, filters, setFilters }) => {
+  const { agencyReports } = useContext(Context);
 
   return (
     <div className="flex items-center md:justify-start justify-end md:w-fit w-full md:gap-x-4 md:mt-0 mt-2">
@@ -11,12 +11,39 @@ const FilterData = () => {
         {[
           {
             title: "Report Name",
-            options: agencies?.data?.map((e) => e?.client_name),
+            options: agencyReports?.map((e) => e?.report_name),
+            value: filters?.report_name,
+            onchange: (e) => {
+              if (e?.target?.value !== "Report Name") {
+                setFilters({ ...filters, report_name: e.target.value });
+              } else {
+                setFilters({ ...filters, report_name: "" });
+              }
+            },
           },
-          { title: "Report Type", options: ["Parent Report", "Child Report"] },
+          {
+            title: "Report Type",
+            options: ["Parent Report", "Child Report"],
+            value: filters?.report_type,
+            onchange: (e) => {
+              if (e?.target?.value !== "Report Type") {
+                setFilters({ ...filters, report_type: e.target.value });
+              } else {
+                setFilters({ ...filters, report_type: "" });
+              }
+            },
+          },
           {
             title: "Template Name",
-            options: agencies?.data?.map((e) => e?.template_name),
+            options: agencyReports?.map((e) => e?.client_name),
+            value: filters?.template_name,
+            onchange: (e) => {
+              if (e?.target?.value !== "Template Name") {
+                setFilters({ ...filters, template_name: e.target.value });
+              } else {
+                setFilters({ ...filters, template_name: "" });
+              }
+            },
           },
         ].map((e, i) => {
           return (
@@ -26,8 +53,8 @@ const FilterData = () => {
             >
               <select
                 className="bg-transparent px-2.5 md:px-4 py-1 md:py-2.5 min-[1600px]:py-3 outline-none appearance-none w-full min-[1600px]:text-base text-sm"
-                // value={selectedOption}
-                // onChange={(e) => setSelectedOption(e.target.value)}
+                value={e?.value}
+                onChange={e?.onchange}
               >
                 {e?.options &&
                   [e?.title, ...e?.options]?.map((e, i) => {
@@ -36,7 +63,7 @@ const FilterData = () => {
                         {e}
                       </option>
                     );
-                  })}{" "}
+                  })}
               </select>
               <span className="absolute md:block hidden right-3 top-1/2 min-[1600px]:text-2xl text-xl -translate-y-1/2 pointer-events-none">
                 <MdKeyboardArrowDown />

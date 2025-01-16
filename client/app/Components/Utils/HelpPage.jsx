@@ -55,7 +55,7 @@ const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
           <button
             className={`bg-newBlue w-full py-2 rounded-lg text-sm min-[1600px]:text-base text-center`}
             onClick={() => {
-              window.navigator.clipboard.writeText("info@prowiz.io");
+              window.navigator.clipboard.writeText("support@sightshark.com");
               window.open(
                 "https://mail.google.com/mail/u/0/#inbox?compose=CllgCKCJFGLmMqszhnpbMGjMzrDTxnsvddZqRvtbmvLMvXkWJgmpRbLBvjqBzxCKNSZFWMQlgrL",
                 "__blank"
@@ -63,7 +63,7 @@ const HelpPage = ({ showSubscribe, setShowSubscribe }) => {
               setShowSubscribe(!showSubscribe);
             }}
           >
-            info@prowiz.io
+            support@sightshark.com
           </button>{" "}
         </div>
       </Modal>

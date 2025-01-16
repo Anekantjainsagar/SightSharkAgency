@@ -19,6 +19,15 @@ const App = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [recoverPassword, setRecoverPassword] = useState(false);
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (disabled) {
+      setTimeout(() => {
+        setDisabled(false);
+      }, 3000);
+    }
+  }, []);
 
   const handleRememberMe = () => {
     localStorage.setItem("email", user?.email);
@@ -121,7 +130,9 @@ const App = () => {
           <h1 className="text-3xl min-[1600px]:text-[40px] font-semibold">
             Welcome Back
           </h1>
-          <p className="mainText18 text-white/70 md:text-white/80 mt-1 md:mt-2">Login to your account</p>
+          <p className="mainText18 text-white/70 md:text-white/80 mt-1 md:mt-2">
+            Login to your account
+          </p>
           <div className="w-11/12 min-[1600px]:mt-4">
             <div className="flex flex-col mt-5 min-[1600px]:mt-10 mb-3 min-[1600px]:mb-6">
               <label
@@ -211,6 +222,7 @@ const App = () => {
               </button>
             </div>
             <button
+              disabled={disabled}
               onClick={() => {
                 onLogin();
               }}

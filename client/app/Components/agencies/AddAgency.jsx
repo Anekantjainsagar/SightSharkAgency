@@ -428,11 +428,11 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
             })}
           </div>
         </div>
-        <div className="min-[1600px]:h-[40vh] h-[35vh] md:h-[38vh]">
+        <div className="min-[1600px]:h-[43vh] h-[35vh] md:h-[38vh]">
           {page === 1 ? (
             <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
               <div
-                className={`flex flex-col items-center justify-center min-[1600px]:mb-6 mb-3 md:mb-4 ${
+                className={`flex flex-col items-center justify-center mb-3 md:mb-4 ${
                   isDragging
                     ? "border-2 border-dashed border-blue-500 bg-black/30 cursor-pointer"
                     : ""
@@ -457,7 +457,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                         fileInputRef.current.click();
                       }
                     }}
-                    className="absolute bg-newBlue flex items-center justify-center min-[1600px]:text-2xl w-[7.5vw] md:w-[1.6vw] aspect-square min-[1600px]:-bottom-2 md:bottom-0 -bottom-2 cursor-pointer -right-2 rounded-full"
+                    title={
+                      !data?.profile
+                        ? "Upload Client Logo"
+                        : "Remove Client Logo"
+                    }
+                    className="absolute bg-newBlue flex items-center justify-center min-[1600px]:text-2xl w-[7.5vw] md:w-[1.6vw] aspect-square top-0 cursor-pointer -right-2 rounded-full"
                   >
                     {data?.profile ? (
                       <AiOutlineClose className="text-base md:text-[13px]" />
@@ -472,11 +477,16 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                     alt="Agency Img"
                     width={1000}
                     height={1000}
-                    className="w-[17vw] md:w-[4vw] aspect-square object-cover rounded-full"
+                    className="w-[17vw] md:w-[5vw] aspect-square object-cover rounded-full"
+                    title={
+                      !data?.profile
+                        ? "Upload Client Logo"
+                        : "Remove Client Logo"
+                    }
                   />
                 </div>
                 <p className="text-center mt-3 text-gray-300">
-                  {data?.fileInput?.name}
+                  {fileInput?.name || <span className="opacity-0">hell</span>}
                 </p>
                 {isDragging && (
                   <p className="absolute text-blue-500 mt-3">
@@ -507,7 +517,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="parent_name"
-                    className="mb-1.5 text-[13px] min-[1600px]:text-base w-fit relative"
+                    className="mb-1.5 flex items-center text-[13px] min-[1600px]:text-base w-fit relative"
                   >
                     Parent Organization
                     <Info text="If there is no Parent Organization then use the client name" />
@@ -1223,9 +1233,10 @@ const Page4 = ({
                     <div className="flex flex-row justify-between items-center w-full mb-3">
                       <label
                         htmlFor={e?.platform}
-                        className="text-[13px] min-[1600px]:text-base capitalize cursor-pointer"
+                        className="text-[13px] min-[1600px]:text-base flex items-center capitalize cursor-pointer"
                       >
                         {formatName("account_filter")}
+                        <Info text="If you're managing ads for multiple clients under the same account ID, enter the unique client identifier or keyword to filter and load client-specific data. If not, leave it blank." />
                       </label>
                       <input
                         type="text"

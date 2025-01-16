@@ -10,6 +10,11 @@ import { useRouter } from "next/navigation";
 const Overview = () => {
   const [showReports, setShowReports] = useState("Recent Reports");
   const { agencyReports, archivedReports } = useContext(Context);
+  const [filters, setFilters] = useState({
+    report_name: "",
+    report_type: "",
+    template_name: "",
+  });
   const [addAgency, setAddAgency] = useState(false);
 
   return (
@@ -30,7 +35,11 @@ const Overview = () => {
                   ({agencyReports ? agencyReports?.length : 0})
                 </span>
               </h3>
-              <FilterData />
+              <FilterData
+                showReports={showReports}
+                filters={filters}
+                setFilters={setFilters}
+              />
             </div>
             <div className="mt-2 md:mt-3">
               <div className="flex items-center gap-x-3 md:gap-x-4">
@@ -70,9 +79,24 @@ const Overview = () => {
                     })}
                   </div>
                   <div className="h-[66vh] md:h-[62vh] overflow-y-auto small-scroller min-[1600px]:h-[65vh]">
-                    {agencyReports?.map((data, i) => {
-                      return <Template key={i} data={data} />;
-                    })}
+                    {agencyReports
+                      ?.filter((e) => {
+                        if (filters?.report_name) {
+                          return e?.report_name === filters?.report_name;
+                        }
+                        return e;
+                      })
+                      ?.filter((e) => {
+                        if (filters?.report_type == "Parent Report") {
+                          return e?.report_name?.includes("parent");
+                        } else if (filters?.report_type == "Child Report") {
+                          return !e?.report_name?.includes("parent");
+                        }
+                        return e;
+                      })
+                      ?.map((data, i) => {
+                        return <Template key={i} data={data} />;
+                      })}
                   </div>
                 </div>
               ) : (
