@@ -2,7 +2,7 @@ import Context from "@/app/Context/Context";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 
-const FilterData = ({ showReports, filters, setFilters }) => {
+const FilterData = ({ loading, filters, setFilters }) => {
   const { agencyReports } = useContext(Context);
 
   return (
@@ -46,7 +46,21 @@ const FilterData = ({ showReports, filters, setFilters }) => {
             },
           },
         ].map((e, i) => {
-          return (
+          return loading ? (
+            <div
+              key={i}
+              className="relative min-[1600px]:w-[10.5vw] md:w-[12vw] w-fit border border-gray-400/20 text-gray-400 ml-2 md:ml-4 rounded-md"
+            >
+              {/* Skeleton for the dropdown */}
+              <div className="bg-gray-300 animate-pulse px-2.5 md:px-4 py-1 md:py-2.5 min-[1600px]:py-3 rounded-md w-full min-[1600px]:text-base text-sm">
+                <div className="bg-gray-200 h-4 min-[1600px]:h-5 rounded w-3/4"></div>
+              </div>
+              {/* Skeleton for the dropdown arrow */}
+              <span className="absolute md:block hidden right-3 top-1/2 min-[1600px]:text-2xl text-xl -translate-y-1/2">
+                <div className="bg-gray-300 animate-pulse w-4 h-4 min-[1600px]:w-5 min-[1600px]:h-5 rounded-full"></div>
+              </span>
+            </div>
+          ) : (
             <div
               key={i}
               className="relative min-[1600px]:w-[10.5vw] md:w-[12vw] w-fit border border-gray-400/20 text-gray-400 ml-2 md:ml-4 rounded-md"

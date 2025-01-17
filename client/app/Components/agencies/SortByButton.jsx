@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import Context from "../../Context/Context";
 import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 
-const SortByButton = ({ sort_by_options }) => {
+const SortByButton = ({ sort_by_options, loading }) => {
   const { getAgencies } = useContext(Context);
   const [showSortBy, setShowSortBy] = useState(false);
   const sortRef = useRef(null);
@@ -33,7 +33,16 @@ const SortByButton = ({ sort_by_options }) => {
     };
   }, [showSortBy]);
 
-  return (
+  return loading ? (
+    <div className="relative animate-pulse">
+      <div className="bg-white/10 px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl ml-2 md:ml-4 text-[12px] md:text-[13px] min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5">
+        <div className="bg-gray-300 dark:bg-gray-700 h-4 w-4 rounded"></div>{" "}
+        {/* Icon Placeholder */}
+        <div className="bg-gray-300 dark:bg-gray-700 h-4 w-20 rounded"></div>{" "}
+        {/* Text Placeholder */}
+      </div>
+    </div>
+  ) : (
     <button
       ref={sortRef}
       className="bg-white/10 relative px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl ml-2 md:ml-4 text-[12px] md:text-[13px] min-[1600px]:text-base flex items-center gap-x-2 border border-gray-200/5"

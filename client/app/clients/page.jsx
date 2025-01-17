@@ -38,9 +38,15 @@ const excludedKeys = [
 ];
 
 const Overview = () => {
-  const { agencies, getAgencies, setSelectedAgencies, selectedAgencies } =
-    useContext(Context);
+  const {
+    agencies,
+    getAgencies,
+    setSelectedAgencies,
+    selectedAgencies,
+    userData,
+  } = useContext(Context);
   const [addAgency, setAddAgency] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [dataToExport, setDataToExport] = useState([]);
 
   useEffect(() => {
@@ -56,36 +62,59 @@ const Overview = () => {
       });
 
       setDataToExport(filteredData);
+    } else {
+      setDataToExport([]);
     }
   }, [selectedAgencies]);
 
+  useEffect(() => {
+    if (userData?.id) {
+      setLoading(false);
+    }
+  }, [userData]);
+
   return (
     <div className="flex items-start h-[100vh]">
-      <Leftbar />
+      <Leftbar loading={loading} />
       <AddAgency showSubscribe={addAgency} setShowSubscribe={setAddAgency} />
       <div className="md:w-[85%] w-full bg-main h-full relative">
         <div className="bg-newBubbleColor/10 w-[50vw] h-[30vh] absolute top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-0 absolute top-3 /6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[20vw] h-[20vw] right-20 absolute bottom-10 rounded-full"></div>
         <div className="absolute backdrop-blur-3xl top-0 left-0 w-full h-full px-5 overflow-y-auto">
-          <Navbar />
+          <Navbar loading={loading} />
           <div className="text-white w-full rounded-lg py-2 md:px-6 min-[1600px]:py-6">
             <div className="flex md:flex-row flex-col items-start md:items-center justify-between">
-              <h3 className="text-lg md:text-xl min-[1600px]:text-[22px] font-semibold">
-                Clients{" "}
-                <span className="text-base md:text-lg min-[1600px]:text-xl text-white/80">
-                  ({agencies?.total_count})
-                </span>
-              </h3>
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  {/* Skeleton for the "Dashboards" text */}
+                  <div className="bg-gray-300 animate-pulse h-6 md:h-7 min-[1600px]:h-8 w-32 rounded-md"></div>
+                  {/* Skeleton for the count */}
+                  <div className="bg-gray-300 animate-pulse h-5 md:h-6 min-[1600px]:h-7 w-10 rounded-md"></div>
+                </div>
+              ) : (
+                <h3 className="text-lg md:text-xl min-[1600px]:text-[22px] font-semibold">
+                  Clients{" "}
+                  <span className="text-base md:text-lg min-[1600px]:text-xl text-white/80">
+                    ({agencies?.total_count})
+                  </span>
+                </h3>
+              )}
               <div className="flex items-center md:justify-start justify-end md:w-fit w-full md:mt-0 mt-2">
-                <button
-                  onClick={() => {
-                    setAddAgency(!addAgency);
-                  }}
-                  className="bg-newBlue px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl md:ml-4 flex items-center gap-x-1.5 md:gap-x-2 text-[12px] md:text-sm min-[1600px]:text-base"
-                >
-                  <FaPlus className="text-[9px] md:text-sm" /> Add Client
-                </button>
+                {loading ? (
+                  <div className="animate-pulse">
+                    <div className="bg-gray-300 dark:bg-gray-700 rounded-lg md:rounded-xl md:ml-4 h-9 md:h-10 min-[1600px]:h-12 w-32 md:w-36 min-[1600px]:w-40"></div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setAddAgency(!addAgency);
+                    }}
+                    className="bg-newBlue px-4 md:px-6 py-2 md:py-2.5 min-[1600px]:py-3 rounded-lg md:rounded-xl md:ml-4 flex items-center gap-x-1.5 md:gap-x-2 text-[12px] md:text-sm min-[1600px]:text-base"
+                  >
+                    <FaPlus className="text-[9px] md:text-sm" /> Add Client
+                  </button>
+                )}
                 {dataToExport?.length > 0 && (
                   <CSVLink filename={"clients.csv"} data={dataToExport}>
                     <button
@@ -125,145 +154,206 @@ const Overview = () => {
                     </button>
                   </CSVLink>
                 )}
-                <SortByButton sort_by_options={sort_by_options} />
+                <SortByButton
+                  sort_by_options={sort_by_options}
+                  loading={loading}
+                />
               </div>
             </div>
             <div className="mt-4 md:mt-5 border border-gray-200/5 rounded-2xl">
-              <div className="grid bg-[#030021]/40 py-4 px-4 md:px-7 agencyBlockGrid items-center rounded-2xl">
-                <div className="inline-flex items-start">
-                  <label className="relative flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
-                      id="check"
-                      onChange={(e) => {
-                        if (e?.target?.checked) {
-                          setSelectedAgencies(agencies?.data);
-                        } else {
-                          setSelectedAgencies([]);
-                        }
-                      }}
-                      checked={
-                        selectedAgencies?.length == agencies?.data?.length
-                      }
-                    />
-                    <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        strokeWidth="1"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        ></path>
-                      </svg>
-                    </span>
-                  </label>
+              {loading ? (
+                <div className="grid bg-[#030021]/40 py-4 px-4 md:px-7 agencyBlockGrid items-center rounded-2xl animate-pulse">
+                  {/* Checkbox Skeleton */}
+                  <div className="inline-flex items-start">
+                    <div className="h-6 w-6 bg-gray-800 rounded-md"></div>
+                  </div>
+
+                  {/* Placeholder Headers Skeleton */}
+                  {[
+                    "Client Name",
+                    "Status",
+                    "Key Contact",
+                    "Email",
+                    "Created Date",
+                  ].map((e, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className={`h-4 bg-gray-700 rounded w-24 ${
+                          (e === "Key Contact" || e === "Email") &&
+                          "md:block hidden"
+                        } ${
+                          !e?.includes("Name")
+                            ? "text-center mx-auto"
+                            : "min-[1600px]:ml-0 ml-2"
+                        }`}
+                      ></div>
+                    );
+                  })}
                 </div>
-                {[
-                  "Client Name",
-                  "Status",
-                  "Key Contact",
-                  "Email",
-                  "Created Date",
-                ].map((e, i) => {
-                  return (
-                    <h5
-                      key={i}
-                      className={`text-[13px] min-[1600px]:text-sm ${
-                        (e == "Key Contact" || e === "Email") &&
-                        "md:block hidden"
-                      } ${
-                        !e?.includes("Name")
-                          ? "text-center"
-                          : "min-[1600px]:ml-0 ml-2"
-                      } font-light tracking-wider`}
-                    >
-                      {e}
-                    </h5>
-                  );
-                })}
-              </div>
+              ) : (
+                <div className="grid bg-[#030021]/40 py-4 px-4 md:px-7 agencyBlockGrid items-center rounded-2xl">
+                  <div className="inline-flex items-start">
+                    <label className="relative flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="before:content[''] peer relative h-6 w-6 rounded-md cursor-pointer appearance-none border-2 border-[#343745] transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-16 before:w-16 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:bg-gray-800 checked:before:bg-gray-800 hover:before:opacity-10"
+                        id="check"
+                        onChange={(e) => {
+                          if (e?.target?.checked) {
+                            setSelectedAgencies(agencies?.data);
+                          } else {
+                            setSelectedAgencies([]);
+                          }
+                        }}
+                        checked={
+                          selectedAgencies?.length == agencies?.data?.length
+                        }
+                      />
+                      <span className="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-4 w-4"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          stroke="currentColor"
+                          strokeWidth="1"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          ></path>
+                        </svg>
+                      </span>
+                    </label>
+                  </div>
+                  {[
+                    "Client Name",
+                    "Status",
+                    "Key Contact",
+                    "Email",
+                    "Created Date",
+                  ].map((e, i) => {
+                    return (
+                      <h5
+                        key={i}
+                        className={`text-[13px] min-[1600px]:text-sm ${
+                          (e == "Key Contact" || e === "Email") &&
+                          "md:block hidden"
+                        } ${
+                          !e?.includes("Name")
+                            ? "text-center"
+                            : "min-[1600px]:ml-0 ml-2"
+                        } font-light tracking-wider`}
+                      >
+                        {e}
+                      </h5>
+                    );
+                  })}
+                </div>
+              )}
               <div className="h-[71vh] md:h-[66vh] min-[1600px]:h-[69vh]">
                 <div className="overflow-y-auto small-scroller h-[86%]">
                   {agencies?.data?.map((e, i) => {
-                    return <AgencyDetailsBlock key={i} data={e} />;
+                    return (
+                      <AgencyDetailsBlock key={i} data={e} loading={loading} />
+                    );
                   })}
                 </div>
-                <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
-                  <MdOutlineKeyboardDoubleArrowLeft
-                    onClick={() => {
-                      if (agencies?.current_page != 1) {
-                        getAgencies(1);
-                      }
-                    }}
-                    className={`text-2xl ${
-                      agencies?.current_page != 1
-                        ? "text-gray-300"
-                        : "text-gray-600"
-                    } cursor-pointer`}
-                  />
-                  <MdOutlineChevronLeft
-                    onClick={() => {
-                      if (agencies?.current_page != 1) {
-                        getAgencies(agencies?.current_page - 1);
-                      }
-                    }}
-                    className={`text-2xl ${
-                      agencies?.current_page != 1
-                        ? "text-gray-300"
-                        : "text-gray-600"
-                    } cursor-pointer`}
-                  />
-                  {[...Array(agencies?.total_pages).keys()]
-                    .map((i) => i + 1)
-                    ?.map((e, i) => {
-                      return (
-                        <div
-                          className={`w-[35px] md:w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[35px] md:h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
-                            agencies?.current_page == e
-                              ? "bg-newBlue"
-                              : "text-[#85888E]"
-                          }`}
-                          key={i}
-                          onClick={() => {
-                            getAgencies(e);
-                          }}
-                        >
-                          {e}
-                        </div>
-                      );
-                    })}
-                  <MdOutlineChevronRight
-                    onClick={() => {
-                      if (agencies?.current_page != agencies?.total_pages) {
-                        getAgencies(agencies?.current_page + 1);
-                      }
-                    }}
-                    className={`text-2xl ${
-                      agencies?.current_page != agencies?.total_pages
-                        ? "text-gray-300"
-                        : "text-gray-600"
-                    } cursor-pointer`}
-                  />{" "}
-                  <MdOutlineKeyboardDoubleArrowRight
-                    onClick={() => {
-                      if (agencies?.current_page != agencies?.total_pages) {
-                        getAgencies(agencies?.total_pages);
-                      }
-                    }}
-                    className={`text-2xl ${
-                      agencies?.current_page != agencies?.total_pages
-                        ? "text-gray-300"
-                        : "text-gray-600"
-                    } cursor-pointer`}
-                  />
-                </div>
+                {loading ? (
+                  <div className="h-[14%] gap-x-4 px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl animate-pulse">
+                    {/* Left Double Arrow */}
+                    <div className="h-8 w-8 bg-gray-700 rounded-md"></div>
+
+                    {/* Left Arrow */}
+                    <div className="h-8 w-8 bg-gray-700 rounded-md"></div>
+
+                    {/* Page Numbers Placeholder */}
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="w-[35px] md:w-[30px] min-[1600px]:w-[40px] h-[35px] md:h-[30px] min-[1600px]:h-[40px] bg-gray-700 rounded-lg"
+                      ></div>
+                    ))}
+
+                    {/* Right Arrow */}
+                    <div className="h-8 w-8 bg-gray-700 rounded-md"></div>
+
+                    {/* Right Double Arrow */}
+                    <div className="h-8 w-8 bg-gray-700 rounded-md"></div>
+                  </div>
+                ) : (
+                  <div className="h-[14%] gap-x-4  px-6 flex items-center justify-center bg-[#030021]/40 rounded-2xl">
+                    <MdOutlineKeyboardDoubleArrowLeft
+                      onClick={() => {
+                        if (agencies?.current_page != 1) {
+                          getAgencies(1);
+                        }
+                      }}
+                      className={`text-2xl ${
+                        agencies?.current_page != 1
+                          ? "text-gray-300"
+                          : "text-gray-600"
+                      } cursor-pointer`}
+                    />
+                    <MdOutlineChevronLeft
+                      onClick={() => {
+                        if (agencies?.current_page != 1) {
+                          getAgencies(agencies?.current_page - 1);
+                        }
+                      }}
+                      className={`text-2xl ${
+                        agencies?.current_page != 1
+                          ? "text-gray-300"
+                          : "text-gray-600"
+                      } cursor-pointer`}
+                    />
+                    {[...Array(agencies?.total_pages).keys()]
+                      .map((i) => i + 1)
+                      ?.map((e, i) => {
+                        return (
+                          <div
+                            className={`w-[35px] md:w-[30px] cursor-pointer min-[1600px]:w-[40px] h-[35px] md:h-[30px] text-sm min-[1600px]:text-base min-[1600px]:h-[40px] rounded-lg flex items-center justify-center ${
+                              agencies?.current_page == e
+                                ? "bg-newBlue"
+                                : "text-[#85888E]"
+                            }`}
+                            key={i}
+                            onClick={() => {
+                              getAgencies(e);
+                            }}
+                          >
+                            {e}
+                          </div>
+                        );
+                      })}
+                    <MdOutlineChevronRight
+                      onClick={() => {
+                        if (agencies?.current_page != agencies?.total_pages) {
+                          getAgencies(agencies?.current_page + 1);
+                        }
+                      }}
+                      className={`text-2xl ${
+                        agencies?.current_page != agencies?.total_pages
+                          ? "text-gray-300"
+                          : "text-gray-600"
+                      } cursor-pointer`}
+                    />{" "}
+                    <MdOutlineKeyboardDoubleArrowRight
+                      onClick={() => {
+                        if (agencies?.current_page != agencies?.total_pages) {
+                          getAgencies(agencies?.total_pages);
+                        }
+                      }}
+                      className={`text-2xl ${
+                        agencies?.current_page != agencies?.total_pages
+                          ? "text-gray-300"
+                          : "text-gray-600"
+                      } cursor-pointer`}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
