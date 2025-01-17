@@ -58,6 +58,7 @@ const Overview = ({ params }) => {
     selectedClientDetails,
     getCredentialsForClient,
     timezones,
+    getAssignedTemplates,
   } = useContext(Context);
   const { name } = params;
   const [original_data, setOriginal_data] = useState(selectedClientDetails);
@@ -66,6 +67,7 @@ const Overview = ({ params }) => {
   useEffect(() => {
     updateDataTemp();
     getCredentialsForClient(original_data?.client_id);
+    getAssignedTemplates(original_data?.client_id);
   }, [name, agencies]);
 
   const updateDataTemp = () => {

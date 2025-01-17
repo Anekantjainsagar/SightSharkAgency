@@ -28,14 +28,14 @@ const MyTemplate = ({ data, idx }) => {
   return (
     <div className="border border-gray-300/10 p-2.5 rounded-lg cursor-pointer">
       <Image
-        src={data?.path}
-        alt={data?.title}
+        src={data?.template_image}
+        alt={data?.template_name}
         width={1000}
         height={1000}
         className="rounded-lg"
       />
       <div className="flex items-center justify-between mt-1.5 relative">
-        <p className="text-center mt-1.5">{data?.title}</p>
+        <p className="text-center mt-1.5">{data?.template_name}</p>
         <BsThreeDotsVertical
           className=""
           onClick={() => {

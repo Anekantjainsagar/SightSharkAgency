@@ -1,7 +1,6 @@
 "use client";
 import axios from "axios";
 import Context from "./Context";
-import toast from "react-hot-toast";
 import { getCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -37,6 +36,7 @@ const State = (props) => {
   const [showLeftMenu, setShowLeftMenu] = useState(false);
   const [allDataSources, setAllDataSources] = useState([]);
   const [archivedReports, setArchivedReports] = useState([]);
+  const [assignedTemplates, setAssignedTemplates] = useState([]);
 
   const checkToken = () => {
     let cookie = getCookie("token");
@@ -371,6 +371,31 @@ const State = (props) => {
     }
   };
 
+  const getAssignedTemplates = (id) => {
+    let cookie = getCookie("token");
+    setAssignedTemplates([]);
+    if (cookie?.length > 5 && id) {
+      try {
+        axios
+          .get(`${BACKEND_URI}/template/assigned-templates/${id}`, {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${cookie}`,
+            },
+          })
+          .then((res) => {
+            setAssignedTemplates(res.data.templates);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   const getDataSourceStructure = (id) => {
     let cookie = getCookie("token");
     setDataSourceStructure([]);
@@ -691,7 +716,8 @@ const State = (props) => {
         archivedReports,
         getArchivedAgencyReports,
         getCriticalNotifications,
-        getAlerts,
+        getAssignedTemplates,
+        assignedTemplates,
       }}
     >
       {props.children}
