@@ -60,6 +60,7 @@ const Block = ({
   original_name,
   isNew,
   idx,
+  loading,
 }) => {
   const [clicked, setClicked] = useState(false);
   const dropdownRef = useRef(null);
@@ -240,7 +241,16 @@ const Block = ({
     }
   };
 
-  return (
+  return loading ? (
+    <div className="flex flex-row items-start gap-x-2 px-3 md:px-5 py-3 md:py-7 bg-[#171C2A]/50 rounded-xl relative animate-pulse">
+      <div className="bg-gray-400 w-16 h-16 md:w-12 md:h-12 min-[1600px]:w-14 min-[1600px]:h-14 rounded-lg" />
+      <div className="ml-2 w-1/2">
+        <div className="bg-gray-400 h-4 w-3/4 mb-2 rounded" />
+        <div className="bg-gray-400 h-3 w-1/2 mb-2 rounded" />
+        <div className="bg-gray-400 h-3 w-3/4 rounded" />
+      </div>
+    </div>
+  ) : (
     <div
       ref={dropdownRef}
       className={`flex flex-row items-start gap-x-2 shadow-md ${

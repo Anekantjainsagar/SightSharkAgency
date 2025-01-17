@@ -6,7 +6,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
 import { RiMenu3Line } from "react-icons/ri";
 
-const Navbar = () => {
+const Navbar = ({ loading = false }) => {
   const pathname = usePathname();
   const history = useRouter();
   const {
@@ -18,7 +18,20 @@ const Navbar = () => {
     setShowLeftMenu,
   } = useContext(Context);
 
-  return (
+  return loading ? (
+    <div className="text-white md:py-6 py-4 flex items-center justify-between w-full md:px-6 animate-pulse">
+      <div className="h-6 w-1/2 bg-gray-200 rounded"></div>
+      <div className="flex items-center justify-end">
+        <div className="relative flex items-center w-10/12 md:w-[340px]">
+          <div className="absolute left-4 z-40 text-white text-sm md:text-base h-6 w-6 rounded-full bg-gray-200"></div>
+          <form className="w-full relative">
+            <input className="outline-none text-sm border border-gray-200/5 bg-transparent pr-4 md:pr-6 py-2 rounded-lg md:pl-12 pl-10 w-full h-8 bg-gray-200"></input>
+          </form>
+        </div>
+        <div className="md:hidden block text-4xl text-gray-300 ml-2 p-1 border border-gray-300/10 rounded-md h-12 w-12 bg-gray-200"></div>
+      </div>
+    </div>
+  ) : (
     <div className="text-white md:py-6 py-4 flex items-center justify-between w-full md:px-6">
       <h3 className="text-xl md:text-[28px] min-[1600px]:text-[36px] font-semibold md:w-fit w-6/12">
         Hello {userData?.first_name},

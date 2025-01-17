@@ -252,7 +252,7 @@ let mainRoutes = [
   },
 ];
 
-const Leftbar = () => {
+const Leftbar = ({ loading = false }) => {
   const { criticalNotificationsLength, alertsLength, showLeftMenu } =
     useContext(Context);
   const [show, setShow] = useState(false);
@@ -409,21 +409,30 @@ const Leftbar = () => {
       <div className="w-full h-full absolute top-0 left-0 py-3 md:py-5 flex flex-col items-center justify-between backdrop-blur-3xl z-10">
         <div className="w-10/12 h-full flex flex-col items-center justify-between md:pb-6">
           <div className="w-full">
-            <div className="flex items-center">
-              <Image
-                src="/logo.png"
-                alt="logo"
-                width={1000}
-                height={1000}
-                className="w-[10vw] md:w-[2vw]"
-              />
-              <h1 className="mainText18 font-semibold uppercase tracking-wider ml-3">
-                sightshark
-              </h1>
-            </div>
+            {loading ? (
+              <div className="flex items-center">
+                <div className="bg-gray-300 w-[10vw] md:w-[2vw] h-[10vw] md:h-[2vw] animate-pulse" />
+                <div className="ml-3">
+                  <div className="bg-gray-300 h-6 w-24 animate-pulse" />
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center">
+                <Image
+                  src="/logo.png"
+                  alt="logo"
+                  width={1000}
+                  height={1000}
+                  className="w-[10vw] md:w-[2vw]"
+                />
+                <h1 className="mainText18 font-semibold uppercase tracking-wider ml-3">
+                  sightshark
+                </h1>
+              </div>
+            )}
             <div className="my-8 w-full">
               {mainRoutes?.map((e, i) => {
-                return <Block e={e} key={i} />;
+                return <Block e={e} key={i} loading={loading} />;
               })}
             </div>
           </div>
@@ -431,12 +440,18 @@ const Leftbar = () => {
             <div className="">
               {settingRoutes?.map((e, i) => {
                 return (
-                  <NewwBlock e={e} key={i} setShow={setShow} show={show} />
+                  <NewwBlock
+                    e={e}
+                    key={i}
+                    setShow={setShow}
+                    show={show}
+                    loading={loading}
+                  />
                 );
               })}
             </div>
             <div className="gradient-line my-4"></div>
-            <LogoutBtn />
+            <LogoutBtn loading={loading} />
           </div>
         </div>
       </div>
@@ -444,11 +459,20 @@ const Leftbar = () => {
   );
 };
 
-const LogoutBtn = () => {
+const LogoutBtn = ({ loading }) => {
   const history = useRouter();
   const { setShowLeftMenu } = useContext(Context);
 
-  return (
+  return loading ? (
+    <div className="flex items-center py-2 rounded-xl cursor-pointer text-[#D93F21]">
+      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#D93F21]/10 to-[#D93F21]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
+        <div className="bg-gray-300 w-6 h-6 rounded-full animate-pulse" />
+      </div>
+      <div className="ml-4 min-[1600px]:text-lg text-[15px]">
+        <div className="bg-gray-300 h-4 w-24 animate-pulse" />
+      </div>
+    </div>
+  ) : (
     <div
       className={`flex items-center py-2 rounded-xl cursor-pointer text-[#D93F21]`}
       onClick={() => {
@@ -479,11 +503,20 @@ const LogoutBtn = () => {
   );
 };
 
-const NewwBlock = ({ e, setShow, show }) => {
+const NewwBlock = ({ e, setShow, show, loading }) => {
   const history = useRouter();
   const { setShowLeftMenu } = useContext(Context);
 
-  return (
+  return loading ? (
+    <div className="flex items-center py-2 rounded-xl cursor-pointer text-white">
+      <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#1664FF]/10 to-[#1664FF]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
+        <div className="bg-gray-300 w-6 h-6 rounded-full animate-pulse" />
+      </div>
+      <div className="ml-4 min-[1600px]:text-lg text-[15px]">
+        <div className="bg-gray-300 h-4 w-24 animate-pulse" />
+      </div>
+    </div>
+  ) : (
     <div
       className={`flex items-center py-2 rounded-xl cursor-pointer text-white`}
       onClick={() => {
@@ -503,13 +536,18 @@ const NewwBlock = ({ e, setShow, show }) => {
   );
 };
 
-const Block = ({ e }) => {
+const Block = ({ e, loading }) => {
   const { setShowLeftMenu } = useContext(Context);
   const pathname = usePathname();
   const history = useRouter();
   const [hover, setHover] = useState(false);
 
-  return (
+  return loading ? (
+    <div className="flex items-center rounded-lg cursor-pointer px-3 min-[1600px]:py-3 py-2 mb-2 min-[1600px]:text-lg text-[15px] text-gray-400 hover:text-white transition-all">
+      <div className="bg-gray-300 w-6 h-6 rounded-full animate-pulse" />
+      <div className="ml-4 bg-gray-300 h-4 w-24 animate-pulse" />
+    </div>
+  ) : (
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
