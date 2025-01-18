@@ -233,7 +233,7 @@ const AgencyDetails = ({ data }) => {
         </div>
         <div className="m-3">
           {selectedClientDetails?.platforms_images?.length > 0 ? (
-            <div className="min-[1600px]:h-[22vh] h-[18vh] bg-[#171C2A] rounded-lg">
+            <div className="min-[1600px]:h-[22vh] h-[18vh] bg-[#171C2A] rounded-lg overflow-y-auto small-scroller">
               <div className="h-fit grid grid-cols-2 gap-y-5 p-2 min-[1600px]:p-4">
                 {selectedClientDetails?.platforms_images?.map((e, i) => {
                   return (

@@ -107,6 +107,38 @@ const Overview = ({ params }) => {
     }
   };
 
+  const checkIsChanged = () => {
+    if (fileInput?.name?.length > 0) {
+      return true;
+    } else {
+      // First Page Check
+      if (
+        original_data?.client_name == data?.client_name &&
+        original_data?.website === data?.website &&
+        original_data?.parent_name === data?.parent_name &&
+        original_data?.time_zone == data?.timezone &&
+        original_data?.report_start_date === data?.report_start_date &&
+        status === original_data?.status
+      ) {
+        // Second Page Check
+        if (
+          original_data?.key_contact_name === data?.keyContact?.name &&
+          original_data?.key_contact_email_address ===
+            data?.keyContact?.email &&
+          original_data?.key_contact_phone === data?.keyContact?.phone &&
+          original_data?.key_contact_designation ===
+            data?.keyContact?.designation
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }
+  };
+
   return (
     <div className="flex items-start h-[100vh]">
       <Leftbar />
@@ -453,82 +485,92 @@ const Overview = ({ params }) => {
                           data?.website &&
                           data?.keyContact?.email
                         ) {
-                          const filteredData = Object.fromEntries(
-                            Object.entries(selectedClientDetails).filter(
-                              ([key, value]) => value != null
-                            )
-                          );
-
-                          const queryParams = new URLSearchParams({
-                            client_name: data?.name,
-                            website: data?.website,
-                            location: data?.location,
-                            key_contact_name: data?.keyContact?.name,
-                            key_contact_designation:
-                              data?.keyContact?.designation,
-                            key_contact_email_address: data?.keyContact?.email,
-                            key_contact_phone: data?.keyContact?.phone,
-                            service_account_cloud: data?.serviceAcc?.acc1,
-                            service_account_api: data?.serviceAcc?.acc2,
-                            email_address: data?.credentials?.email,
-                            status,
-                            time_zone: data?.timezone,
-                            parent_name: data?.parent_name,
-                            ...filteredData,
-                          }).toString();
-
-                          const formData = new FormData();
-                          formData.append(
-                            "profile_picture",
-                            fileInput ? fileInput : ""
-                          );
-                          formData.append(
-                            "profile_picture_filename",
-                            fileInput?.name ? fileInput?.name : ""
-                          );
-                          formData.append(
-                            "profile_picture_content_type",
-                            fileInput?.type ? fileInput?.type : ""
-                          );
-
-                          try {
-                            axios
-                              .put(
-                                `${BACKEND_URI}/client/update/${original_data?.client_id}?${queryParams}`,
-                                formData, // Send formData directly
-                                {
-                                  headers: {
-                                    Accept:
-                                      "application/json, application/xml, text/plain, text/html, *.*",
-                                    Authorization: `Bearer ${getCookie(
-                                      "token"
-                                    )}`,
-                                  },
-                                }
+                          if (checkIsChanged()) {
+                            const filteredData = Object.fromEntries(
+                              Object.entries(selectedClientDetails).filter(
+                                ([key, value]) => value != null
                               )
-                              .then((res) => {
-                                if (res.data.msg) {
-                                  getAgencies();
-                                  toast.success("Client updated successfully");
-                                  history.push(
-                                    `/clients/${data?.name?.replaceAll(
-                                      " ",
-                                      "-"
-                                    )}/edit-profile`
-                                  );
-                                }
-                                if (res.data.detail) {
-                                  toast.error(res.data.detail);
-                                }
-                              })
-                              .catch((err) => {
-                                console.log(err);
-                              });
-                          } catch (error) {
-                            console.log(error);
+                            );
+
+                            const queryParams = new URLSearchParams({
+                              client_name: data?.name,
+                              website: data?.website,
+                              location: data?.location,
+                              key_contact_name: data?.keyContact?.name,
+                              key_contact_designation:
+                                data?.keyContact?.designation,
+                              key_contact_email_address:
+                                data?.keyContact?.email,
+                              key_contact_phone: data?.keyContact?.phone,
+                              service_account_cloud: data?.serviceAcc?.acc1,
+                              service_account_api: data?.serviceAcc?.acc2,
+                              email_address: data?.credentials?.email,
+                              status,
+                              time_zone: data?.timezone,
+                              parent_name: data?.parent_name,
+                              ...filteredData,
+                            }).toString();
+
+                            const formData = new FormData();
+                            formData.append(
+                              "profile_picture",
+                              fileInput ? fileInput : ""
+                            );
+                            formData.append(
+                              "profile_picture_filename",
+                              fileInput?.name ? fileInput?.name : ""
+                            );
+                            formData.append(
+                              "profile_picture_content_type",
+                              fileInput?.type ? fileInput?.type : ""
+                            );
+
+                            try {
+                              axios
+                                .put(
+                                  `${BACKEND_URI}/client/update/${original_data?.client_id}?${queryParams}`,
+                                  formData, // Send formData directly
+                                  {
+                                    headers: {
+                                      Accept:
+                                        "application/json, application/xml, text/plain, text/html, *.*",
+                                      Authorization: `Bearer ${getCookie(
+                                        "token"
+                                      )}`,
+                                    },
+                                  }
+                                )
+                                .then((res) => {
+                                  if (res.data.msg) {
+                                    getAgencies();
+                                    toast.success(
+                                      "Client updated successfully"
+                                    );
+                                    setFileInput("");
+                                    history.push(
+                                      `/clients/${data?.name?.replaceAll(
+                                        " ",
+                                        "-"
+                                      )}/edit-profile`
+                                    );
+                                  }
+                                  if (res.data.detail) {
+                                    toast.error(res.data.detail);
+                                  }
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                });
+                            } catch (error) {
+                              console.log(error);
+                            }
+                          } else {
+                            toast.error(
+                              "Change some data to update the client"
+                            );
                           }
                         } else {
-                          toast.error("Please fill all the details");
+                          toast.error("Please fill all the required details");
                         }
                       }}
                     >
