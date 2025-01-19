@@ -428,7 +428,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
             })}
           </div>
         </div>
-        <div className="min-[1600px]:h-[43vh] h-[35vh] md:h-[38vh]">
+        <div className="min-[1600px]:h-[48vh] min-[1750px]:h-[52vh] h-[35vh] md:h-[42vh]">
           {page === 1 ? (
             <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
               <div
