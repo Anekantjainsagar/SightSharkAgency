@@ -156,7 +156,7 @@ const Overview = () => {
                     {
                       name: "Warranty Period",
                       value: `${calculateRemainingDays(
-                        actualUser?.deployment_date,
+                        actualUser?.created_at,
                         actualUser?.warrenty_period
                       )} days left`,
                       img: "/Overview/Icons/dashboard.png",
