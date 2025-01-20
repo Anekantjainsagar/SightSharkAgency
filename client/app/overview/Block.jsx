@@ -121,7 +121,7 @@ const Block = ({
       if (isNew) {
         setDropDownValues([
           {
-            title: "Request Data Source",
+            title: "Request Access",
             onClick: () => {
               requestDataSource();
             },
@@ -253,10 +253,12 @@ const Block = ({
   ) : (
     <div
       ref={dropdownRef}
-      className={`flex flex-row items-start gap-x-2 shadow-md ${
-        isConfigured || name == "Looker Studio" || name == "Big Query"
-          ? "shadow-green-600/40"
-          : "shadow-gray-500/10"
+      className={`flex flex-row items-start gap-x-2 ${
+        (isConfigured && name !== "Looker Studio" && name !== "Big Query") ||
+        (name == "Looker Studio" && values[0]?.title === "Reconnect") ||
+        name == "Big Query"
+          ? "shadow-lg shadow-green-600/40"
+          : "shadow-md shadow-gray-500/10"
       } px-3 md:px-5 py-3 md:py-7 bg-[#171C2A]/50 rounded-xl relative`}
     >
       {name == "Looker Studio" || name == "Big Query" ? (
@@ -292,24 +294,23 @@ const Block = ({
           </p>
         )}
         {!isConfigured && !isNew && (
-          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+          <p className="text-[12px] mt-0.5 w-full text-gray-500 min-[1600px]:text-sm cursor-pointer">
             Connect your {name} account to fetch data
           </p>
         )}{" "}
         {isNew && (
-          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+          <p className="text-[12px] mt-0.5 w-full text-gray-500 min-[1600px]:text-sm cursor-pointer">
             Request access to unlock insights of {name}
           </p>
         )}{" "}
-        {name == "Big Query" && (
-          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
-            Connected! Now your data is stored in Google BigQuery
-          </p>
-        )}
+        <p className="text-[12px] mt-0.5 w-full text-gray-500 min-[1600px]:text-sm cursor-pointer">
+          {name == "Big Query" &&
+            "Connected! Now your data is stored in Google BigQuery"}
+        </p>
         {name == "Looker Studio" && (
-          <p className="text-[12px] mt-0.5 w-10/12 text-gray-500 min-[1600px]:text-sm cursor-pointer">
+          <p className="text-[12px] mt-0.5 w-full text-gray-500 min-[1600px]:text-sm cursor-pointer">
             {values[0]?.title === "Connect"
-              ? "Connect to your Looker Studio account to generate dashboards"
+              ? "Connect your Looker Studio account to generate dashboards"
               : "Connected! Start building dashboards for your clients"}
           </p>
         )}
@@ -351,36 +352,41 @@ const Block = ({
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-main pt-10 text-white">
-          <AiOutlineClose
-            size={40}
-            onClick={closeModal}
-            className="absolute top-2 right-2 px-2 cursor-pointer"
-          />
-          <div className="md:mb-12">
-            <p className="text-center text-2xl md:text-3xl mb-5">
-              {"Platform Setup"}
-            </p>
-          </div>
-          <div className="h-[45vh] min-[1600px]:h-[40vh]">
-            <div className="px-[4vw] h-full pb-5 overflow-y-auto small-scroller w-full">
-              <Page4
-                credentialsState={credentialsState}
-                setCredentialsState={setCredentialsState}
-                selectedPlatform={original_name}
-                data={data}
-              />
+        <div className="relative rounded-lg bg-main text-white">
+          <div className="bg-newBubbleColor/10 w-[20vw] h-[30vh] absolute left-20 top-1/2 -translate-y-1/2 rounded-full"></div>
+          <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-0 absolute top-3/6 rounded-full"></div>
+          <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-20 absolute bottom-10 rounded-full"></div>
+          <div className="rounded-lg pt-10 backdrop-blur-3xl">
+            <AiOutlineClose
+              size={40}
+              onClick={closeModal}
+              className="absolute top-2 right-2 px-2 cursor-pointer"
+            />
+            <div className="md:mb-12">
+              <p className="text-center text-2xl md:text-3xl mb-5">
+                {"Platform Setup"}
+              </p>
             </div>
-          </div>
-          <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-end py-6 mt-10 mainText20">
-            <button
-              onClick={() => {
-                addClientCredentials();
-              }}
-              className={`text-white text-sm md:text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
-            >
-              {"Submit"}
-            </button>
+            <div className="h-[45vh] min-[1600px]:h-[40vh]">
+              <div className="px-[4vw] h-full pb-5 overflow-y-auto small-scroller w-full">
+                <Page4
+                  credentialsState={credentialsState}
+                  setCredentialsState={setCredentialsState}
+                  selectedPlatform={original_name}
+                  data={data}
+                />
+              </div>
+            </div>
+            <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-end py-6 mt-10 mainText20">
+              <button
+                onClick={() => {
+                  addClientCredentials();
+                }}
+                className={`text-white text-sm md:text-base min-[1600px]:text-lg bg-newBlue w-[150px] min-[1600px]:w-[170px] h-10 min-[1600px]:h-12 rounded-lg`}
+              >
+                {"Submit"}
+              </button>
+            </div>
           </div>
         </div>
       </Modal>
@@ -525,7 +531,7 @@ const Page4 = ({
                   {formatName(e?.platform)}
                 </label>
               </div>
-              {/* <div className="border-[0.5px] border-gray-300/30 h-[200px]"></div> */}
+              <div className="border-[0.5px] border-gray-500/10 min-h-[130px]"></div>
               <div className="mt-3 flex-1 md:flex-row flex-col md:px-6 w-full">
                 {/* Show inputs only for the current platform */}
 

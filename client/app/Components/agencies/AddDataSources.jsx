@@ -125,7 +125,7 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
           if (item?.creds_structure?.credentials) {
             const areCredentialsEmpty = (creds) =>
               Object.values(creds).every((value) => value === null);
-            if (item?.platform === "shopify") {
+            if (item?.platform === "shopify" || item?.platform == "recharge") {
               continue;
             }
             if (areCredentialsEmpty(item?.creds_structure?.credentials)) {
@@ -161,129 +161,135 @@ const AddDataSouces = ({ showSubscribe, setShowSubscribe }) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="relative rounded-lg bg-main pt-10 text-white">
-          <AiOutlineClose
-            size={40}
-            onClick={closeModal}
-            className="absolute top-2 right-2 px-2 cursor-pointer"
-          />{" "}
-          <div className="mb-10 w-full">
-            <div className="flex items-center justify-center w-full pl-[20vw]">
-              {nav_data.map((e, i, arr) => {
-                return (
-                  <div key={i} className="flex items-center w-full">
-                    <div
-                      className={`${
-                        page >= i + 1
-                          ? "bg-newBlue"
-                          : "border border-gray-500/20 bg-[#343745]"
-                      } ${
-                        i != arr.length - 1
-                          ? "w-[15vw] md:w-[3vw]"
-                          : "w-[10.5vw] md:w-[2.5vw]"
-                      } aspect-square rounded-full flex items-center justify-center text-xl md:text-[24px]`}
-                    >
-                      {page > i + 1 ? <IoMdCheckmark /> : i + 1}
-                    </div>
-                    {arr.length - 1 !== i && (
+        {" "}
+        <div className="relative rounded-lg bg-main text-white">
+          <div className="bg-newBubbleColor/10 w-[20vw] h-[30vh] absolute left-20 top-1/2 -translate-y-1/2 rounded-full"></div>
+          <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-0 absolute top-3/6 rounded-full"></div>
+          <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-20 absolute bottom-10 rounded-full"></div>
+          <div className="relative rounded-lg backdrop-blur-3xl pt-10 text-white">
+            <AiOutlineClose
+              size={40}
+              onClick={closeModal}
+              className="absolute top-2 right-2 px-2 cursor-pointer"
+            />{" "}
+            <div className="mb-10 w-full">
+              <div className="flex items-center justify-center w-full pl-[20vw]">
+                {nav_data.map((e, i, arr) => {
+                  return (
+                    <div key={i} className="flex items-center w-full">
                       <div
-                        className={`h-[1px] w-full ${
-                          page > i + 1 ? "bg-newBlue" : "bg-[#343745]"
-                        }`}
-                      ></div>
-                    )}
-                  </div>
-                );
-              })}
+                        className={`${
+                          page >= i + 1
+                            ? "bg-newBlue"
+                            : "border border-gray-500/20 bg-[#343745]"
+                        } ${
+                          i != arr.length - 1
+                            ? "w-[15vw] md:w-[3vw]"
+                            : "w-[10.5vw] md:w-[2.5vw]"
+                        } aspect-square rounded-full flex items-center justify-center text-xl md:text-[24px]`}
+                      >
+                        {page > i + 1 ? <IoMdCheckmark /> : i + 1}
+                      </div>
+                      {arr.length - 1 !== i && (
+                        <div
+                          className={`h-[1px] w-full ${
+                            page > i + 1 ? "bg-newBlue" : "bg-[#343745]"
+                          }`}
+                        ></div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="grid grid-cols-2 text-sm md:text-[13px] min-[1600px]:text-base justify-between mt-2 px-[8vw] md:px-[10vw]">
+                {nav_data.map((e, i) => {
+                  return (
+                    <p className="text-center" key={i}>
+                      {e}
+                    </p>
+                  );
+                })}
+              </div>
             </div>
-            <div className="grid grid-cols-2 text-sm md:text-[13px] min-[1600px]:text-base justify-between mt-2 px-[8vw] md:px-[10vw]">
-              {nav_data.map((e, i) => {
-                return (
-                  <p className="text-center" key={i}>
-                    {e}
-                  </p>
-                );
-              })}
-            </div>
-          </div>
-          {page == 1 ? (
-            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[36vh] md:h-[38vh] md:pb-5 overflow-y-auto small-scroller w-full">
-              <div className="relative flex items-center w-[180px] md:w-[350px] min-[1600px]:w-[456px]">
-                <FaSearch className="absolute left-4 z-40 text-white" />{" "}
-                <input
-                  type="search"
-                  placeholder="Search"
-                  value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
-                  className="outline-none text-[13px] min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
+            {page == 1 ? (
+              <div className="px-[4vw] min-[1600px]:h-[40vh] h-[36vh] md:h-[38vh] md:pb-5 overflow-y-auto small-scroller w-full">
+                <div className="relative flex items-center w-[180px] md:w-[350px] min-[1600px]:w-[456px]">
+                  <FaSearch className="absolute left-4 z-40 text-white" />{" "}
+                  <input
+                    type="search"
+                    placeholder="Search"
+                    value={search}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                    className="outline-none text-[13px] min-[1600px]:text-base border border-gray-500/20 px-6 bg-[#898989]/15 py-1.5 min-[1600px]:py-2 rounded-lg pl-12 w-full" // Add padding to the left for the icon
+                  />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
+                  {mainDataSource
+                    ?.filter((e) => {
+                      if (search) {
+                        return e?.name
+                          ?.toLowerCase()
+                          ?.includes(search?.toLowerCase());
+                      }
+                      return e;
+                    })
+                    .map((e, i) => {
+                      return (
+                        !selectedClientDetails?.platform_name?.includes(
+                          e?.name
+                        ) && (
+                          <DataSourceBox
+                            key={i}
+                            e={e}
+                            setAllowedPlatforms={setAllowedPlatforms}
+                            allowedPlatforms={allowedPlatforms}
+                          />
+                        )
+                      );
+                    })}
+                </div>
+              </div>
+            ) : (
+              <div className="px-[4vw] min-[1600px]:h-[40vh] h-[38vh] pb-5 overflow-y-auto small-scroller w-full">
+                <Page4
+                  credentialsState={credentialsState}
+                  setCredentialsState={setCredentialsState}
+                  allowedPlatforms={allowedPlatforms}
                 />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-5">
-                {mainDataSource
-                  ?.filter((e) => {
-                    if (search) {
-                      return e?.name
-                        ?.toLowerCase()
-                        ?.includes(search?.toLowerCase());
-                    }
-                    return e;
-                  })
-                  .map((e, i) => {
-                    return (
-                      !selectedClientDetails?.platform_name?.includes(
-                        e?.name
-                      ) && (
-                        <DataSourceBox
-                          key={i}
-                          e={e}
-                          setAllowedPlatforms={setAllowedPlatforms}
-                          allowedPlatforms={allowedPlatforms}
-                        />
-                      )
-                    );
-                  })}
-              </div>
+            )}
+            <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-3 md:py-6 mt-5 md:mt-10 mainText20">
+              <button
+                className={`text-white text-[13px] min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
+                  page == 1
+                    ? "bg-[#898989]/15 invisible"
+                    : "bg-newBlue cursor-pointer visible"
+                } h-10 min-[1600px]:h-12 rounded-lg`}
+                disabled={page == 1}
+                onClick={() => {
+                  // setAllowedPlatforms([])
+                  setCredentialsState([]);
+                  setPage(page - 1);
+                }}
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => {
+                  if (page == maxPage) {
+                    addClientCredentials();
+                  } else {
+                    isAllDataSourceConfigured();
+                    // setPage(page + 1);
+                  }
+                }}
+                className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[120px] md:w-[150px] min-[1600px]:w-[170px] h-9 md:h-10 min-[1600px]:h-12 rounded-lg`}
+              >
+                {page == maxPage ? "Submit" : "Next"}
+              </button>
             </div>
-          ) : (
-            <div className="px-[4vw] min-[1600px]:h-[40vh] h-[38vh] pb-5 overflow-y-auto small-scroller w-full">
-              <Page4
-                credentialsState={credentialsState}
-                setCredentialsState={setCredentialsState}
-                allowedPlatforms={allowedPlatforms}
-              />
-            </div>
-          )}
-          <div className="border-t border-t-gray-100/30 px-[3vw] min-[1600px]:px-[5vw] w-full flex items-center justify-between py-3 md:py-6 mt-5 md:mt-10 mainText20">
-            <button
-              className={`text-white text-[13px] min-[1600px]:text-lg w-[150px] min-[1600px]:w-[170px] ${
-                page == 1
-                  ? "bg-[#898989]/15 invisible"
-                  : "bg-newBlue cursor-pointer visible"
-              } h-10 min-[1600px]:h-12 rounded-lg`}
-              disabled={page == 1}
-              onClick={() => {
-                // setAllowedPlatforms([])
-                setCredentialsState([]);
-                setPage(page - 1);
-              }}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => {
-                if (page == maxPage) {
-                  addClientCredentials();
-                } else {
-                  isAllDataSourceConfigured();
-                  // setPage(page + 1);
-                }
-              }}
-              className={`text-white text-[13px] min-[1600px]:text-lg bg-newBlue w-[120px] md:w-[150px] min-[1600px]:w-[170px] h-9 md:h-10 min-[1600px]:h-12 rounded-lg`}
-            >
-              {page == maxPage ? "Submit" : "Next"}
-            </button>
           </div>
         </div>
       </Modal>
@@ -618,7 +624,7 @@ const Page4 = ({ credentialsState, setCredentialsState, allowedPlatforms }) => {
                                 true
                               )
                             }
-                            className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mr-4 mb-3"
+                            className="bg-transparent border text-[13px] min-[1600px]:text-base border-gray-200/20 px-4 py-1.5 outline-none rounded-lg mb-3"
                           />
                         </div>
                       )

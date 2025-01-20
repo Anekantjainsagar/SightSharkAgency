@@ -33,12 +33,15 @@ const Overview = () => {
   } = useContext(Context);
 
   function calculateRemainingDays(startDate, monthsToAdd) {
-    const start = new Date(startDate);
-    const today = new Date();
-    const end = new Date(start);
-    end.setMonth(start.getMonth() + monthsToAdd);
-    const timeDiff = end - today;
-    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    let daysRemaining = Math.ceil(
+      (new Date(
+        new Date(startDate).setMonth(
+          new Date(startDate).getMonth() + monthsToAdd
+        )
+      ) -
+        new Date()) /
+        (1000 * 60 * 60 * 24)
+    );
     return daysRemaining > 0 ? daysRemaining : 0;
   }
 
@@ -156,7 +159,7 @@ const Overview = () => {
                     {
                       name: "Warranty Period",
                       value: `${calculateRemainingDays(
-                        actualUser?.created_at,
+                        actualUser?.created_date,
                         actualUser?.warrenty_period
                       )} days left`,
                       img: "/Overview/Icons/dashboard.png",
