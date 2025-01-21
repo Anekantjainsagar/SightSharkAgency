@@ -77,7 +77,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
     report_start_date: "",
     website: "",
     location: "",
-    timezone: "",
+    timezone: "Select Timezone",
     keyContact: {
       name: "",
       profile: "",
@@ -377,9 +377,8 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
   };
 
   useEffect(() => {
-    // setPage(1);
+    setPage(1);
     getDataSourceStructure();
-    setData({ ...data, timezone: timezones[0]?.region_name });
   }, [timezones]);
 
   return (
@@ -562,7 +561,6 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                       Timezone
                       <Required />
                     </label>
-
                     <div className="relative w-full">
                       <select
                         value={data?.timezone}
@@ -572,6 +570,12 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                         id="Timezone"
                         className="bg-[#898989]/15 w-full outline-none border min-[1600px]:h-[45px] h-[35px] border-gray-500/20 text-[13px] min-[1600px]:text-base px-4 py-2 pr-10 rounded-md appearance-none"
                       >
+                        <option
+                          value={"Select Timezone"}
+                          className="bg-main text-[13px] min-[1600px]:text-base"
+                        >
+                          Select Timezone
+                        </option>
                         {timezones?.map((e, i) => {
                           return (
                             <option
@@ -579,7 +583,7 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                               key={i}
                               className="bg-main text-[13px] min-[1600px]:text-base"
                             >
-                              {e?.region_name}
+                              {e?.region_name + " " + e?.utc_offset}
                             </option>
                           );
                         })}
@@ -818,8 +822,8 @@ min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px
                 />
               </div>
             ) : page === 5 ? (
-              <div className="px-[4vw] md:pb-5 h-[38vh] overflow-y-auto small-scroller w-full">
-                <div className="grid md:grid-cols-3 gap-x-4 mt-2">
+              <div className="px-[4vw] md:pb-5 h-full overflow-y-auto small-scroller w-full">
+                <div className="grid md:grid-cols-2 gap-4 mt-2">
                   {mainTemplates?.map((e, i) => {
                     return (
                       <div
@@ -828,16 +832,19 @@ min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px
                           setData({ ...data, templates: [e?.id] });
                         }}
                         className={`${
-                          e?.id == data?.templates[0] && "border border-white"
-                        } flex items-center min-[1600px]:p-1.5 p-1 justify-center shadow-md shadow-gray-200/50 rounded-xl cursor-pointer`}
+                          e?.id == data?.templates[0]
+                            ? "border-white"
+                            : "border-transparent"
+                        } flex flex-col items-center border min-[1600px]:p-1.5 p-1 justify-center shadow-md shadow-gray-200/50 rounded-xl cursor-pointer`}
                       >
                         <Image
                           src={e?.template_image}
                           alt={e?.template_image?.src}
                           width={1000}
                           height={1000}
-                          className="h-[22vh] md:h-[18vh] object-cover rounded-xl"
+                          className="h-[22vh] md:h-[28vh] object-cover rounded-xl"
                         />
+                        <p className="text-lg mt-1.5">{e?.template_name}</p>
                       </div>
                     );
                   })}
@@ -1016,7 +1023,7 @@ min-[1600px]:h-[45px] h-[35px] border border-gray-500/20 text-[13px] min-[1600px
                     data?.name &&
                     data?.website &&
                     data?.parent_name &&
-                    data?.timezone &&
+                    data?.timezone != "Select Timezone" &&
                     data?.report_start_date
                   ) {
                     setPage(page + 1);
