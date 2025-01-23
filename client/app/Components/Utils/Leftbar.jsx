@@ -461,7 +461,7 @@ const Leftbar = ({ loading = false }) => {
 
 const LogoutBtn = ({ loading }) => {
   const history = useRouter();
-  const { setShowLeftMenu } = useContext(Context);
+  const { setShowLeftMenu, setSearchTextClients } = useContext(Context);
 
   return loading ? (
     <div className="flex items-center py-2 rounded-xl cursor-pointer text-[#D93F21]">
@@ -479,6 +479,7 @@ const LogoutBtn = ({ loading }) => {
         Cookies.remove("token");
         history.push("/");
         setShowLeftMenu(false);
+        setSearchTextClients("");
       }}
     >
       <div className="flex rounded-lg items-center justify-center bg-gradient-to-b from-[#D93F21]/10 to-[#D93F21]/20 w-9 min-[1600px]:w-12 aspect-square p-2">
@@ -505,7 +506,7 @@ const LogoutBtn = ({ loading }) => {
 
 const NewwBlock = ({ e, setShow, show, loading }) => {
   const history = useRouter();
-  const { setShowLeftMenu } = useContext(Context);
+  const { setShowLeftMenu, setSearchTextClients } = useContext(Context);
 
   return loading ? (
     <div className="flex items-center py-2 rounded-xl cursor-pointer text-white">
@@ -521,6 +522,7 @@ const NewwBlock = ({ e, setShow, show, loading }) => {
       className={`flex items-center py-2 rounded-xl cursor-pointer text-white`}
       onClick={() => {
         setShowLeftMenu(false);
+        setSearchTextClients("");
         if (e?.route) {
           history.push(e?.route);
         } else {
@@ -537,7 +539,7 @@ const NewwBlock = ({ e, setShow, show, loading }) => {
 };
 
 const Block = ({ e, loading }) => {
-  const { setShowLeftMenu } = useContext(Context);
+  const { setShowLeftMenu, setSearchTextClients } = useContext(Context);
   const pathname = usePathname();
   const history = useRouter();
   const [hover, setHover] = useState(false);
@@ -560,6 +562,7 @@ const Block = ({ e, loading }) => {
         if (e?.route) {
           history.push(e?.route);
           setShowLeftMenu(false);
+          setSearchTextClients("");
         }
       }}
     >

@@ -2,9 +2,10 @@
 import axios from "axios";
 import Context from "./Context";
 import { getCookie } from "cookies-next";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ADMIN_BACKEND_URI, BACKEND_URI } from "../utils/url";
+import { debounce } from "lodash";
 
 const State = (props) => {
   const pathname = usePathname();
@@ -119,7 +120,7 @@ const State = (props) => {
       try {
         axios
           .get(
-            `${BACKEND_URI}/critical-notification/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}`,
+            `${BACKEND_URI}/critical-notification/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}&search_query=${searchTextClients}`,
             {
               headers: {
                 Authorization: `Bearer ${cookie}`,
@@ -133,6 +134,9 @@ const State = (props) => {
           })
           .catch((err) => {
             console.log(err);
+            if (err.message?.includes("404")) {
+              setCriticalNotifications();
+            }
           });
       } catch (error) {
         console.log(error);
@@ -166,7 +170,7 @@ const State = (props) => {
       try {
         axios
           .get(
-            `${BACKEND_URI}/alerts/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}`,
+            `${BACKEND_URI}/alerts/?unseen_only=${false}&order_by=${"created_at"}&page=${page}&page_size=${50}&search_query=${searchTextClients}`,
             {
               headers: {
                 Authorization: `Bearer ${cookie}`,
@@ -180,6 +184,9 @@ const State = (props) => {
           })
           .catch((err) => {
             console.log(err);
+            if (err.message?.includes("404")) {
+              setAlerts();
+            }
           });
       } catch (error) {
         console.log(error);
@@ -249,7 +256,7 @@ const State = (props) => {
               (page - 1) * limit
             }&limit=${limit}&sort_by=${order_by}&order=${
               type ? "asc" : "desc"
-            }`,
+            }&user_name=${searchTextClients}`,
             {
               headers: {
                 Accept: "application/json",
@@ -261,9 +268,14 @@ const State = (props) => {
           .then((res) => {
             if (res.data?.data?.length > 0) {
               setUsers(res.data);
+            } else {
+              setUsers();
             }
           })
           .catch((err) => {
+            if (err.message?.includes("404")) {
+              setUsers();
+            }
             console.log(err);
           });
       } catch (error) {
@@ -296,9 +308,14 @@ const State = (props) => {
           .then((res) => {
             if (res.data.data?.length > 0) {
               setAgencies(res.data);
+            } else {
+              setAgencies();
             }
           })
           .catch((err) => {
+            if (err.message?.includes("404")) {
+              setAgencies();
+            }
             console.log(err);
           });
       } catch (error) {
@@ -580,7 +597,7 @@ const State = (props) => {
         const response = await axios.get(
           `${
             process.env.NEXT_PUBLIC_BACKEND_URI
-          }/agency/reports?client_id=${""}`,
+          }/agency/reports?client_id=${""}?report_name=${searchTextClients}`,
           {
             headers: {
               Authorization: `Bearer ${cookie}`,
@@ -590,6 +607,9 @@ const State = (props) => {
         setAgencyReports(response.data.data);
       } catch (err) {
         console.log(err);
+        if (err.message?.includes("404")) {
+          setAgencyReports();
+        }
       }
     }
   };
@@ -599,9 +619,7 @@ const State = (props) => {
     if (cookie) {
       try {
         const response = await axios.get(
-          `${
-            process.env.NEXT_PUBLIC_BACKEND_URI
-          }/archive/archive-reports/search?report_name=${""}`,
+          `${process.env.NEXT_PUBLIC_BACKEND_URI}/archive/archive-reports/search?report_name=${searchTextClients}`,
           {
             headers: {
               Authorization: `Bearer ${cookie}`,
@@ -611,6 +629,9 @@ const State = (props) => {
         setArchivedReports(response.data.data);
       } catch (err) {
         console.log(err);
+        if (err.message?.includes("404")) {
+          setArchivedReports();
+        }
       }
     }
   };
@@ -619,9 +640,36 @@ const State = (props) => {
     checkToken();
   }, []);
 
+  const callAPIs = () => {
+    if (pathname == "/overview" || pathname?.includes("clients")) {
+      getAgencies();
+    }
+    if (pathname == "/overview" || pathname?.includes("alerts")) {
+      getCriticalNotifications();
+      getAlerts();
+    }
+    if (pathname == "/overview" || pathname?.includes("users")) {
+      getUsers();
+    }
+    if (pathname == "/overview" || pathname?.includes("dashboards")) {
+      getAgencyReports();
+      getArchivedAgencyReports();
+    }
+  };
+
+  const debouncedCallAPIs = useCallback(
+    debounce(() => {
+      callAPIs();
+    }, 600),
+    [searchTextClients]
+  );
+
   useEffect(() => {
-    getAgencies();
-  }, [searchTextClients]);
+    debouncedCallAPIs();
+    return () => {
+      debouncedCallAPIs.cancel();
+    };
+  }, [searchTextClients, debouncedCallAPIs]);
 
   useEffect(() => {
     getAgencies();

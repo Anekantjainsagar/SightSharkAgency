@@ -16,6 +16,11 @@ const Navbar = ({ loading = false }) => {
     agencies,
     showLeftMenu,
     setShowLeftMenu,
+    criticalNotifications,
+    alerts,
+    users,
+    agencyReports,
+    archivedReports,
   } = useContext(Context);
 
   return loading ? (
@@ -52,25 +57,132 @@ const Navbar = ({ loading = false }) => {
               }}
               className="outline-none text-sm min-[1600px]:text-base border border-gray-200/5 bg-transparent pr-4 md:pr-6 glass py-2 min-[1600px]:py-3 rounded-lg md:pl-12 pl-10 w-full"
             />
-            {pathname !== "/clients" && searchTextClients && (
-              <div className="absolute right-0 top-12 min-[1600px]:top-16 w-full md:w-[350px] min-[1600px]:w-[500px] z-50 bg-main rounded-md min-h-[10vh] md:min-h-[15vh] overflow-y-auto p-2">
-                {agencies?.data?.map((e, i, arr) => {
+            {pathname === "/overview" && searchTextClients && (
+              <div className="absolute right-0 top-16 w-[500px] bg-main rounded-md min-h-[15vh] max-h-[20vh] small-scroller z-20 overflow-y-auto px-2 pb-2">
+                <Title text="Clients" condition={agencies?.data?.length > 0} />
+                {agencies?.data?.map((e, i) => {
                   return (
                     <div
                       key={i}
-                      className={`hover:bg-gray-700/20 text-[13px] min-[1600px]:text-base cursor-pointer px-2 py-1 rounded-sm transition-all flex items-center justify-between ${
-                        i + 1 !== arr.length && "border-b border-b-gray-100/10"
-                      }`}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
                       onClick={() => {
-                        history.push(`/clients/${e?.client_name}`);
-                        setSearchTextClients("");
+                        history.push(
+                          `/agencies/${e?.agency_name?.replaceAll(" ", "-")}`
+                        );
+                        setSearchTextAgency("");
                       }}
                     >
-                      <p>{e?.client_name}</p>
-                      <p className="md:block hidden">{`> clients > ${e?.client_name?.replaceAll(
+                      <p className="w-5/12 break-words">{e?.client_name}</p>
+                      <p className="text-sm">{`/agencies/${e?.client_name?.replaceAll(
                         " ",
                         "-"
                       )}`}</p>
+                    </div>
+                  );
+                })}
+                <Title text="Users" condition={users?.data?.length > 0} />
+                {users?.data?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
+                      onClick={() => {
+                        history.push(`/users`);
+                        setSearchTextAgency("");
+                      }}
+                    >
+                      <p className="w-full break-words">
+                        {e?.first_name + " " + e?.last_name}
+                      </p>
+                      {/* <p className="text-sm">{`/agencies/${e?.client_name?.replaceAll(
+                        " ",
+                        "-"
+                      )}`}</p> */}
+                    </div>
+                  );
+                })}
+                <Title
+                  text="Recent Reports"
+                  condition={agencyReports?.length > 0}
+                />
+                {agencyReports?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
+                      onClick={() => {
+                        history.push(`/dashboards`);
+                        setSearchTextAgency("");
+                      }}
+                    >
+                      <p className="w-full break-words">
+                        {e?.report_name?.replaceAll("_", " ")}
+                      </p>
+                      {/* <p className="text-sm">{`/agencies/${e?.client_name?.replaceAll(
+                        " ",
+                        "-"
+                      )}`}</p> */}
+                    </div>
+                  );
+                })}{" "}
+                <Title
+                  text="Archived Reports"
+                  condition={archivedReports?.length > 0}
+                />
+                {archivedReports?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
+                      onClick={() => {
+                        history.push(`/dashboards`);
+                        setSearchTextAgency("");
+                      }}
+                    >
+                      <p className="w-full break-words">
+                        {e?.report_name?.replaceAll("_", " ")}
+                      </p>
+                      {/* <p className="text-sm">{`/agencies/${e?.client_name?.replaceAll(
+                        " ",
+                        "-"
+                      )}`}</p> */}
+                    </div>
+                  );
+                })}
+                <Title
+                  text="Critical Notifications"
+                  condition={criticalNotifications?.notifications?.length > 0}
+                />
+                {criticalNotifications?.notifications?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
+                      onClick={() => {
+                        history.push(`/alerts`);
+                        setSearchTextAgency("");
+                      }}
+                    >
+                      <p className="w-full break-words">{e?.message}</p>
+                      {/* <p className="text-sm">{`/agencies/${e?.client_name?.replaceAll(
+                        " ",
+                        "-"
+                      )}`}</p> */}
+                    </div>
+                  );
+                })}
+                <Title text="Alerts" condition={alerts?.alerts?.length > 0} />
+                {alerts?.alerts?.map((e, i) => {
+                  return (
+                    <div
+                      key={i}
+                      className="hover:bg-gray-700/20 cursor-pointer px-2 py-1 rounded-md flex items-center justify-between"
+                      onClick={() => {
+                        history.push(`/alerts`);
+                        setSearchTextAgency("");
+                      }}
+                    >
+                      <p className="break-words">{e?.message}</p>
                     </div>
                   );
                 })}
@@ -95,6 +207,14 @@ const Navbar = ({ loading = false }) => {
         )}
       </div>
     </div>
+  );
+};
+
+const Title = ({ text, condition }) => {
+  return (
+    condition && (
+      <p className="text-gray-200 px-2 py-0.5 text-sm mt-2">{text}</p>
+    )
   );
 };
 
