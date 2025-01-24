@@ -59,7 +59,9 @@ const Navbar = ({ loading = false }) => {
             />
             {pathname === "/overview" && searchTextClients && (
               <div className="absolute right-0 top-16 w-[500px] bg-main rounded-md min-h-[15vh] max-h-[20vh] small-scroller z-20 overflow-y-auto px-2 pb-2">
-                <Title text="Clients" condition={agencies?.data?.length > 0} />
+                {agencies?.data?.length > 0 && (
+                  <p className="text-gray-200 px-2 py-0.5 text-sm">Clients</p>
+                )}
                 {agencies?.data?.map((e, i) => {
                   return (
                     <div
@@ -213,9 +215,16 @@ const Navbar = ({ loading = false }) => {
 const Title = ({ text, condition }) => {
   return (
     condition && (
-      <p className="text-gray-200 px-2 py-0.5 text-sm mt-2">{text}</p>
+      <div className="w-full">
+        {text !== "Clients" && <Line />}
+        <p className="text-gray-200 px-2 py-0.5 text-sm">{text}</p>
+      </div>
     )
   );
+};
+
+const Line = () => {
+  return <div className="h-[1px] w-11/12 my-3 bg-gray-300/10 mx-auto"></div>;
 };
 
 export default Navbar;

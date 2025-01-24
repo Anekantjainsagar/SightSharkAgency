@@ -23,8 +23,8 @@ const UnpublishedReports = () => {
             style={{ gridTemplateColumns: "25% 25% 25% 25%" }}
           >
             {[
-              "Report Name",
               "Template Name",
+              "Report Type",
               "Created Date",
               "Report Link",
             ]?.map((e, i) => {
@@ -46,8 +46,8 @@ const UnpublishedReports = () => {
                   style={{ gridTemplateColumns: "25% 25% 25% 25%" }}
                 >
                   {[
-                    e?.report_name,
                     e?.client_name,
+                    e?.report_type,
                     new Date(e?.created_at)?.toISOString()?.slice(0, 10),
                     e?.report_url,
                   ]?.map((e, i) => {
