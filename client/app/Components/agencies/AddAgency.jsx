@@ -392,36 +392,31 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
         <div className="bg-newBubbleColor/10 w-[20vw] h-[30vh] absolute left-20 top-1/2 -translate-y-1/2 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-0 absolute top-3/6 rounded-full"></div>
         <div className="bg-newBubbleColor/10 w-[15vw] h-[15vw] right-20 absolute bottom-10 rounded-full"></div>
-        <div className="w-full h-full backdrop-blur-3xl relative pt-10 rounded-lg">
+        <div className="relative flex mt-5 backdrop-blur-3xl rounded-lg">
           <AiOutlineClose
             size={40}
             onClick={closeModal}
-            className="absolute top-2 right-2 px-2 cursor-pointer"
+            className="absolute -top-10 -right-3 px-2 text-lg text-main cursor-pointer z-50"
           />
-          <div className="min-[1600px]:mb-12 mb-8">
-            <p className="text-center min-[1600px]:text-3xl md:text-2xl text-[22px] mb-5">
-              {nav_data[page - 1]}
-            </p>
-            <div className="flex items-center justify-between pl-3.5 md:pl-[8vw]">
-              {nav_data.map((e, i, arr) => {
+          <div className="w-[24%] flex items-start pl-10 py-10 bg-gray-600/30">
+            <div className="flex flex-col items-center justify-between h-full">
+              {[1, 2, 3, 4].map((e, i, arr) => {
                 return (
-                  <div key={i} className="flex items-center w-full">
+                  <div key={i} className="flex flex-col items-center">
                     <div
                       className={`${
-                        page >= i + 1
-                          ? "bg-newBlue"
-                          : "border border-gray-500/20 bg-[#343745]"
-                      } ${
-                        i != arr.length - 1
-                          ? "w-[15vw] md:w-[3vw]"
-                          : "w-[8.5vw] md:w-[2.5vw]"
-                      } aspect-square rounded-full flex items-center justify-center text-lg min-[1600px]:text-[24px]`}
+                        page > i + 1
+                          ? "bg-transparent border-2 border-newBlue"
+                          : page == i + 1
+                          ? "bg-newBlue border-2 border-transparent"
+                          : "border-2 border-gray-500/20 bg-transparent"
+                      } w-[15vw] md:w-[2.5vw] aspect-square rounded-full flex items-center justify-center text-lg min-[1600px]:text-[24px]`}
                     >
                       {page > i + 1 ? <IoMdCheckmark /> : i + 1}
                     </div>
                     {arr.length - 1 !== i && (
                       <div
-                        className={`h-[1px] w-full ${
+                        className={`h-[103px] w-[1px] ${
                           page > i + 1 ? "bg-newBlue" : "bg-[#343745]"
                         }`}
                       ></div>
@@ -430,8 +425,22 @@ const AddAgency = ({ showSubscribe, setShowSubscribe }) => {
                 );
               })}
             </div>
+            <div className="items-start py-2 pl-5 flex flex-col h-full justify-between text-sm min-[1600px]:text-base">
+              {[
+                "Agency Details",
+                "Key Contact Details",
+                "Portal Deployment",
+                "Credentials",
+              ].map((e, i) => {
+                return (
+                  <p className={``} key={i}>
+                    {e}
+                  </p>
+                );
+              })}
+            </div>
           </div>
-          <div className="min-[1600px]:h-[48vh] min-[1750px]:h-[52vh] h-[35vh] md:h-[42vh]">
+          <div className="w-[76%] p-10 flex flex-col items-start justify-between relative z-50">
             {page === 1 ? (
               <div className="px-[4vw] min-[1600px]:px-[8vw] w-full">
                 <div
